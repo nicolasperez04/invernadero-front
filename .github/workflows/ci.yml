@@ -38,7 +38,7 @@ jobs:
         run: npm ci
 
       - name: Run tests
-        run: npm test -- --no-watch --no-watch-on-ci
+        run: npm test -- --no-watch
 
       - name: Run lint
         run: npm run lint
