@@ -19,16 +19,23 @@ import {
   STATUS_ICONS
 } from '../../core/models/dashboard.model';
 
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+
 interface Crop {
   id: number;
   name: string;
   description?: string;
 }
 
+interface ChartData {
+  name: string;
+  value: number;
+}
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule, MatIconModule],
+  imports: [CommonModule, FormsModule, TranslateModule, MatIconModule, NgxChartsModule],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
 })
@@ -263,4 +270,34 @@ export class DashboardComponent implements OnInit, OnDestroy {
       return `${dayName} ${dayNum}`;
     });
   }
+
+  get chartData(): ChartData[] {
+    if (!this.eventChart?.labels || !this.eventChart?.values) return [];
+    return this.eventChart.labels.map((label, i) => ({
+      name: this.formatDateLabel(label),
+      value: this.eventChart!.values[i]
+    }));
+  }
+
+  private formatDateLabel(dateStr: string): string {
+    const date = new Date(dateStr + 'T00:00:00');
+    return date.toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
+  }
+
+  colorScheme: any = {
+    name: 'greenhouse',
+    selectable: true,
+    group: 'Ordinal',
+    domain: ['#2d7d4d', '#1e88e5', '#7b1fa2', '#f57c00', '#e91e63', '#00bcd4']
+  };
+
+  showXAxis = true;
+  showYAxis = true;
+  gradient = true;
+  showLegend = false;
+  showXAxisLabel = false;
+  showYAxisLabel = false;
+  animations = true;
+  xAxisLabel = 'Fecha';
+  yAxisLabel = 'Eventos';
 }
