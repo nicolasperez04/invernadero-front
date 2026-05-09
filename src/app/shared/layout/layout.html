@@ -1,0 +1,78 @@
+<!-- TOP NAVBAR -->
+<div class="top-navbar">
+  <div class="navbar-left">
+    🌾 {{ 'nav.title' | translate }}
+  </div>
+
+  <div class="navbar-right">
+    <div class="lang-switcher">
+      <button class="lang-btn" (click)="setLang('es')" [class.active-lang]="currentLang() === 'es'">ES</button>
+      <span class="lang-sep">|</span>
+      <button class="lang-btn" (click)="setLang('en')" [class.active-lang]="currentLang() === 'en'">EN</button>
+    </div>
+
+    <div class="user-info">
+      <mat-icon>account_circle</mat-icon>
+      <span>{{ username }}</span>
+    </div>
+
+    <button class="logout-btn" (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      {{ 'nav.logout' | translate }}
+    </button>
+  </div>
+</div>
+
+<!-- MAIN CONTAINER -->
+<div class="main-container">
+
+  <!-- SIDEBAR NAVIGATION -->
+  <div class="sidebar">
+
+    <div class="sidebar-header">
+      <div class="sidebar-title">{{ 'nav.menu' | translate }}</div>
+    </div>
+
+    <!-- Dashboard -->
+    <div (click)="navigate('/dashboard')"
+         [class.active]="isActive('/dashboard')"
+         class="nav-item">
+      <mat-icon>dashboard</mat-icon>
+      <span>{{ 'nav.dashboard' | translate }}</span>
+    </div>
+
+    <!-- Crops (ADMIN, OPERATOR) -->
+    <div *ngIf="canAccess(['ADMIN', 'OPERATOR'])"
+         (click)="navigate('/crops')"
+         [class.active]="isActive('/crops')"
+         class="nav-item">
+      <mat-icon>grass</mat-icon>
+      <span>{{ 'nav.crops' | translate }}</span>
+    </div>
+
+    <!-- Lots (ADMIN, OPERATOR) -->
+    <div *ngIf="canAccess(['ADMIN', 'OPERATOR'])"
+         (click)="navigate('/lots')"
+         [class.active]="isActive('/lots')"
+         class="nav-item">
+      <mat-icon>place</mat-icon>
+      <span>{{ 'nav.lots' | translate }}</span>
+    </div>
+
+    <!-- Events (ADMIN, OPERATOR, VIEWER) -->
+    <div *ngIf="canAccess(['ADMIN', 'OPERATOR', 'VIEWER'])"
+         (click)="navigate('/events')"
+         [class.active]="isActive('/events')"
+         class="nav-item">
+      <mat-icon>event</mat-icon>
+      <span>{{ 'nav.events' | translate }}</span>
+    </div>
+
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="content">
+    <router-outlet></router-outlet>
+  </div>
+
+</div>

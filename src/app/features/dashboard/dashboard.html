@@ -1,0 +1,230 @@
+<div class="dashboard-container">
+  <div class="page-header">
+    <h1 class="page-title">
+      <mat-icon>dashboard</mat-icon>
+      {{ 'dashboard.title' | translate }}
+    </h1>
+    <p class="page-subtitle">{{ 'dashboard.welcome' | translate }}</p>
+  </div>
+
+  <div *ngIf="hasAlerts" class="alert-banner">
+    <mat-icon>notifications_active</mat-icon>
+    <div class="alert-content">
+      <strong>{{ alertLots.length }} lote{{ alertLots.length > 1 ? 's' : '' }} requiere{{ alertLots.length === 1 ? '' : 'n' }} atención</strong>
+      <span>{{ alertLots.map(l => l.lotName).join(', ') }}</span>
+    </div>
+  </div>
+
+  <div *ngIf="errorMessage" class="error-banner">
+    <mat-icon>error</mat-icon>
+    {{ errorMessage }}
+  </div>
+
+  <div class="kpi-grid" *ngIf="!loading">
+    <div class="kpi-card kpi-crops">
+      <div class="kpi-icon">
+        <mat-icon>grass</mat-icon>
+      </div>
+      <div class="kpi-content">
+        <span class="kpi-value">{{ kpiTotalCrops }}</span>
+        <span class="kpi-label">{{ 'dashboard.cropsSub' | translate }}</span>
+      </div>
+    </div>
+
+    <div class="kpi-card kpi-lots">
+      <div class="kpi-icon">
+        <mat-icon>place</mat-icon>
+      </div>
+      <div class="kpi-content">
+        <span class="kpi-value">{{ kpiTotalLots }}</span>
+        <span class="kpi-label">{{ 'dashboard.lotsSub' | translate }}</span>
+      </div>
+    </div>
+
+    <div class="kpi-card kpi-events">
+      <div class="kpi-icon">
+        <mat-icon>event</mat-icon>
+      </div>
+      <div class="kpi-content">
+        <span class="kpi-value">{{ kpiEventsThisWeek }}</span>
+        <span class="kpi-label">{{ 'dashboard.eventsSub' | translate }}</span>
+      </div>
+    </div>
+
+    <div class="kpi-card kpi-progress">
+      <div class="kpi-icon">
+        <mat-icon>trending_up</mat-icon>
+      </div>
+      <div class="kpi-content">
+        <span class="kpi-value">{{ kpiAvgProgress }}%</span>
+        <span class="kpi-label">Avance promedio</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="filter-bar">
+    <label for="cropFilter">{{ 'dashboard.filterByCrop' | translate }}</label>
+    <select
+      id="cropFilter"
+      [(ngModel)]="selectedCropId"
+      (change)="onCropChange()"
+      [disabled]="loading"
+    >
+      <option [value]="null">{{ 'dashboard.allCrops' | translate }}</option>
+      <option *ngFor="let crop of crops" [value]="crop.id">
+        {{ crop.name }}
+      </option>
+    </select>
+  </div>
+
+  <div *ngIf="loading" class="loading-container">
+    <div class="spinner"></div>
+    <p>{{ 'dashboard.loading' | translate }}</p>
+  </div>
+
+  <div *ngIf="!loading" class="dashboard-content">
+
+    <div class="chart-card">
+      <div class="chart-header">
+        <div class="chart-title-group">
+          <h2>{{ 'dashboard.eventActivity' | translate }}</h2>
+          <p>{{ 'dashboard.last7Days' | translate }}</p>
+        </div>
+        <div class="chart-total">
+          <span class="chart-total-value">{{ kpiEventsThisWeek }}</span>
+          <span class="chart-total-label">eventos totales</span>
+        </div>
+      </div>
+
+      <div class="chart-container" *ngIf="eventChart">
+        <svg [attr.width]="chartWidth + 60" [attr.height]="chartHeight + 80" class="chart-svg">
+          <line x1="45" y1="10" x2="45" [attr.y2]="chartHeight + 10" class="axis" />
+          <line x1="45" [attr.y1]="chartHeight + 10" [attr.x2]="chartWidth + 45" [attr.y2]="chartHeight + 10" class="axis" />
+          <g class="grid-labels">
+            <line x1="40" [attr.y1]="chartHeight + 10" x2="50" [attr.y2]="chartHeight + 10" class="tick" />
+            <text x="38" [attr.y]="chartHeight + 25" class="axis-label">0</text>
+            <line x1="40" [attr.y1]="chartHeight / 2 + 10" x2="50" [attr.y2]="chartHeight / 2 + 10" class="tick" />
+            <text x="18" [attr.y]="chartHeight / 2 + 20" class="axis-label">{{ chartMaxValue / 2 | number:'1.0-0' }}</text>
+            <line x1="40" [attr.y1]="10" x2="50" [attr.y2]="10" class="tick" />
+            <text x="18" [attr.y]="25" class="axis-label">{{ chartMaxValue | number:'1.0-0' }}</text>
+          </g>
+          <g class="bars">
+            <g *ngFor="let value of eventChart.values; let i = index"
+               class="bar-group"
+               [attr.transform]="'translate(' + (55 + i * (chartWidth / eventChart.values.length)) + ', 0)'">
+              <rect
+                x="5"
+                [attr.y]="chartHeight + 10 - getBarHeight(value)"
+                [attr.width]="(chartWidth / eventChart.values.length) - 10"
+                [attr.height]="getBarHeight(value)"
+                fill="rgba(45,125,77,0.85)"
+                class="bar"
+                [class.bar-zero]="value === 0"
+                rx="4"
+              />
+              <text
+                *ngIf="value > 0"
+                [attr.x]="5 + (chartWidth / eventChart.values.length - 10) / 2"
+                [attr.y]="chartHeight + 10 - getBarHeight(value) - 8"
+                class="bar-value"
+                text-anchor="middle"
+              >{{ value }}</text>
+            </g>
+          </g>
+          <g class="date-labels">
+            <g *ngFor="let label of chartLabelsFormatted; let i = index"
+               [attr.transform]="'translate(' + (55 + i * (chartWidth / eventChart.values.length) + (chartWidth / eventChart.values.length) / 2) + ', 0)'">
+              <text y="35" class="date-label" text-anchor="middle">{{ label }}</text>
+            </g>
+          </g>
+        </svg>
+      </div>
+
+      <div *ngIf="!eventChart" class="empty-state">
+        <mat-icon>bar_chart</mat-icon>
+        <p>{{ 'dashboard.noData' | translate }}</p>
+      </div>
+    </div>
+
+    <div class="status-section">
+      <div class="section-title">
+        <mat-icon>traffic</mat-icon>
+        {{ 'dashboard.lotStatus' | translate }}
+      </div>
+
+      <div class="status-grid">
+        <div *ngIf="lotStatuses.length === 0" class="empty-message">
+          {{ 'dashboard.noLotsData' | translate }}
+        </div>
+
+        <div
+          *ngFor="let lot of lotStatuses"
+          class="status-card"
+          [class]="'status-' + lot.status.toLowerCase()"
+        >
+          <div class="status-header">
+            <div class="status-header-left">
+              <h3>{{ lot.lotName }}</h3>
+              <p class="inactivity-label">{{ getInactivityLabel(lot.inactivityLevel) }}</p>
+            </div>
+            <mat-icon [style.color]="getStatusColor(lot.status)" class="status-icon">
+              {{ getStatusIcon(lot.status) }}
+            </mat-icon>
+          </div>
+
+          <div class="status-badge" [style.background]="getStatusColor(lot.status)">
+            {{ getStatusLabel(lot.status) }}
+          </div>
+
+          <p class="status-id">ID: {{ lot.lotId }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="progress-section">
+      <div class="section-title">
+        <mat-icon>grain</mat-icon>
+        {{ 'dashboard.cropProgress' | translate }}
+      </div>
+
+      <div class="progress-list">
+        <div *ngIf="lotProgress.length === 0" class="empty-message">
+          {{ 'dashboard.noProgressData' | translate }}
+        </div>
+
+        <div *ngFor="let lot of lotProgress" class="progress-item">
+          <div class="progress-item-header">
+            <span class="progress-item-name">{{ lot.lotName }}</span>
+            <span class="progress-percentage">{{ lot.progress | number:'1.1-1' }}%</span>
+          </div>
+
+          <div class="progress-bar-container">
+            <div
+              class="progress-bar"
+              [style.width]="getProgressWidth(lot.progress) + '%'"
+              [class.progress-zero]="lot.progress === 0">
+            </div>
+          </div>
+
+          <div class="progress-item-footer">
+            <div class="progress-meta">
+              <span class="remaining-label" *ngIf="hasSowing(lot)">{{ getRemainingLabel(lot) }}</span>
+              <span class="no-sowing-msg" *ngIf="!hasSowing(lot)">Registra un evento de Siembra para ver el progreso</span>
+            </div>
+            <div style="display:flex;gap:16px;align-items:center;">
+              <span class="sowing-date" *ngIf="hasSowing(lot)">
+                <mat-icon>grass</mat-icon>
+                {{ getSowingDateLabel(lot) }}
+              </span>
+              <span class="harvest-date" *ngIf="lot.estimatedHarvestDate !== 'null'">
+                <mat-icon>event</mat-icon>
+                {{ formatHarvestDate(lot.estimatedHarvestDate) }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

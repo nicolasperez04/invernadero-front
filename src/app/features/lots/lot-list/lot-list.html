@@ -1,0 +1,244 @@
+<div class="page-header">
+  <h1 class="page-title">
+    <mat-icon>place</mat-icon>
+    {{ 'lots.title' | translate }}
+  </h1>
+  <p class="page-subtitle">{{ 'lots.description' | translate }}</p>
+</div>
+
+<div class="form-card" [class.edit-mode]="isEditing">
+  <div class="form-header">
+    <div class="form-header-icon">
+      <mat-icon>{{ isEditing ? 'edit_square' : 'add_circle' }}</mat-icon>
+    </div>
+    <div>
+      <h3 class="form-header-title">
+        {{ isEditing ? ('lots.editTitle' | translate) : ('lots.create' | translate) }}
+      </h3>
+      <p class="form-header-subtitle">
+        {{ isEditing ? 'Modifica los datos del lote' : 'Completa los datos para registrar un nuevo lote' }}
+      </p>
+    </div>
+  </div>
+
+  <div class="form-body">
+    <ng-container *ngIf="!isEditing">
+      <div class="form-grid">
+        <div class="form-field">
+          <label>{{ 'lots.name' | translate }}</label>
+          <input type="text" [(ngModel)]="newLot.name" placeholder="{{ 'lots.namePlaceholder' | translate }}">
+        </div>
+        <div class="form-field">
+          <label>{{ 'lots.crop' | translate }}</label>
+          <select [(ngModel)]="newLot.cropId">
+            <option [value]="0">{{ 'lots.selectCrop' | translate }}</option>
+            <option *ngFor="let crop of crops" [value]="crop.id">{{ crop.name }}</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>{{ 'lots.startDate' | translate }}</label>
+          <input type="date" [(ngModel)]="newLot.startDate">
+        </div>
+        <div class="form-field">
+          <label>{{ 'lots.endDate' | translate }}</label>
+          <input type="date" [(ngModel)]="newLot.endDate">
+        </div>
+      </div>
+      <div class="form-footer">
+        <button class="btn-secondary" (click)="resetForm()">
+          <mat-icon>clear_all</mat-icon>
+          {{ 'lots.clearForm' | translate }}
+        </button>
+        <button class="btn-primary" (click)="createLot()"
+                [disabled]="!newLot.name || !newLot.cropId || !newLot.startDate || loading">
+          <mat-icon>add</mat-icon>
+          {{ 'lots.create' | translate }}
+        </button>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="isEditing">
+      <div class="form-grid">
+        <div class="form-field">
+          <label>{{ 'lots.name' | translate }}</label>
+          <input type="text" [(ngModel)]="editingLot.name">
+        </div>
+        <div class="form-field">
+          <label>{{ 'lots.crop' | translate }}</label>
+          <select [(ngModel)]="editingLot.cropId" disabled>
+            <option *ngFor="let crop of crops" [value]="crop.id">{{ crop.name }}</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>{{ 'lots.startDate' | translate }}</label>
+          <input type="date" [ngModel]="editingLot.startDate" disabled>
+        </div>
+        <div class="form-field">
+          <label>{{ 'lots.endDate' | translate }}</label>
+          <input type="date" [ngModel]="editingLot.endDate" disabled>
+        </div>
+      </div>
+      <div class="form-footer">
+        <button class="btn-ghost" (click)="cancelEdit()">
+          <mat-icon>close</mat-icon>
+          {{ 'lots.cancelEdit' | translate }}
+        </button>
+        <button class="btn-primary" (click)="saveEdit()" [disabled]="loading">
+          <mat-icon>check</mat-icon>
+          {{ 'lots.update' | translate }}
+        </button>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<div class="table-card">
+  <div class="table-header">
+    <h3>{{ 'lots.list' | translate }}</h3>
+    <span class="table-count">{{ lots.length }} lotes</span>
+  </div>
+  <div class="table-wrapper">
+    <table *ngIf="lots.length > 0; else emptyState">
+      <thead>
+        <tr>
+          <th>{{ 'lots.name' | translate }}</th>
+          <th>{{ 'lots.crop' | translate }}</th>
+          <th>{{ 'lots.startDate' | translate }}</th>
+          <th>{{ 'lots.endDate' | translate }}</th>
+          <th class="center">{{ 'lots.actions' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let lot of lots" [class.row-editing]="editingLotId === lot.id">
+          <td><strong>{{ lot.name }}</strong></td>
+          <td>{{ getCropName(lot.cropId) }}</td>
+          <td>{{ lot.startDate | date: 'dd/MM/yyyy' }}</td>
+          <td>{{ lot.endDate ? (lot.endDate | date: 'dd/MM/yyyy') : '—' }}</td>
+          <td class="center">
+            <div class="actions-cell">
+              <button class="btn-action btn-summary"
+                      (click)="openSummary(lot.id)"
+                      title="{{ 'lots.viewSummary' | translate }}">
+                <mat-icon>analytics</mat-icon>
+              </button>
+              <button *ngIf="isAdminOrOperator"
+                      class="btn-action btn-edit"
+                      (click)="startEdit(lot)"
+                      title="{{ 'lots.edit' | translate }}">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button class="btn-action btn-delete"
+                      (click)="deleteLot(lot.id)"
+                      title="{{ 'lots.delete' | translate }}">
+                <mat-icon>delete_outline</mat-icon>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <ng-template #emptyState>
+      <div class="empty-state">
+        <mat-icon>eco</mat-icon>
+        <p>{{ 'lots.empty' | translate }}</p>
+      </div>
+    </ng-template>
+  </div>
+</div>
+
+<div *ngIf="summaryOpen" class="modal-overlay" (click)="closeSummary()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-header-info">
+        <div class="modal-status-dot" [style.background]="getStatusColor(summary?.status || '')"></div>
+        <div>
+          <h3 class="modal-title">{{ summary?.lotName }}</h3>
+          <div class="modal-status-row">
+            <span class="status-badge" [style.background]="getStatusColor(summary?.status || '')">
+              <mat-icon>{{ getStatusIcon(summary?.status || '') }}</mat-icon>
+              {{ getStatusLabel(summary?.status || '') }}
+            </span>
+            <span class="inactivity-badge" [style.background]="getInactivityColor(summary?.inactivityStatus || '')">
+              <mat-icon>{{ getInactivityIcon(summary?.inactivityStatus || '') }}</mat-icon>
+              {{ getInactivityLabel(summary?.inactivityStatus || '') }}
+            </span>
+          </div>
+        </div>
+      </div>
+      <button class="btn-close" (click)="closeSummary()" title="{{ 'lots.close' | translate }}">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div *ngIf="summaryLoading" class="modal-loading">
+      <div class="spinner"></div>
+      <p>{{ 'dashboard.loading' | translate }}</p>
+    </div>
+
+    <div *ngIf="!summaryLoading && summary" class="modal-body">
+      <div class="summary-kpi-row">
+        <div class="kpi-mini">
+          <span class="kpi-mini-value">{{ summary.totalEvents }}</span>
+          <span class="kpi-mini-label">{{ 'lots.totalEvents' | translate }}</span>
+        </div>
+        <div class="kpi-mini">
+          <span class="kpi-mini-value">{{ summary.durationDays }}</span>
+          <span class="kpi-mini-label">{{ 'lots.duration' | translate }} ({{ 'lots.days' | translate }})</span>
+        </div>
+        <div class="kpi-mini">
+          <span class="kpi-mini-value">{{ getEventFrequencyLabel() }}</span>
+          <span class="kpi-mini-label">{{ 'lots.eventsPerDay' | translate }}</span>
+        </div>
+      </div>
+
+      <div *ngIf="hasSowing()" class="modal-section">
+        <h4 class="modal-section-title">
+          <mat-icon>agriculture</mat-icon>
+          {{ 'lots.progress' | translate }}
+        </h4>
+        <div class="progress-header-row">
+          <span class="progress-days-label">{{ getProgressDaysLabel() }}</span>
+          <span class="progress-remaining-label">{{ getRemainingLabel() }}</span>
+        </div>
+        <div class="progress-bar-container">
+          <div class="progress-bar" [style.width]="getProgressPercent() + '%'"></div>
+        </div>
+        <div class="date-meta-row">
+          <span class="date-tag">
+            <mat-icon>grass</mat-icon>
+            {{ 'lots.sowingDate' | translate }}: {{ formatDate(summary.sowingDate) }}
+          </span>
+          <span class="date-tag" *ngIf="summary.estimatedHarvestDate !== 'null'">
+            <mat-icon>event</mat-icon>
+            {{ 'lots.estimatedHarvest' | translate }}: {{ formatDate(summary.estimatedHarvestDate) }}
+          </span>
+        </div>
+      </div>
+
+      <div *ngIf="!hasSowing()" class="modal-section no-sowing-section">
+        <mat-icon>info</mat-icon>
+        <span>{{ 'lots.noSowing' | translate }}</span>
+      </div>
+
+      <div class="modal-section">
+        <h4 class="modal-section-title">
+          <mat-icon>history</mat-icon>
+          {{ 'lots.lastEvent' | translate }}
+        </h4>
+        <div class="last-event-row" *ngIf="summary.lastEventDate; else noEvents">
+          <div class="last-event-info">
+            <span class="event-type-badge">{{ getEventTypeLabel(summary.lastEventType) }}</span>
+            <span class="last-event-date">{{ formatLastEventDate(summary.lastEventDate) }}</span>
+          </div>
+        </div>
+        <ng-template #noEvents>
+          <div class="last-event-empty">
+            <mat-icon>block</mat-icon>
+            {{ 'lots.noEvents' | translate }}
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

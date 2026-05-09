@@ -1,0 +1,68 @@
+<div class="login-container">
+  <div class="login-card">
+    <!-- Login Title -->
+    <div class="login-title">
+      <span>🌾</span>
+      {{ 'login.title' | translate }}
+    </div>
+    <p class="login-subtitle">{{ 'login.subtitle' | translate }}</p>
+
+    <!-- Login Form -->
+    <form class="login-form" (ngSubmit)="login()" #loginForm="ngForm">
+      <!-- Error Message -->
+      <div *ngIf="errorMessage" class="error-message">
+        <mat-icon>error</mat-icon>
+        {{ errorMessage }}
+      </div>
+
+      <!-- Email Field -->
+      <div class="form-field">
+        <label for="email">{{ 'login.email' | translate }}</label>
+        <input
+          type="email"
+          id="email"
+          [(ngModel)]="email"
+          name="email"
+          placeholder="usuario@ejemplo.com"
+          [disabled]="loading"
+          required
+        />
+      </div>
+
+      <!-- Password Field -->
+      <div class="form-field password-field">
+        <label for="password">{{ 'login.password' | translate }}</label>
+        <input
+          [type]="hidePassword ? 'password' : 'text'"
+          id="password"
+          [(ngModel)]="password"
+          name="password"
+          placeholder="••••••••"
+          [disabled]="loading"
+          required
+        />
+        <button
+          type="button"
+          class="toggle-password"
+          (click)="togglePasswordVisibility()"
+          [disabled]="loading"
+        >
+          <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+      </div>
+
+      <!-- Login Button -->
+      <button
+        type="submit"
+        class="login-btn"
+        [disabled]="loading || !email || !password"
+      >
+        <span *ngIf="!loading">{{ 'login.button' | translate }}</span>
+        <span *ngIf="loading">
+          <span class="spinner"></span>
+          {{ 'login.loading' | translate }}
+        </span>
+      </button>
+    </form>
+  </div>
+</div>

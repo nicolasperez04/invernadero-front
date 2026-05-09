@@ -1,0 +1,17 @@
+<div style="display:flex; justify-content: space-between; align-items: center; padding: 12px 20px; background:#1976d2; color:white; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+
+  <div style="font-size: 18px; font-weight: bold;">
+    🌾 {{ 'nav.title' | translate }}
+  </div>
+
+  <div style="display:flex; gap:15px; align-items: center;">
+    <button mat-icon-button (click)="setLang('es')" [disabled]="currentLang() === 'es'" title="Español">
+      <span style="font-weight: bold;">ES</span>
+    </button>
+    <span style="color: rgba(255,255,255,0.5);">|</span>
+    <button mat-icon-button (click)="setLang('en')" [disabled]="currentLang() === 'en'" title="English">
+      <span style="font-weight: bold;">EN</span>
+    </button>
+  </div>
+
+</div>

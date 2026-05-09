@@ -1,0 +1,101 @@
+<div class="page-header">
+  <h1 class="page-title">
+    <mat-icon>event</mat-icon>
+    {{ 'events.title' | translate }}
+  </h1>
+  <p class="page-subtitle">{{ 'events.description' | translate }}</p>
+</div>
+
+<!-- LOT SELECTOR CARD -->
+<div class="form-card">
+  <div class="form-card-title">
+    <mat-icon>place</mat-icon>
+    {{ 'events.selectLot' | translate }}
+  </div>
+
+  <div class="form-row">
+    <div class="form-field" style="flex: 1; max-width: none;">
+      <label>{{ 'events.lot' | translate }}</label>
+      <select [(ngModel)]="selectedLotId" (change)="loadEvents()">
+        <option [value]="0">{{ 'events.selectLot' | translate }}</option>
+        <option *ngFor="let lot of lots" [value]="lot.id">
+          {{ lot.name }}
+        </option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- CREATE EVENT CARD -->
+<div class="form-card" *ngIf="selectedLotId">
+  <div class="form-card-title">
+    <mat-icon>add_circle</mat-icon>
+    {{ 'events.newEvent' | translate }}
+  </div>
+
+  <div class="form-row">
+    <div class="form-field">
+      <label>{{ 'events.type' | translate }}</label>
+      <select [(ngModel)]="newEvent.type">
+        <option value="">{{ 'events.selectType' | translate }}</option>
+        <option *ngFor="let t of eventTypes" [value]="t.name">
+          {{ translateType(t.name) }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-field">
+      <label>{{ 'events.timestamp' | translate }}</label>
+      <input type="datetime-local" [(ngModel)]="newEvent.timestamp">
+    </div>
+
+    <div class="form-field">
+      <label>{{ 'events.description' | translate }}</label>
+      <textarea [(ngModel)]="newEvent.description"
+                placeholder="{{ 'events.descriptionPlaceholder' | translate }}"
+                rows="2"></textarea>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button class="btn-primary" (click)="createEvent()" [disabled]="!newEvent.type || !newEvent.timestamp">
+      <mat-icon>add</mat-icon>
+      {{ 'events.register' | translate }}
+    </button>
+  </div>
+</div>
+
+<!-- EVENTS TABLE CARD -->
+<div class="table-card" *ngIf="selectedLotId">
+  <div class="table-header">
+    <h3>{{ 'events.history' | translate }} - {{ getLotName(selectedLotId) }}</h3>
+  </div>
+
+  <div class="table-wrapper">
+    <table *ngIf="events.length > 0; else emptyState">
+      <thead>
+        <tr>
+          <th>{{ 'events.timestamp' | translate }}</th>
+          <th>{{ 'events.type' | translate }}</th>
+          <th>{{ 'events.description' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let event of events">
+          <td>{{ event.timestamp | date: 'dd/MM/yyyy HH:mm' }}</td>
+          <td>
+            <span class="event-badge">{{ translateType(event.type) }}</span>
+          </td>
+          <td>{{ event.description || '-' }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <ng-template #emptyState>
+      <div class="empty-state">
+        <mat-icon>inbox</mat-icon>
+        <p>{{ 'events.empty' | translate }}</p>
+      </div>
+    </ng-template>
+  </div>
+</div>

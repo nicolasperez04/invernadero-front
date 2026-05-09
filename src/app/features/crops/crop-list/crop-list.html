@@ -1,0 +1,130 @@
+<div class="page-header">
+  <h1 class="page-title">
+    <mat-icon>grass</mat-icon>
+    {{ 'crops.title' | translate }}
+  </h1>
+  <p class="page-subtitle">{{ 'crops.description' | translate }}</p>
+</div>
+
+<div class="form-card" [class.edit-mode]="isEditing">
+  <div class="form-header">
+    <div class="form-header-icon">
+      <mat-icon>{{ isEditing ? 'edit_square' : 'add_circle' }}</mat-icon>
+    </div>
+    <div>
+      <h3 class="form-header-title">{{ isEditing ? 'Editar cultivo' : 'Nuevo cultivo' }}</h3>
+      <p class="form-header-subtitle">
+        {{ isEditing ? 'Modifica los datos del cultivo' : 'Completa los datos para registrar un nuevo cultivo' }}
+      </p>
+    </div>
+  </div>
+
+  <div class="form-body">
+    <div class="form-grid">
+      <div class="form-field">
+        <label>{{ 'crops.name' | translate }}</label>
+        <input type="text"
+               [(ngModel)]="newCrop.name"
+               placeholder="Ej: Tomate, Maíz, Lechuga...">
+      </div>
+
+      <div class="form-field">
+        <label>{{ 'crops.description' | translate }}</label>
+        <input type="text"
+               [(ngModel)]="newCrop.description"
+               placeholder="Breve descripción del cultivo">
+      </div>
+
+      <div class="form-field">
+        <label>{{ 'crops.estimatedGrowthDays' | translate }}</label>
+        <input type="number"
+               [(ngModel)]="newCrop.estimatedGrowthDays"
+               placeholder="Ej: 90"
+               min="1">
+      </div>
+
+      <div class="form-field">
+        <label>{{ 'crops.inactivityDaysThreshold' | translate }}</label>
+        <input type="number"
+               [(ngModel)]="newCrop.inactivityDaysThreshold"
+               placeholder="Ej: 15"
+               min="1">
+      </div>
+    </div>
+
+    <div class="form-footer">
+      <button class="btn-ghost" (click)="cancelEdit()" *ngIf="isEditing">
+        <mat-icon>close</mat-icon>
+        Cancelar
+      </button>
+
+      <button class="btn-secondary" (click)="resetForm()" *ngIf="!isEditing">
+        <mat-icon>clear_all</mat-icon>
+        Limpiar
+      </button>
+
+      <button class="btn-primary"
+              (click)="createOrUpdate()"
+              [disabled]="!newCrop.name || !newCrop.estimatedGrowthDays || !newCrop.inactivityDaysThreshold || loading">
+        <mat-icon>{{ isEditing ? 'check' : 'add' }}</mat-icon>
+        {{ isEditing ? 'Guardar cambios' : ('crops.create' | translate) }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="table-card">
+  <div class="table-header">
+    <h3>{{ 'crops.list' | translate }}</h3>
+    <span class="table-count">{{ crops.length }} cultivos</span>
+  </div>
+
+  <div class="table-wrapper">
+    <table *ngIf="crops.length > 0; else emptyState">
+      <thead>
+        <tr>
+          <th>{{ 'crops.name' | translate }}</th>
+          <th>{{ 'crops.description' | translate }}</th>
+          <th class="center">{{ 'crops.estimatedGrowthDays' | translate }}</th>
+          <th class="center">{{ 'crops.inactivityDaysThreshold' | translate }}</th>
+          <th class="center">{{ 'crops.actions' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let crop of crops" [class.row-editing]="editingCropId === crop.id">
+          <td><strong>{{ crop.name }}</strong></td>
+          <td class="desc-cell">{{ crop.description || '—' }}</td>
+          <td class="center">
+            <span class="metric-badge">{{ crop.estimatedGrowthDays }} días</span>
+          </td>
+          <td class="center">
+            <span class="metric-badge warning">{{ crop.inactivityDaysThreshold }} días</span>
+          </td>
+          <td class="center">
+            <div class="actions-cell">
+              <button *ngIf="isAdmin"
+                      class="btn-action btn-edit"
+                      (click)="startEdit(crop)"
+                      title="{{ 'crops.edit' | translate }}">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button class="btn-action btn-delete"
+                      (click)="deleteCrop(crop.id)"
+                      title="{{ 'crops.delete' | translate }}">
+                <mat-icon>delete_outline</mat-icon>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <ng-template #emptyState>
+      <div class="empty-state">
+        <mat-icon>eco</mat-icon>
+        <p>No hay cultivos registrados</p>
+        <small>Usa el formulario de arriba para crear tu primer cultivo</small>
+      </div>
+    </ng-template>
+  </div>
+</div>

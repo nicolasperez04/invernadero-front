@@ -1,0 +1,13 @@
+button {
+  color: white;
+  transition: opacity 0.3s;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button:not(:disabled):hover {
+  opacity: 0.8;
+}
