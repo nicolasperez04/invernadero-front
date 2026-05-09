@@ -8,7 +8,6 @@ on:
       - 'docs/**'
       - 'README.md'
       - 'AGENTS.md'
-      - 'package-lock.json'
   pull_request:
     branches: [main]
     paths-ignore:
@@ -16,7 +15,6 @@ on:
       - 'docs/**'
       - 'README.md'
       - 'AGENTS.md'
-      - 'package-lock.json'
 
 jobs:
   test:
