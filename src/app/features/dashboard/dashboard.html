@@ -97,10 +97,10 @@
       </div>
 
       <div class="chart-wrapper">
-        <canvas #eventChartCanvas *ngIf="eventChart"></canvas>
+        <canvas #eventChartCanvas id="eventChartCanvas"></canvas>
       </div>
 
-      <div *ngIf="!eventChart" class="empty-state">
+      <div *ngIf="!eventChart || !eventChart.labels?.length" class="empty-state">
         <mat-icon>bar_chart</mat-icon>
         <p>{{ 'dashboard.noData' | translate }}</p>
       </div>

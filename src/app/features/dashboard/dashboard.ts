@@ -121,7 +121,10 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.loading = false;
         
-        this.waitForCanvas();
+        setTimeout(() => {
+          this.createEventChart();
+          this.cdr.markForCheck();
+        }, 0);
       },
       error: (err) => {
         console.error('Error cargando dashboard:', err);
@@ -134,21 +137,31 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   createEventChart(): void {
     console.log('DEBUG createEventChart - START');
-    console.log('DEBUG - canvas:', this.eventChartCanvas?.nativeElement);
-    console.log('DEBUG - eventChart:', this.eventChart);
     
-    if (!this.eventChartCanvas || !this.eventChart) {
-      console.log('DEBUG createEventChart - NO CANVAS OR DATA');
-      return;
-    }
-    
-    if (!this.eventChart.labels || !this.eventChart.values) {
-      console.log('DEBUG createEventChart - NO LABELS OR VALUES');
+    // Verificar datos del gráfico
+    if (!this.eventChart || !this.eventChart.labels || !this.eventChart.values) {
+      console.log('DEBUG createEventChart - NO DATA');
       return;
     }
 
+    console.log('DEBUG - eventChart:', this.eventChart);
     console.log('DEBUG - labels:', this.eventChart.labels);
     console.log('DEBUG - values:', this.eventChart.values);
+
+    // Usar querySelector como respaldo si @ViewChild no funciona
+    let canvasElement: HTMLCanvasElement | null = this.eventChartCanvas?.nativeElement;
+    
+    if (!canvasElement) {
+      console.log('DEBUG - Canvas no encontrado por @ViewChild, usando querySelector');
+      canvasElement = document.querySelector('#eventChartCanvas') as HTMLCanvasElement;
+    }
+    
+    console.log('DEBUG - canvasElement:', canvasElement);
+
+    if (!canvasElement) {
+      console.log('DEBUG createEventChart - CANVAS NOT FOUND AT ALL');
+      return;
+    }
 
     if (this.eventChartInstance) {
       this.eventChartInstance.destroy();
