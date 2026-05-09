@@ -121,10 +121,8 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.loading = false;
         
-        setTimeout(() => {
-          this.createEventChart();
-          this.cdr.markForCheck();
-        }, 0);
+        // Usar MutationObserver para esperar a que el canvas esté en el DOM
+        this.waitForCanvasWithObserver();
       },
       error: (err) => {
         console.error('Error cargando dashboard:', err);
@@ -251,7 +249,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private waitForCanvas(): void {
     let attempts = 0;
-    const maxAttempts = 40; // 40 intentos * 50ms = 2 segundos máximo
+    const maxAttempts = 40;
     const checkInterval = setInterval(() => {
       attempts++;
       console.log(`DEBUG waitForCanvas - intento ${attempts}, canvas:`, this.eventChartCanvas?.nativeElement);
@@ -265,9 +263,56 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       
       if (attempts >= maxAttempts) {
         clearInterval(checkInterval);
-        console.log('DEBUG waitForCanvas - TIMEOUT, el canvas nunca estuvo disponible');
+        console.log('DEBUG waitForCanvas - TIMEOUT, intentando con querySelector');
+        // Último intento con querySelector
+        setTimeout(() => this.createEventChart(), 100);
       }
     }, 50);
+  }
+
+  private waitForCanvasWithObserver(): void {
+    console.log('DEBUG waitForCanvasWithObserver - START');
+    
+    // Primero intentar inmediatamente
+    const tryCreateChart = () => {
+      const canvasEl = document.getElementById('eventChartCanvas') as HTMLCanvasElement;
+      console.log('DEBUG - querySelector result:', canvasEl);
+      
+      if (canvasEl) {
+        console.log('DEBUG - Canvas encontrado inmediatamente!');
+        this.createEventChart();
+        this.cdr.markForCheck();
+        return true;
+      }
+      return false;
+    };
+    
+    // Intentar inmediatamente
+    if (tryCreateChart()) return;
+    
+    // Si no funciona, usar MutationObserver
+    console.log('DEBUG - Canvas no encontrado, usando MutationObserver');
+    
+    const observer = new MutationObserver((mutations, obs) => {
+      console.log('DEBUG - MutationObserver: detectando cambios en el DOM');
+      if (tryCreateChart()) {
+        obs.disconnect();
+      }
+    });
+    
+    // Observar el cuerpo del documento
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+    
+    // Timeout de 5 segundos
+    setTimeout(() => {
+      observer.disconnect();
+      console.log('DEBUG - MutationObserver desconectado por timeout');
+      // Último intento
+      tryCreateChart();
+    }, 5000);
   }
 
   /**
