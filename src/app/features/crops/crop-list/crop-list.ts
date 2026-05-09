@@ -19,17 +19,16 @@ import { MatIconModule } from '@angular/material/icon';
   standalone: true,
   imports: [FormsModule, CommonModule, TranslateModule, MatButtonModule, MatIconModule],
   templateUrl: './crop-list.html',
-  styleUrl: './crop-list.css'
+  styleUrl: './crop-list.css',
 })
 export class CropListComponent implements OnInit, OnDestroy {
-
   crops: Crop[] = [];
 
   newCrop: Partial<Crop> = {
     name: '',
     description: '',
     estimatedGrowthDays: 0,
-    inactivityDaysThreshold: 0
+    inactivityDaysThreshold: 0,
   };
 
   editingCropId: number | null = null;
@@ -44,7 +43,7 @@ export class CropListComponent implements OnInit, OnDestroy {
     private router: Router,
     private cdr: ChangeDetectorRef,
     private snackBar: MatSnackBar,
-    private translate: TranslateService
+    private translate: TranslateService,
   ) {}
 
   get isAdmin(): boolean {
@@ -60,9 +59,9 @@ export class CropListComponent implements OnInit, OnDestroy {
 
     this.router.events
       .pipe(
-        filter(event => event instanceof NavigationEnd),
+        filter((event) => event instanceof NavigationEnd),
         filter((event: any) => event.url === '/crops'),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
       )
       .subscribe(() => {
         this.loadCrops();
@@ -77,7 +76,7 @@ export class CropListComponent implements OnInit, OnDestroy {
   loadCrops(): void {
     this.loading = true;
     this.cropService.getAll().subscribe({
-      next: data => {
+      next: (data) => {
         this.crops = data;
         this.loading = false;
         this.cdr.markForCheck();
@@ -85,7 +84,7 @@ export class CropListComponent implements OnInit, OnDestroy {
       error: () => {
         this.loading = false;
         this.cdr.markForCheck();
-      }
+      },
     });
   }
 
@@ -104,16 +103,22 @@ export class CropListComponent implements OnInit, OnDestroy {
     this.cropService.create(this.newCrop).subscribe({
       next: () => {
         this.loading = false;
-        this.snackBar.open('Cultivo creado exitosamente', 'Cerrar', { duration: 3000, panelClass: 'snack-success' });
+        this.snackBar.open('Cultivo creado exitosamente', 'Cerrar', {
+          duration: 3000,
+          panelClass: 'snack-success',
+        });
         this.resetForm();
         this.loadCrops();
         this.cdr.markForCheck();
       },
       error: (err) => {
         this.loading = false;
-        this.snackBar.open('Error al crear el cultivo', 'Cerrar', { duration: 4000, panelClass: 'snack-error' });
+        this.snackBar.open('Error al crear el cultivo', 'Cerrar', {
+          duration: 4000,
+          panelClass: 'snack-error',
+        });
         this.cdr.markForCheck();
-      }
+      },
     });
   }
 
@@ -134,43 +139,60 @@ export class CropListComponent implements OnInit, OnDestroy {
     this.cropService.update(this.editingCropId, this.newCrop).subscribe({
       next: () => {
         this.loading = false;
-        this.snackBar.open('Cultivo actualizado correctamente', 'Cerrar', { duration: 3000, panelClass: 'snack-success' });
+        this.snackBar.open('Cultivo actualizado correctamente', 'Cerrar', {
+          duration: 3000,
+          panelClass: 'snack-success',
+        });
         this.cancelEdit();
         this.loadCrops();
         this.cdr.markForCheck();
       },
       error: () => {
         this.loading = false;
-        this.snackBar.open('Error al actualizar el cultivo', 'Cerrar', { duration: 4000, panelClass: 'snack-error' });
+        this.snackBar.open('Error al actualizar el cultivo', 'Cerrar', {
+          duration: 4000,
+          panelClass: 'snack-error',
+        });
         this.cdr.markForCheck();
-      }
+      },
     });
   }
 
   deleteCrop(id: number): void {
-    this.confirmDialog.confirm('confirm.deleteTitle', 'confirm.deleteMessage').subscribe(
-      (confirmed) => {
+    this.confirmDialog
+      .confirm('confirm.deleteTitle', 'confirm.deleteMessage')
+      .subscribe((confirmed) => {
         if (confirmed) {
           this.loading = true;
           this.cropService.delete(id).subscribe({
             next: () => {
               this.loading = false;
-              this.snackBar.open('Cultivo eliminado', 'Cerrar', { duration: 3000, panelClass: 'snack-success' });
+              this.snackBar.open('Cultivo eliminado', 'Cerrar', {
+                duration: 3000,
+                panelClass: 'snack-success',
+              });
               this.loadCrops();
               this.cdr.markForCheck();
             },
             error: () => {
               this.loading = false;
-              this.snackBar.open('Error al eliminar el cultivo', 'Cerrar', { duration: 4000, panelClass: 'snack-error' });
+              this.snackBar.open('Error al eliminar el cultivo', 'Cerrar', {
+                duration: 4000,
+                panelClass: 'snack-error',
+              });
               this.cdr.markForCheck();
-            }
+            },
           });
         }
-      }
-    );
+      });
   }
 
   resetForm(): void {
-    this.newCrop = { name: '', description: '', estimatedGrowthDays: 0, inactivityDaysThreshold: 0 };
+    this.newCrop = {
+      name: '',
+      description: '',
+      estimatedGrowthDays: 0,
+      inactivityDaysThreshold: 0,
+    };
   }
 }

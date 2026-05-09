@@ -43,12 +43,11 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       // Mostrar snackbar con el mensaje
       snackBar.open(errorMessage, 'OK', {
         duration: 5000,
-        panelClass: ['error-snackbar']
+        panelClass: ['error-snackbar'],
       });
 
       // Propagar el error para que el componente pueda acceder a error.error si es necesario
       return throwError(() => error);
-    })
+    }),
   );
 };
-

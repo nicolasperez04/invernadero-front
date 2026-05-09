@@ -9,11 +9,10 @@ import { LotListComponent } from './features/lots/lot-list/lot-list';
 import { EventListComponent } from './features/events/event-list/event-list';
 
 export const routes: Routes = [
-
   // Login (público)
   {
     path: 'login',
-    component: LoginComponent
+    component: LoginComponent,
   },
 
   // App protegida
@@ -22,7 +21,6 @@ export const routes: Routes = [
     component: LayoutComponent,
     canActivate: [authGuard],
     children: [
-
       { path: 'dashboard', component: DashboardComponent },
 
       // default
@@ -33,7 +31,7 @@ export const routes: Routes = [
         path: 'crops',
         component: CropListComponent,
         canMatch: [roleGuard],
-        data: { roles: ['ADMIN', 'OPERATOR'] }
+        data: { roles: ['ADMIN', 'OPERATOR'] },
       },
 
       // lots (protegido por rol ADMIN, OPERATOR)
@@ -41,7 +39,7 @@ export const routes: Routes = [
         path: 'lots',
         component: LotListComponent,
         canMatch: [roleGuard],
-        data: { roles: ['ADMIN', 'OPERATOR'] }
+        data: { roles: ['ADMIN', 'OPERATOR'] },
       },
 
       // events (protegido por rol ADMIN, OPERATOR, VIEWER)
@@ -49,12 +47,11 @@ export const routes: Routes = [
         path: 'events',
         component: EventListComponent,
         canMatch: [roleGuard],
-        data: { roles: ['ADMIN', 'OPERATOR', 'VIEWER'] }
-      }
-
-    ]
+        data: { roles: ['ADMIN', 'OPERATOR', 'VIEWER'] },
+      },
+    ],
   },
 
   // fallback
-  { path: '**', redirectTo: 'login' }
+  { path: '**', redirectTo: 'login' },
 ];

@@ -1,11 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { DashboardResponse, EventChartDTO, LotStatusDTO, LotProgressDTO } from '../models/dashboard.model';
+import {
+  DashboardResponse,
+  EventChartDTO,
+  LotStatusDTO,
+  LotProgressDTO,
+} from '../models/dashboard.model';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DashboardService {
   private apiUrl = `${environment.apiUrl}/dashboard`;

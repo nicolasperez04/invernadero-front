@@ -10,10 +10,9 @@ export interface EventType {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class EventTypeService {
-
   private api = `${environment.apiUrl}/event-types`;
 
   constructor(private http: HttpClient) {}

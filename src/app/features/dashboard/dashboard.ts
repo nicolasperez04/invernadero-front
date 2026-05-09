@@ -1,4 +1,12 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ChangeDetectorRef,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -17,7 +25,7 @@ import {
   LotProgressDTO,
   STATUS_COLORS,
   STATUS_LABELS,
-  STATUS_ICONS
+  STATUS_ICONS,
 } from '../../core/models/dashboard.model';
 
 interface Crop {
@@ -31,10 +39,9 @@ interface Crop {
   standalone: true,
   imports: [CommonModule, FormsModule, TranslateModule, MatIconModule],
   templateUrl: './dashboard.html',
-  styleUrl: './dashboard.css'
+  styleUrl: './dashboard.css',
 })
 export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
-
   // Data
   eventChart: EventChartDTO | null = null;
   lotStatuses: LotStatusDTO[] = [];
@@ -57,7 +64,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     private cropService: CropService,
     private router: Router,
     private cdr: ChangeDetectorRef,
-    private translate: TranslateService
+    private translate: TranslateService,
   ) {}
 
   ngOnInit(): void {
@@ -67,9 +74,9 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     // Recargar al navegar a esta ruta
     this.router.events
       .pipe(
-        filter(event => event instanceof NavigationEnd),
+        filter((event) => event instanceof NavigationEnd),
         filter((event: any) => event.url === '/dashboard'),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
       )
       .subscribe(() => {
         this.loadDashboard();
@@ -84,8 +91,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  ngAfterViewInit(): void {
-  }
+  ngAfterViewInit(): void {}
 
   /**
    * Carga la lista de cultivos disponibles
@@ -98,7 +104,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       },
       error: (err) => {
         console.error('Error cargando cultivos:', err);
-      }
+      },
     });
   }
 
@@ -120,7 +126,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
         this.lotProgress = response.lotProgress;
 
         this.loading = false;
-        
+
         // Usar MutationObserver para esperar a que el canvas esté en el DOM
         this.waitForCanvasWithObserver();
       },
@@ -129,13 +135,13 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
         this.errorMessage = this.translate.instant('dashboard.loadingError');
         this.loading = false;
         this.cdr.markForCheck();
-      }
+      },
     });
   }
 
   createEventChart(): void {
     console.log('DEBUG createEventChart - START');
-    
+
     // Verificar datos del gráfico
     if (!this.eventChart || !this.eventChart.labels || !this.eventChart.values) {
       console.log('DEBUG createEventChart - NO DATA');
@@ -148,12 +154,12 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // Usar querySelector como respaldo si @ViewChild no funciona
     let canvasElement: HTMLCanvasElement | null = this.eventChartCanvas?.nativeElement;
-    
+
     if (!canvasElement) {
       console.log('DEBUG - Canvas no encontrado por @ViewChild, usando querySelector');
       canvasElement = document.querySelector('#eventChartCanvas') as HTMLCanvasElement;
     }
-    
+
     console.log('DEBUG - canvasElement:', canvasElement);
 
     if (!canvasElement) {
@@ -171,7 +177,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     });
 
     const data = this.eventChart.values;
-    
+
     console.log('DEBUG - processed labels:', labels);
     console.log('DEBUG - processed data:', data);
 
@@ -179,22 +185,24 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       type: 'bar',
       data: {
         labels: labels,
-        datasets: [{
-          label: this.translate.instant('dashboard.eventActivity'),
-          data: data,
-          backgroundColor: 'rgba(45, 125, 77, 0.85)',
-          borderColor: '#2d7d4d',
-          borderWidth: 1,
-          borderRadius: 6,
-          borderSkipped: false,
-        }]
+        datasets: [
+          {
+            label: this.translate.instant('dashboard.eventActivity'),
+            data: data,
+            backgroundColor: 'rgba(45, 125, 77, 0.85)',
+            borderColor: '#2d7d4d',
+            borderWidth: 1,
+            borderRadius: 6,
+            borderSkipped: false,
+          },
+        ],
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
           legend: {
-            display: false
+            display: false,
           },
           tooltip: {
             backgroundColor: 'rgba(0, 0, 0, 0.8)',
@@ -207,43 +215,43 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
               label: (context) => {
                 const label = context.parsed.y;
                 return `${label} ${this.translate.instant('dashboard.totalEvents')}`;
-              }
-            }
-          }
+              },
+            },
+          },
         },
         scales: {
           x: {
             grid: {
-              display: false
+              display: false,
             },
             ticks: {
               color: '#666',
               font: {
-                size: 11
+                size: 11,
               },
               maxRotation: 45,
-              minRotation: 45
-            }
+              minRotation: 45,
+            },
           },
           y: {
             beginAtZero: true,
             grid: {
-              color: 'rgba(0, 0, 0, 0.05)'
+              color: 'rgba(0, 0, 0, 0.05)',
             },
             ticks: {
               color: '#666',
               font: {
-                size: 11
+                size: 11,
               },
-              stepSize: 1
-            }
-          }
+              stepSize: 1,
+            },
+          },
         },
         animation: {
           duration: 1000,
-          easing: 'easeOutQuart'
-        }
-      }
+          easing: 'easeOutQuart',
+        },
+      },
     });
   }
 
@@ -252,15 +260,18 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     const maxAttempts = 40;
     const checkInterval = setInterval(() => {
       attempts++;
-      console.log(`DEBUG waitForCanvas - intento ${attempts}, canvas:`, this.eventChartCanvas?.nativeElement);
-      
+      console.log(
+        `DEBUG waitForCanvas - intento ${attempts}, canvas:`,
+        this.eventChartCanvas?.nativeElement,
+      );
+
       if (this.eventChartCanvas?.nativeElement) {
         clearInterval(checkInterval);
         this.createEventChart();
         this.cdr.markForCheck();
         return;
       }
-      
+
       if (attempts >= maxAttempts) {
         clearInterval(checkInterval);
         console.log('DEBUG waitForCanvas - TIMEOUT, intentando con querySelector');
@@ -272,12 +283,12 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private waitForCanvasWithObserver(): void {
     console.log('DEBUG waitForCanvasWithObserver - START');
-    
+
     // Primero intentar inmediatamente
     const tryCreateChart = () => {
       const canvasEl = document.getElementById('eventChartCanvas') as HTMLCanvasElement;
       console.log('DEBUG - querySelector result:', canvasEl);
-      
+
       if (canvasEl) {
         console.log('DEBUG - Canvas encontrado inmediatamente!');
         this.createEventChart();
@@ -286,26 +297,26 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       }
       return false;
     };
-    
+
     // Intentar inmediatamente
     if (tryCreateChart()) return;
-    
+
     // Si no funciona, usar MutationObserver
     console.log('DEBUG - Canvas no encontrado, usando MutationObserver');
-    
+
     const observer = new MutationObserver((mutations, obs) => {
       console.log('DEBUG - MutationObserver: detectando cambios en el DOM');
       if (tryCreateChart()) {
         obs.disconnect();
       }
     });
-    
+
     // Observar el cuerpo del documento
     observer.observe(document.body, {
       childList: true,
-      subtree: true
+      subtree: true,
     });
-    
+
     // Timeout de 5 segundos
     setTimeout(() => {
       observer.disconnect();
@@ -329,7 +340,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     const colorMap = {
       GREEN: '#4caf50',
       YELLOW: '#ff9800',
-      RED: '#f44336'
+      RED: '#f44336',
     };
     return colorMap[status];
   }
@@ -355,7 +366,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     const inactivityLabels = {
       GREEN: this.translate.instant('dashboard.inactivityGreen'),
       YELLOW: this.translate.instant('dashboard.inactivityYellow'),
-      RED: this.translate.instant('dashboard.inactivityRed')
+      RED: this.translate.instant('dashboard.inactivityRed'),
     };
     return inactivityLabels[level];
   }
@@ -377,7 +388,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       return date.toLocaleDateString('es-ES', {
         year: 'numeric',
         month: 'short',
-        day: 'numeric'
+        day: 'numeric',
       });
     } catch {
       return dateString;
@@ -424,7 +435,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   get alertLots(): LotStatusDTO[] {
-    return this.lotStatuses.filter(l => l.status !== 'GREEN' || l.inactivityLevel !== 'GREEN');
+    return this.lotStatuses.filter((l) => l.status !== 'GREEN' || l.inactivityLevel !== 'GREEN');
   }
 
   get hasAlerts(): boolean {

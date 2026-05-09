@@ -12,7 +12,9 @@
       <mat-icon>{{ isEditing ? 'edit_square' : 'add_circle' }}</mat-icon>
     </div>
     <div>
-      <h3 class="form-header-title">{{ isEditing ? ('crops.editTitle' | translate) : ('crops.newTitle' | translate) }}</h3>
+      <h3 class="form-header-title">
+        {{ isEditing ? ('crops.editTitle' | translate) : ('crops.newTitle' | translate) }}
+      </h3>
       <p class="form-header-subtitle">
         {{ isEditing ? ('crops.editSubtitle' | translate) : ('crops.newSubtitle' | translate) }}
       </p>
@@ -23,32 +25,40 @@
     <div class="form-grid">
       <div class="form-field">
         <label>{{ 'crops.name' | translate }}</label>
-        <input type="text"
-               [(ngModel)]="newCrop.name"
-               placeholder="{{ 'crops.namePlaceholder' | translate }}">
+        <input
+          type="text"
+          [(ngModel)]="newCrop.name"
+          placeholder="{{ 'crops.namePlaceholder' | translate }}"
+        />
       </div>
 
       <div class="form-field">
         <label>{{ 'crops.description' | translate }}</label>
-        <input type="text"
-               [(ngModel)]="newCrop.description"
-               placeholder="{{ 'crops.descriptionPlaceholderShort' | translate }}">
+        <input
+          type="text"
+          [(ngModel)]="newCrop.description"
+          placeholder="{{ 'crops.descriptionPlaceholderShort' | translate }}"
+        />
       </div>
 
       <div class="form-field">
         <label>{{ 'crops.estimatedGrowthDays' | translate }}</label>
-        <input type="number"
-               [(ngModel)]="newCrop.estimatedGrowthDays"
-               placeholder="{{ 'crops.growthDaysPlaceholder' | translate }}"
-               min="1">
+        <input
+          type="number"
+          [(ngModel)]="newCrop.estimatedGrowthDays"
+          placeholder="{{ 'crops.growthDaysPlaceholder' | translate }}"
+          min="1"
+        />
       </div>
 
       <div class="form-field">
         <label>{{ 'crops.inactivityDaysThreshold' | translate }}</label>
-        <input type="number"
-               [(ngModel)]="newCrop.inactivityDaysThreshold"
-               placeholder="{{ 'crops.inactivityPlaceholder' | translate }}"
-               min="1">
+        <input
+          type="number"
+          [(ngModel)]="newCrop.inactivityDaysThreshold"
+          placeholder="{{ 'crops.inactivityPlaceholder' | translate }}"
+          min="1"
+        />
       </div>
     </div>
 
@@ -63,9 +73,16 @@
         {{ 'crops.clearForm' | translate }}
       </button>
 
-      <button class="btn-primary"
-              (click)="createOrUpdate()"
-              [disabled]="!newCrop.name || !newCrop.estimatedGrowthDays || !newCrop.inactivityDaysThreshold || loading">
+      <button
+        class="btn-primary"
+        (click)="createOrUpdate()"
+        [disabled]="
+          !newCrop.name ||
+          !newCrop.estimatedGrowthDays ||
+          !newCrop.inactivityDaysThreshold ||
+          loading
+        "
+      >
         <mat-icon>{{ isEditing ? 'check' : 'add' }}</mat-icon>
         {{ isEditing ? ('crops.update' | translate) : ('crops.create' | translate) }}
       </button>
@@ -92,25 +109,35 @@
       </thead>
       <tbody>
         <tr *ngFor="let crop of crops" [class.row-editing]="editingCropId === crop.id">
-          <td><strong>{{ crop.name }}</strong></td>
+          <td>
+            <strong>{{ crop.name }}</strong>
+          </td>
           <td class="desc-cell">{{ crop.description || '—' }}</td>
           <td class="center">
-            <span class="metric-badge">{{ crop.estimatedGrowthDays }} {{ 'crops.days' | translate }}</span>
+            <span class="metric-badge"
+              >{{ crop.estimatedGrowthDays }} {{ 'crops.days' | translate }}</span
+            >
           </td>
           <td class="center">
-            <span class="metric-badge warning">{{ crop.inactivityDaysThreshold }} {{ 'crops.days' | translate }}</span>
+            <span class="metric-badge warning"
+              >{{ crop.inactivityDaysThreshold }} {{ 'crops.days' | translate }}</span
+            >
           </td>
           <td class="center">
             <div class="actions-cell">
-              <button *ngIf="isAdmin"
-                      class="btn-action btn-edit"
-                      (click)="startEdit(crop)"
-                      title="{{ 'crops.edit' | translate }}">
+              <button
+                *ngIf="isAdmin"
+                class="btn-action btn-edit"
+                (click)="startEdit(crop)"
+                title="{{ 'crops.edit' | translate }}"
+              >
                 <mat-icon>edit</mat-icon>
               </button>
-              <button class="btn-action btn-delete"
-                      (click)="deleteCrop(crop.id)"
-                      title="{{ 'crops.delete' | translate }}">
+              <button
+                class="btn-action btn-delete"
+                (click)="deleteCrop(crop.id)"
+                title="{{ 'crops.delete' | translate }}"
+              >
                 <mat-icon>delete_outline</mat-icon>
               </button>
             </div>

@@ -21,7 +21,10 @@ test.describe('AUTH', () => {
     await page.click('button[type="submit"]');
     await page.waitForTimeout(1500);
 
-    const errorVisible = await page.locator('.error-message').isVisible().catch(() => false);
+    const errorVisible = await page
+      .locator('.error-message')
+      .isVisible()
+      .catch(() => false);
     const stillOnLogin = await page.url().includes('/login');
     expect(errorVisible || stillOnLogin).toBeTruthy();
   });
@@ -65,8 +68,12 @@ test.describe('DASHBOARD', () => {
 
   test('should display alert lots when exist', async ({ page }) => {
     await page.waitForTimeout(2000);
-    const alertsSection = page.locator('[class*="alert"], [class*="warning"], .status-badge').first();
-    await expect(alertsSection).toBeVisible({ timeout: 5000 }).catch(() => {});
+    const alertsSection = page
+      .locator('[class*="alert"], [class*="warning"], .status-badge')
+      .first();
+    await expect(alertsSection)
+      .toBeVisible({ timeout: 5000 })
+      .catch(() => {});
   });
 });
 
@@ -152,7 +159,7 @@ test.describe('LOTS', () => {
   test('should display lots list', async ({ page }) => {
     await page.goto('/lots');
     await page.waitForTimeout(3000);
-    
+
     const h1 = page.locator('h1');
     await expect(h1).toContainText('Lotes', { timeout: 10000 });
 
@@ -171,7 +178,7 @@ test.describe('LOTS', () => {
     if (optCount > 1) {
       const timestamp = Date.now();
       const lotName = `Lote E2E ${timestamp}`;
-      
+
       await page.locator('input[type="text"]').fill(lotName);
       await lotSelect.selectOption({ index: 1 });
       await page.locator('input[type="date"]').first().fill('2026-05-01');
@@ -187,7 +194,7 @@ test.describe('LOTS', () => {
 
     const summaryBtns = page.locator('button.btn-summary');
     const count = await summaryBtns.count();
-    
+
     if (count > 0) {
       await summaryBtns.first().click();
       await page.waitForTimeout(2000);
@@ -247,7 +254,10 @@ test.describe('EVENTS', () => {
       await lotSelect.selectOption({ index: 1 });
       await page.waitForTimeout(3000);
 
-      const tableVisible = await page.locator('table').isVisible().catch(() => false);
+      const tableVisible = await page
+        .locator('table')
+        .isVisible()
+        .catch(() => false);
       expect(tableVisible || optCount > 1).toBeTruthy();
     }
   });
@@ -258,7 +268,7 @@ test.describe('EVENTS', () => {
 
     const lotSelect = page.locator('select').first();
     await lotSelect.waitFor({ state: 'visible', timeout: 5000 });
-    
+
     const options = lotSelect.locator('option');
     const optCount = await options.count();
 

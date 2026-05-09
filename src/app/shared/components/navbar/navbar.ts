@@ -10,12 +10,18 @@ import { TranslateModule } from '@ngx-translate/core';
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterModule, MatToolbarModule, MatButtonModule, MatIconModule, TranslateModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+    TranslateModule,
+  ],
   templateUrl: './navbar.html',
-  styleUrl: './navbar.css'
+  styleUrl: './navbar.css',
 })
 export class NavbarComponent {
-
   constructor(private i18n: I18nService) {}
 
   setLang(lang: string) {

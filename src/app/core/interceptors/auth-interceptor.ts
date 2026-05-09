@@ -1,7 +1,6 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-
   const token = localStorage.getItem('token');
   const language = localStorage.getItem('lang') || 'es';
 
@@ -9,8 +8,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     // Enviar Accept-Language incluso en login
     const cloned = req.clone({
       setHeaders: {
-        'Accept-Language': language
-      }
+        'Accept-Language': language,
+      },
     });
     return next(cloned);
   }
@@ -19,8 +18,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     const cloned = req.clone({
       setHeaders: {
         Authorization: `Bearer ${token}`,
-        'Accept-Language': language
-      }
+        'Accept-Language': language,
+      },
     });
 
     return next(cloned);

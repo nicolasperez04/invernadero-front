@@ -5,10 +5,9 @@ import { Event } from '../../models/event.model';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class EventService {
-
   private api = `${environment.apiUrl}/events`;
 
   constructor(private http: HttpClient) {}

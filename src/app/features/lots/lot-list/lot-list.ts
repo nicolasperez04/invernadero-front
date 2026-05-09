@@ -21,10 +21,9 @@ import { MatIconModule } from '@angular/material/icon';
   standalone: true,
   imports: [FormsModule, CommonModule, TranslateModule, MatButtonModule, MatIconModule],
   templateUrl: './lot-list.html',
-  styleUrl: './lot-list.css'
+  styleUrl: './lot-list.css',
 })
 export class LotListComponent implements OnInit, OnDestroy {
-
   lots: Lot[] = [];
   crops: Crop[] = [];
 
@@ -32,7 +31,7 @@ export class LotListComponent implements OnInit, OnDestroy {
     name: '',
     cropId: 0,
     startDate: '',
-    endDate: ''
+    endDate: '',
   };
 
   editingLotId: number | null = null;
@@ -53,7 +52,7 @@ export class LotListComponent implements OnInit, OnDestroy {
     private router: Router,
     private cdr: ChangeDetectorRef,
     private snackBar: MatSnackBar,
-    private translate: TranslateService
+    private translate: TranslateService,
   ) {}
 
   get isAdminOrOperator(): boolean {
@@ -70,9 +69,9 @@ export class LotListComponent implements OnInit, OnDestroy {
 
     this.router.events
       .pipe(
-        filter(event => event instanceof NavigationEnd),
+        filter((event) => event instanceof NavigationEnd),
         filter((event: any) => event.url === '/lots'),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
       )
       .subscribe(() => {
         this.loadLots();
@@ -88,7 +87,7 @@ export class LotListComponent implements OnInit, OnDestroy {
   loadLots(): void {
     this.loading = true;
     this.lotService.getAll().subscribe({
-      next: data => {
+      next: (data) => {
         this.lots = data;
         this.loading = false;
         this.cdr.markForCheck();
@@ -96,17 +95,17 @@ export class LotListComponent implements OnInit, OnDestroy {
       error: () => {
         this.loading = false;
         this.cdr.markForCheck();
-      }
+      },
     });
   }
 
   loadCrops(): void {
     this.cropService.getAll().subscribe({
-      next: data => {
+      next: (data) => {
         this.crops = data;
         this.cdr.markForCheck();
       },
-      error: () => {}
+      error: () => {},
     });
   }
 
@@ -117,7 +116,7 @@ export class LotListComponent implements OnInit, OnDestroy {
     const payload: any = {
       name: this.newLot.name,
       cropId: this.newLot.cropId,
-      startDate: this.toIsoDatetime(this.newLot.startDate)
+      startDate: this.toIsoDatetime(this.newLot.startDate),
     };
     if (this.newLot.endDate) {
       payload.endDate = this.toIsoDatetime(this.newLot.endDate);
@@ -126,40 +125,56 @@ export class LotListComponent implements OnInit, OnDestroy {
     this.lotService.create(payload).subscribe({
       next: () => {
         this.loading = false;
-        this.snackBar.open(this.translate.instant('lots.success'), this.translate.instant('buttons.ok'), { duration: 3000, panelClass: 'snack-success' });
+        this.snackBar.open(
+          this.translate.instant('lots.success'),
+          this.translate.instant('buttons.ok'),
+          { duration: 3000, panelClass: 'snack-success' },
+        );
         this.resetForm();
         this.loadLots();
         this.cdr.markForCheck();
       },
       error: () => {
         this.loading = false;
-        this.snackBar.open(this.translate.instant('lots.error'), this.translate.instant('buttons.ok'), { duration: 4000, panelClass: 'snack-error' });
+        this.snackBar.open(
+          this.translate.instant('lots.error'),
+          this.translate.instant('buttons.ok'),
+          { duration: 4000, panelClass: 'snack-error' },
+        );
         this.cdr.markForCheck();
-      }
+      },
     });
   }
 
   deleteLot(id: number): void {
-    this.confirmDialog.confirm('confirm.deleteTitle', 'confirm.deleteMessage').subscribe(
-      (confirmed) => {
+    this.confirmDialog
+      .confirm('confirm.deleteTitle', 'confirm.deleteMessage')
+      .subscribe((confirmed) => {
         if (confirmed) {
           this.loading = true;
           this.lotService.delete(id).subscribe({
             next: () => {
               this.loading = false;
-              this.snackBar.open(this.translate.instant('lots.deleteSuccess'), this.translate.instant('buttons.ok'), { duration: 3000, panelClass: 'snack-success' });
+              this.snackBar.open(
+                this.translate.instant('lots.deleteSuccess'),
+                this.translate.instant('buttons.ok'),
+                { duration: 3000, panelClass: 'snack-success' },
+              );
               this.loadLots();
               this.cdr.markForCheck();
             },
             error: () => {
               this.loading = false;
-              this.snackBar.open(this.translate.instant('lots.error'), this.translate.instant('buttons.ok'), { duration: 4000, panelClass: 'snack-error' });
+              this.snackBar.open(
+                this.translate.instant('lots.error'),
+                this.translate.instant('buttons.ok'),
+                { duration: 4000, panelClass: 'snack-error' },
+              );
               this.cdr.markForCheck();
-            }
+            },
           });
         }
-      }
-    );
+      });
   }
 
   openSummary(id: number): void {
@@ -167,7 +182,7 @@ export class LotListComponent implements OnInit, OnDestroy {
     this.summaryOpen = true;
     this.summary = null;
     this.lotService.getSummary(id).subscribe({
-      next: data => {
+      next: (data) => {
         this.summary = data;
         this.summaryLoading = false;
         this.cdr.markForCheck();
@@ -175,9 +190,13 @@ export class LotListComponent implements OnInit, OnDestroy {
       error: () => {
         this.summaryLoading = false;
         this.closeSummary();
-        this.snackBar.open(this.translate.instant('lots.error'), this.translate.instant('buttons.ok'), { duration: 4000, panelClass: 'snack-error' });
+        this.snackBar.open(
+          this.translate.instant('lots.error'),
+          this.translate.instant('buttons.ok'),
+          { duration: 4000, panelClass: 'snack-error' },
+        );
         this.cdr.markForCheck();
-      }
+      },
     });
   }
 
@@ -187,7 +206,7 @@ export class LotListComponent implements OnInit, OnDestroy {
   }
 
   getCropName(cropId: number): string {
-    const crop = this.crops.find(c => c.id === cropId);
+    const crop = this.crops.find((c) => c.id === cropId);
     return crop ? crop.name : this.translate.instant('events.noDescription');
   }
 
@@ -208,16 +227,24 @@ export class LotListComponent implements OnInit, OnDestroy {
     this.lotService.update(this.editingLotId, this.editingLot).subscribe({
       next: () => {
         this.loading = false;
-        this.snackBar.open(this.translate.instant('lots.updateSuccess'), this.translate.instant('buttons.ok'), { duration: 3000, panelClass: 'snack-success' });
+        this.snackBar.open(
+          this.translate.instant('lots.updateSuccess'),
+          this.translate.instant('buttons.ok'),
+          { duration: 3000, panelClass: 'snack-success' },
+        );
         this.cancelEdit();
         this.loadLots();
         this.cdr.markForCheck();
       },
       error: () => {
         this.loading = false;
-        this.snackBar.open(this.translate.instant('lots.error'), this.translate.instant('buttons.ok'), { duration: 4000, panelClass: 'snack-error' });
+        this.snackBar.open(
+          this.translate.instant('lots.error'),
+          this.translate.instant('buttons.ok'),
+          { duration: 4000, panelClass: 'snack-error' },
+        );
         this.cdr.markForCheck();
-      }
+      },
     });
   }
 
@@ -233,7 +260,7 @@ export class LotListComponent implements OnInit, OnDestroy {
     const map: Record<string, string> = {
       CREATED: this.translate.instant('lots.statusCreated'),
       IN_PRODUCTION: this.translate.instant('lots.statusInProduction'),
-      FINISHED: this.translate.instant('lots.statusFinished')
+      FINISHED: this.translate.instant('lots.statusFinished'),
     };
     return map[status] || status;
   }
@@ -242,7 +269,7 @@ export class LotListComponent implements OnInit, OnDestroy {
     const map: Record<string, string> = {
       CREATED: 'radio_button_unchecked',
       IN_PRODUCTION: 'agriculture',
-      FINISHED: 'check_circle'
+      FINISHED: 'check_circle',
     };
     return map[status] || 'help';
   }
@@ -251,7 +278,7 @@ export class LotListComponent implements OnInit, OnDestroy {
     const map: Record<string, string> = {
       CREATED: '#9e9e9e',
       IN_PRODUCTION: '#2d7d4d',
-      FINISHED: '#1e88e5'
+      FINISHED: '#1e88e5',
     };
     return map[status] || '#9e9e9e';
   }
@@ -262,7 +289,7 @@ export class LotListComponent implements OnInit, OnDestroy {
       YELLOW: this.translate.instant('lots.inactivityYellow'),
       RED: this.translate.instant('lots.inactivityRed'),
       GRAY: this.translate.instant('lots.noEvents'),
-      UNKNOWN: '-'
+      UNKNOWN: '-',
     };
     return map[level] || level;
   }
@@ -273,7 +300,7 @@ export class LotListComponent implements OnInit, OnDestroy {
       YELLOW: '#ff9800',
       RED: '#f44336',
       GRAY: '#9e9e9e',
-      UNKNOWN: '#bdbdbd'
+      UNKNOWN: '#bdbdbd',
     };
     return map[level] || '#9e9e9e';
   }
@@ -284,7 +311,7 @@ export class LotListComponent implements OnInit, OnDestroy {
       YELLOW: 'warning',
       RED: 'error',
       GRAY: 'remove_circle',
-      UNKNOWN: 'help'
+      UNKNOWN: 'help',
     };
     return map[level] || 'help';
   }
@@ -309,7 +336,13 @@ export class LotListComponent implements OnInit, OnDestroy {
     try {
       const d = new Date(dateStr);
       if (isNaN(d.getTime())) return this.translate.instant('events.noDescription');
-      return d.toLocaleDateString('es-ES', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+      return d.toLocaleDateString('es-ES', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      });
     } catch {
       return this.translate.instant('events.noDescription');
     }
@@ -321,7 +354,8 @@ export class LotListComponent implements OnInit, OnDestroy {
   }
 
   getProgressDaysLabel(): string {
-    if (!this.summary || this.summary.totalDays === 0 || !this.hasSowing()) return this.translate.instant('events.noDescription');
+    if (!this.summary || this.summary.totalDays === 0 || !this.hasSowing())
+      return this.translate.instant('events.noDescription');
     return `${this.summary.daysElapsed} / ${this.summary.totalDays} ${this.translate.instant('lots.days')}`;
   }
 

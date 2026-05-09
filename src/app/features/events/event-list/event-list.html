@@ -14,7 +14,7 @@
   </div>
 
   <div class="form-row">
-    <div class="form-field" style="flex: 1; max-width: none;">
+    <div class="form-field" style="flex: 1; max-width: none">
       <label>{{ 'events.lot' | translate }}</label>
       <select [(ngModel)]="selectedLotId" (change)="loadEvents()">
         <option [value]="0">{{ 'events.selectLot' | translate }}</option>
@@ -46,19 +46,25 @@
 
     <div class="form-field">
       <label>{{ 'events.timestamp' | translate }}</label>
-      <input type="datetime-local" [(ngModel)]="newEvent.timestamp">
+      <input type="datetime-local" [(ngModel)]="newEvent.timestamp" />
     </div>
 
     <div class="form-field">
       <label>{{ 'events.description' | translate }}</label>
-      <textarea [(ngModel)]="newEvent.description"
-                placeholder="{{ 'events.descriptionPlaceholder' | translate }}"
-                rows="2"></textarea>
+      <textarea
+        [(ngModel)]="newEvent.description"
+        placeholder="{{ 'events.descriptionPlaceholder' | translate }}"
+        rows="2"
+      ></textarea>
     </div>
   </div>
 
   <div class="form-actions">
-    <button class="btn-primary" (click)="createEvent()" [disabled]="!newEvent.type || !newEvent.timestamp">
+    <button
+      class="btn-primary"
+      (click)="createEvent()"
+      [disabled]="!newEvent.type || !newEvent.timestamp"
+    >
       <mat-icon>add</mat-icon>
       {{ 'events.register' | translate }}
     </button>

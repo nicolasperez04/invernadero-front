@@ -52,11 +52,7 @@
       </div>
 
       <!-- Login Button -->
-      <button
-        type="submit"
-        class="login-btn"
-        [disabled]="loading || !email || !password"
-      >
+      <button type="submit" class="login-btn" [disabled]="loading || !email || !password">
         <span *ngIf="!loading">{{ 'login.button' | translate }}</span>
         <span *ngIf="loading">
           <span class="spinner"></span>

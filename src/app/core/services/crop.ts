@@ -5,10 +5,9 @@ import { Crop } from '../../models/crop.model';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CropService {
-
   private api = `${environment.apiUrl}/crops`;
 
   constructor(private http: HttpClient) {}

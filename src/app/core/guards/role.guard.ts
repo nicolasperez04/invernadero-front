@@ -38,7 +38,7 @@ export const roleGuard: CanMatchFn = (route, state) => {
 
   // Acceso denegado: redirigir a dashboard
   console.warn(
-    `Acceso denegado. Roles requeridos: ${requiredRoles.join(', ')}, usuario tiene: ${auth.getUserRoles().join(', ')}`
+    `Acceso denegado. Roles requeridos: ${requiredRoles.join(', ')}, usuario tiene: ${auth.getUserRoles().join(', ')}`,
   );
   router.navigate(['/dashboard']);
   return false;

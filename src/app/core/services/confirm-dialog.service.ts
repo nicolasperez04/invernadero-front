@@ -23,14 +23,16 @@ export interface ConfirmDialogData {
     <mat-dialog-content>{{ data.message | translate }}</mat-dialog-content>
     <mat-dialog-actions align="end">
       <button mat-button (click)="onCancel()">{{ 'confirm.no' | translate }}</button>
-      <button mat-raised-button color="primary" (click)="onConfirm()">{{ 'confirm.yes' | translate }}</button>
+      <button mat-raised-button color="primary" (click)="onConfirm()">
+        {{ 'confirm.yes' | translate }}
+      </button>
     </mat-dialog-actions>
-  `
+  `,
 })
 export class ConfirmDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<ConfirmDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: ConfirmDialogData
+    @Inject(MAT_DIALOG_DATA) public data: ConfirmDialogData,
   ) {}
 
   onCancel() {
@@ -43,12 +45,12 @@ export class ConfirmDialogComponent {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ConfirmDialogService {
   constructor(
     private dialog: MatDialog,
-    private translate: TranslateService
+    private translate: TranslateService,
   ) {}
 
   /**
@@ -62,8 +64,8 @@ export class ConfirmDialogService {
       disableClose: false,
       data: {
         title: titleKey,
-        message: messageKey
-      }
+        message: messageKey,
+      },
     });
 
     return dialogRef.afterClosed();

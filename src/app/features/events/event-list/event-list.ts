@@ -24,13 +24,23 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 @Component({
   selector: 'app-event-list',
   standalone: true,
-  imports: [FormsModule, CommonModule, TranslateModule, MatCardModule, MatButtonModule,
-            MatFormFieldModule, MatSelectModule, MatInputModule, MatTableModule, MatIconModule, MatTooltipModule],
+  imports: [
+    FormsModule,
+    CommonModule,
+    TranslateModule,
+    MatCardModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
+    MatTableModule,
+    MatIconModule,
+    MatTooltipModule,
+  ],
   templateUrl: './event-list.html',
-  styleUrl: './event-list.css'
+  styleUrl: './event-list.css',
 })
 export class EventListComponent implements OnInit, OnDestroy {
-
   lots: Lot[] = [];
   eventTypes: EventType[] = [];
   events: Event[] = [];
@@ -43,7 +53,7 @@ export class EventListComponent implements OnInit, OnDestroy {
     type: '',
     userId: 0,
     timestamp: '',
-    description: ''
+    description: '',
   };
 
   private destroy$ = new Subject<void>();
@@ -56,7 +66,7 @@ export class EventListComponent implements OnInit, OnDestroy {
     private auth: AuthService,
     private router: Router,
     private translate: TranslateService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -67,9 +77,9 @@ export class EventListComponent implements OnInit, OnDestroy {
     // Cargar datos cada vez que se navega a esta ruta
     this.router.events
       .pipe(
-        filter(event => event instanceof NavigationEnd),
+        filter((event) => event instanceof NavigationEnd),
         filter((event: any) => event.url === '/events'),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
       )
       .subscribe(() => {
         this.loadLots();
@@ -86,41 +96,40 @@ export class EventListComponent implements OnInit, OnDestroy {
 
   loadLots() {
     this.lotService.getAll().subscribe({
-      next: data => {
+      next: (data) => {
         this.lots = data;
         this.cdr.markForCheck();
       },
       error: () => {
         // Error interceptor maneja la visualización del snackbar
-      }
+      },
     });
   }
 
   loadEventTypes() {
     this.eventTypeService.getAll().subscribe({
-      next: data => {
+      next: (data) => {
         this.eventTypes = data;
         this.cdr.markForCheck();
       },
       error: () => {
         // Error interceptor maneja la visualización del snackbar
-      }
+      },
     });
   }
 
   loadEvents() {
     if (!this.selectedLotId) return;
 
-    this.eventService.getByLot(this.selectedLotId)
-      .subscribe({
-        next: data => {
-          this.events = data;
-          this.cdr.markForCheck();
-        },
-        error: () => {
-          // Error interceptor maneja la visualización del snackbar
-        }
-      });
+    this.eventService.getByLot(this.selectedLotId).subscribe({
+      next: (data) => {
+        this.events = data;
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        // Error interceptor maneja la visualización del snackbar
+      },
+    });
   }
 
   createEvent() {
@@ -128,15 +137,16 @@ export class EventListComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const timestamp = this.newEvent.timestamp.length === 16
-      ? this.newEvent.timestamp + ':00.000Z'
-      : this.newEvent.timestamp;
+    const timestamp =
+      this.newEvent.timestamp.length === 16
+        ? this.newEvent.timestamp + ':00.000Z'
+        : this.newEvent.timestamp;
 
     const payload = {
       ...this.newEvent,
       lotId: this.selectedLotId,
       userId: this.auth.getUserId(),
-      timestamp
+      timestamp,
     };
 
     this.eventService.create(payload).subscribe({
@@ -146,16 +156,16 @@ export class EventListComponent implements OnInit, OnDestroy {
           type: '',
           userId: 0,
           timestamp: '',
-          description: ''
+          description: '',
         };
         this.loadEvents();
       },
-      error: () => {}
+      error: () => {},
     });
   }
 
   getLotName(lotId: number): string {
-    const lot = this.lots.find(l => l.id === lotId);
+    const lot = this.lots.find((l) => l.id === lotId);
     return lot ? lot.name : '-';
   }
 
@@ -163,4 +173,3 @@ export class EventListComponent implements OnInit, OnDestroy {
     return this.translate.instant(`events.eventTypes.${type}`);
   }
 }
-

@@ -43,8 +43,8 @@ Cerrar el frontend Angular para que cumpla el 100% de los requisitos del proyect
 **Hallazgos:**
 
 - Rutas:
-	- `/login` público
-	- resto de la app bajo `LayoutComponent` protegido por `authGuard`.
+  - `/login` público
+  - resto de la app bajo `LayoutComponent` protegido por `authGuard`.
 - `App` renderiza `NavbarComponent` + `router-outlet`.
 - `LayoutComponent` contiene toolbar + sidebar con links.
 
@@ -81,8 +81,8 @@ Cerrar el frontend Angular para que cumpla el 100% de los requisitos del proyect
 **Problemas (❌):**
 
 - i18n solo está aplicada en login:
-	- Solo `LoginComponent` importa `TranslateModule`.
-	- El resto de componentes no usa `| translate`.
+  - Solo `LoginComponent` importa `TranslateModule`.
+  - El resto de componentes no usa `| translate`.
 - Muchos textos hardcodeados en templates: crops/lots/events/layout/dashboard.
 - No se envía `Accept-Language` al backend, por lo que el backend no puede responder consistentemente en el idioma elegido.
 - Archivos `assets/i18n/es.json` y `en.json` solo contienen claves de login + dos errores genéricos (insuficiente para la app).
@@ -105,8 +105,8 @@ Cerrar el frontend Angular para que cumpla el 100% de los requisitos del proyect
 **Problemas (❌):**
 
 - Inconsistencia crítica de base URL:
-	- `AuthService` usa `environment.apiUrl`.
-	- `CropService`, `LotService`, `EventService`, `EventTypeService` tienen URL hardcodeada `http://localhost:8080/api/...`.
+  - `AuthService` usa `environment.apiUrl`.
+  - `CropService`, `LotService`, `EventService`, `EventTypeService` tienen URL hardcodeada `http://localhost:8080/api/...`.
 - Esto rompe despliegue/entornos y complica CI.
 
 ### 3.6 Reglas de negocio (SIEMBRA/COSECHA/orden cronológico)
@@ -114,9 +114,9 @@ Cerrar el frontend Angular para que cumpla el 100% de los requisitos del proyect
 **Estado (⚠️):**
 
 - La UI de eventos actualmente no valida:
-	- primer evento debe ser `SIEMBRA`
-	- no permitir `COSECHA` antes de `SIEMBRA`
-	- orden cronológico
+  - primer evento debe ser `SIEMBRA`
+  - no permitir `COSECHA` antes de `SIEMBRA`
+  - orden cronológico
 - Probablemente el backend valida, pero el requisito pide asegurar el comportamiento; el frontend hoy solo reacciona con `alert(err.error?.message)`.
 
 ### 3.7 Pruebas (unitarias + Selenium)
@@ -125,9 +125,9 @@ Cerrar el frontend Angular para que cumpla el 100% de los requisitos del proyect
 
 - `npm test` actualmente falla por errores de TypeScript en specs.
 - Varios `*.spec.ts` están mal generados:
-	- Importan clases inexistentes (`Layout`, `LotList`, `CropList`, etc.) en vez de `LayoutComponent`, `LotListComponent`, etc.
-	- Specs de servicios importan símbolos incorrectos (`Crop` en vez de `CropService`, etc.).
-	- `app.spec.ts` espera un `<h1>Hello, proyecto-front</h1>` que no existe en `app.html`.
+  - Importan clases inexistentes (`Layout`, `LotList`, `CropList`, etc.) en vez de `LayoutComponent`, `LotListComponent`, etc.
+  - Specs de servicios importan símbolos incorrectos (`Crop` en vez de `CropService`, etc.).
+  - `app.spec.ts` espera un `<h1>Hello, proyecto-front</h1>` que no existe en `app.html`.
 - No existen pruebas E2E Selenium.
 
 ### 3.8 Despliegue / CI (GitHub Actions)
@@ -144,8 +144,8 @@ Cerrar el frontend Angular para que cumpla el 100% de los requisitos del proyect
 ### 4.1 Build
 
 - `npm run build` **compila** (✅) pero con warnings importantes:
-	- `LotListComponent` usa `*ngFor`/`*ngIf` sin importar `CommonModule`/directivas → warning `NG8103`.
-	- Presupuesto del bundle inicial excedido (warning, no bloqueante).
+  - `LotListComponent` usa `*ngFor`/`*ngIf` sin importar `CommonModule`/directivas → warning `NG8103`.
+  - Presupuesto del bundle inicial excedido (warning, no bloqueante).
 
 ### 4.2 Tests
 
@@ -160,26 +160,26 @@ Cerrar el frontend Angular para que cumpla el 100% de los requisitos del proyect
 
 ## 5) Matriz de estado por requisito (✅/⚠️/❌)
 
-| Requisito | Estado | Evidencia / Nota técnica |
-|---|---:|---|
-| Login JWT | ⚠️ | Login existe y guarda token, pero manejo de error es `alert()` y guard no valida expiración |
-| Interceptor JWT | ⚠️ | Agrega `Authorization`, pero no envía `Accept-Language` ni centraliza errores |
-| AuthGuard | ⚠️ | Existe, pero solo verifica token presente |
-| RoleGuard | ❌ | No existe guard por rol ni protección por rol en rutas |
-| Rutas protegidas | ⚠️ | Layout protegido; children sin control por rol |
-| UI basada en roles | ❌ | Menú/acciones no se ocultan/inhabilitan por rol |
-| CRUD Cultivos | ⚠️ | Implementado; errores por `alert()` y textos hardcodeados |
-| CRUD Lotes | ⚠️ | Implementado; warnings `NG8103` por imports faltantes, errores por `alert()` |
-| CRUD Eventos | ⚠️ | Implementado; sin validación reglas de negocio en UI |
-| Historial cronológico | ⚠️ | Se lista; no se asegura orden ni validación antes de crear |
-| Estado/métricas lote | ⚠️ | `getSummary` existe; UI hardcodeada |
-| i18n frontend completa | ❌ | Solo login traduce; resto hardcodeado; JSON incompleto |
-| Enviar `Accept-Language` | ❌ | Falta en HTTP |
-| Errores backend traducidos | ❌ | Se muestra texto crudo en `alert(err.error?.message)` |
-| Interceptor global de errores | ❌ | No existe |
-| Pruebas unitarias frontend | ❌ | Specs rotas; `npm test` falla |
-| Pruebas frontend Selenium | ❌ | No existe setup ni tests |
-| GitHub Actions (CI/CD) | ❌ | No existe workflow |
+| Requisito                     | Estado | Evidencia / Nota técnica                                                                    |
+| ----------------------------- | -----: | ------------------------------------------------------------------------------------------- |
+| Login JWT                     |     ⚠️ | Login existe y guarda token, pero manejo de error es `alert()` y guard no valida expiración |
+| Interceptor JWT               |     ⚠️ | Agrega `Authorization`, pero no envía `Accept-Language` ni centraliza errores               |
+| AuthGuard                     |     ⚠️ | Existe, pero solo verifica token presente                                                   |
+| RoleGuard                     |     ❌ | No existe guard por rol ni protección por rol en rutas                                      |
+| Rutas protegidas              |     ⚠️ | Layout protegido; children sin control por rol                                              |
+| UI basada en roles            |     ❌ | Menú/acciones no se ocultan/inhabilitan por rol                                             |
+| CRUD Cultivos                 |     ⚠️ | Implementado; errores por `alert()` y textos hardcodeados                                   |
+| CRUD Lotes                    |     ⚠️ | Implementado; warnings `NG8103` por imports faltantes, errores por `alert()`                |
+| CRUD Eventos                  |     ⚠️ | Implementado; sin validación reglas de negocio en UI                                        |
+| Historial cronológico         |     ⚠️ | Se lista; no se asegura orden ni validación antes de crear                                  |
+| Estado/métricas lote          |     ⚠️ | `getSummary` existe; UI hardcodeada                                                         |
+| i18n frontend completa        |     ❌ | Solo login traduce; resto hardcodeado; JSON incompleto                                      |
+| Enviar `Accept-Language`      |     ❌ | Falta en HTTP                                                                               |
+| Errores backend traducidos    |     ❌ | Se muestra texto crudo en `alert(err.error?.message)`                                       |
+| Interceptor global de errores |     ❌ | No existe                                                                                   |
+| Pruebas unitarias frontend    |     ❌ | Specs rotas; `npm test` falla                                                               |
+| Pruebas frontend Selenium     |     ❌ | No existe setup ni tests                                                                    |
+| GitHub Actions (CI/CD)        |     ❌ | No existe workflow                                                                          |
 
 ---
 
@@ -191,31 +191,34 @@ Cerrar el frontend Angular para que cumpla el 100% de los requisitos del proyect
 
 **Meta:** que el proyecto compile limpio y que `npm test` sea ejecutable.
 
-1) **Arreglar specs rotas para que `npm test` compile**
-- Archivos:
-	- `src/app/shared/layout/layout.spec.ts`
-	- `src/app/features/*/*.spec.ts`
-	- `src/app/core/services/*.spec.ts`
-	- `src/app/app.spec.ts`
-- Aceptación:
-	- `npm test -- --watch=false` sin errores de TS
+1. **Arreglar specs rotas para que `npm test` compile**
 
-2) **Corregir imports faltantes en componentes standalone**
+- Archivos:
+  - `src/app/shared/layout/layout.spec.ts`
+  - `src/app/features/*/*.spec.ts`
+  - `src/app/core/services/*.spec.ts`
+  - `src/app/app.spec.ts`
+- Aceptación:
+  - `npm test -- --watch=false` sin errores de TS
+
+2. **Corregir imports faltantes en componentes standalone**
+
 - Ejemplo detectado: `LotListComponent` usa `*ngFor`/`*ngIf` sin `CommonModule` o directivas.
 - Archivos:
-	- `src/app/features/lots/lot-list/lot-list.ts`
+  - `src/app/features/lots/lot-list/lot-list.ts`
 - Aceptación:
-	- `npm run build` sin warnings `NG8103`
+  - `npm run build` sin warnings `NG8103`
 
-3) **Unificar base URL del backend (no hardcodear localhost)**
+3. **Unificar base URL del backend (no hardcodear localhost)**
+
 - Archivos:
-	- `src/environments/environment.ts`
-	- `src/app/core/services/crop.ts`
-	- `src/app/core/services/lot.ts`
-	- `src/app/core/services/event.ts`
-	- `src/app/core/services/event-type.ts`
+  - `src/environments/environment.ts`
+  - `src/app/core/services/crop.ts`
+  - `src/app/core/services/lot.ts`
+  - `src/app/core/services/event.ts`
+  - `src/app/core/services/event-type.ts`
 - Aceptación:
-	- Ningún servicio tiene `http://localhost:8080` hardcodeado
+  - Ningún servicio tiene `http://localhost:8080` hardcodeado
 
 **Dependencia:** ninguna (esto desbloquea el resto).
 
@@ -225,29 +228,32 @@ Cerrar el frontend Angular para que cumpla el 100% de los requisitos del proyect
 
 **Meta:** proteger rutas/acciones por rol y manejar sesión correctamente.
 
-1) **Endurecer `AuthService` y sesión**
+1. **Endurecer `AuthService` y sesión**
+
 - Validar expiración del JWT (`exp`).
 - Soportar múltiples authorities (set/array).
 - Definir método único `hasRole(roles: string[])`.
 - Aceptación:
-	- token expirado → logout y redirección a `/login`.
+  - token expirado → logout y redirección a `/login`.
 
-2) **Crear `roleGuard`**
+2. **Crear `roleGuard`**
+
 - Guard funcional (`CanMatchFn` recomendado para evitar carga de componentes no autorizados).
 - `data: { roles: [...] }` en rutas.
 - Archivos:
-	- `src/app/core/guards/role.guard.ts` (nuevo)
-	- `src/app/app.routes.ts` (actualizar)
+  - `src/app/core/guards/role.guard.ts` (nuevo)
+  - `src/app/app.routes.ts` (actualizar)
 - Aceptación:
-	- Un usuario VIEWER no puede navegar a rutas restringidas.
+  - Un usuario VIEWER no puede navegar a rutas restringidas.
 
-3) **UI basada en roles**
+3. **UI basada en roles**
+
 - Ocultar/inhabilitar links y acciones según rol.
 - Archivos:
-	- `src/app/shared/layout/layout.html`
-	- (posible) `layout.ts` para helpers `canAccess(...)`
+  - `src/app/shared/layout/layout.html`
+  - (posible) `layout.ts` para helpers `canAccess(...)`
 - Aceptación:
-	- Menú solo muestra lo permitido por rol.
+  - Menú solo muestra lo permitido por rol.
 
 **Dependencia:** Fase 1 completada.
 
@@ -257,30 +263,34 @@ Cerrar el frontend Angular para que cumpla el 100% de los requisitos del proyect
 
 **Meta:** todo texto visible y mensajes de error sean consistentes en ES/EN.
 
-1) **Estandarizar uso de `ngx-translate` en arquitectura standalone**
+1. **Estandarizar uso de `ngx-translate` en arquitectura standalone**
+
 - Cada componente que use traducciones debe importar `TranslateModule`.
 
-2) **Eliminar textos hardcodeados del layout y features**
-- Archivos principales:
-	- `src/app/shared/layout/layout.html`
-	- `src/app/features/dashboard/dashboard.ts`
-	- `src/app/features/crops/crop-list/crop-list.html`
-	- `src/app/features/lots/lot-list/lot-list.html`
-	- `src/app/features/events/event-list/event-list.html`
-	- (y cualquier `alert/confirm` con texto)
+2. **Eliminar textos hardcodeados del layout y features**
 
-3) **Expandir diccionarios i18n**
+- Archivos principales:
+  - `src/app/shared/layout/layout.html`
+  - `src/app/features/dashboard/dashboard.ts`
+  - `src/app/features/crops/crop-list/crop-list.html`
+  - `src/app/features/lots/lot-list/lot-list.html`
+  - `src/app/features/events/event-list/event-list.html`
+  - (y cualquier `alert/confirm` con texto)
+
+3. **Expandir diccionarios i18n**
+
 - Agregar namespaces: `nav`, `dashboard`, `crops`, `lots`, `events`, `buttons`, `confirm`, `http`.
 - Archivos:
-	- `src/assets/i18n/es.json`
-	- `src/assets/i18n/en.json`
+  - `src/assets/i18n/es.json`
+  - `src/assets/i18n/en.json`
 
-4) **Enviar `Accept-Language` al backend**
+4. **Enviar `Accept-Language` al backend**
+
 - Implementar interceptor (o extender el existente) para enviar `Accept-Language: <lang>` leyendo `localStorage('lang')`.
 - Archivos:
-	- `src/app/core/interceptors/auth-interceptor.ts` (o nuevo interceptor)
+  - `src/app/core/interceptors/auth-interceptor.ts` (o nuevo interceptor)
 - Aceptación:
-	- Cambiar idioma en navbar afecta respuestas del backend (cuando aplique) y mensajes UI.
+  - Cambiar idioma en navbar afecta respuestas del backend (cuando aplique) y mensajes UI.
 
 **Dependencias:** Fase 1 y 2.
 
@@ -290,11 +300,13 @@ Cerrar el frontend Angular para que cumpla el 100% de los requisitos del proyect
 
 **Meta:** eliminar `alert()`/`confirm()` y centralizar errores.
 
-1) **Crear interceptor global de errores HTTP**
+1. **Crear interceptor global de errores HTTP**
+
 - Normalizar errores típicos: 400/401/403/404/409/500.
 - Si backend ya responde con texto localizado, mostrarlo; si responde con códigos/keys, mapear vía `ngx-translate`.
 
-2) **Reemplazar `alert/confirm` por Material (mínimo viable)**
+2. **Reemplazar `alert/confirm` por Material (mínimo viable)**
+
 - `MatSnackBar` para errores/éxitos.
 - Confirmación mínima: (opción A) `window.confirm` temporal hasta tener `MatDialog` (si se acepta), o (opción B) `MatDialog` simple reutilizable.
 
@@ -306,24 +318,27 @@ Cerrar el frontend Angular para que cumpla el 100% de los requisitos del proyect
 
 **Meta:** tener evidencia automatizada de los flujos críticos.
 
-1) **Unit tests (Vitest) mínimos pero correctos**
+1. **Unit tests (Vitest) mínimos pero correctos**
+
 - Guards: `authGuard`, `roleGuard`.
 - Interceptors: token + `Accept-Language`.
 - Servicios: smoke tests o `HttpTestingController` (si aplica con el builder).
 
-2) **E2E Selenium (obligatorio)**
+2. **E2E Selenium (obligatorio)**
 
 Propuesta técnica (Node):
+
 - Dependencias: `selenium-webdriver`, `chromedriver`.
 - Tests mínimos:
-	- Login válido → navega a dashboard.
-	- Navegación a crops/lots/events.
-	- Crear cultivo (y opcionalmente eliminar) con aserción de UI.
+  - Login válido → navega a dashboard.
+  - Navegación a crops/lots/events.
+  - Crear cultivo (y opcionalmente eliminar) con aserción de UI.
 
 **Dependencias/condición:**
+
 - Para que Selenium sea útil en CI, se necesita:
-	- backend accesible durante el pipeline (URL fija) **o**
-	- levantar backend con Docker Compose.
+  - backend accesible durante el pipeline (URL fija) **o**
+  - levantar backend con Docker Compose.
 
 ---
 
@@ -332,8 +347,8 @@ Propuesta técnica (Node):
 **Meta:** pipeline reproducible y verificable.
 
 - Crear workflows:
-	1) `ci.yml`: `npm ci` → `npm run build` → `npm test -- --watch=false`.
-	2) `e2e-selenium.yml` (o integrado): levantar app (`npm start` o `ng serve`) y correr Selenium headless con Chrome en Linux.
+  1.  `ci.yml`: `npm ci` → `npm run build` → `npm test -- --watch=false`.
+  2.  `e2e-selenium.yml` (o integrado): levantar app (`npm start` o `ng serve`) y correr Selenium headless con Chrome en Linux.
 
 **Dependencia:** Fase 5 (al menos unit tests). Selenium depende de disponibilidad del backend.
 
@@ -365,4 +380,3 @@ Propuesta técnica (Node):
 - **Dependencia backend para Selenium:** sin backend en CI, las pruebas E2E solo podrán validar UI “mockeada”. Se recomienda proveer contenedor o URL estable.
 - **Claim `userId` en JWT:** el frontend lo usa para crear eventos. Si el backend deriva el usuario desde el token, lo correcto es eliminar `userId` del payload de creación o alinear claim.
 - **Inconsistencia de endpoints:** unificar base URL con `environment.apiUrl` es clave para despliegue.
-

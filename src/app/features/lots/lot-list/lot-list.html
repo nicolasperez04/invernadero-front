@@ -26,7 +26,11 @@
       <div class="form-grid">
         <div class="form-field">
           <label>{{ 'lots.name' | translate }}</label>
-          <input type="text" [(ngModel)]="newLot.name" placeholder="{{ 'lots.namePlaceholder' | translate }}">
+          <input
+            type="text"
+            [(ngModel)]="newLot.name"
+            placeholder="{{ 'lots.namePlaceholder' | translate }}"
+          />
         </div>
         <div class="form-field">
           <label>{{ 'lots.crop' | translate }}</label>
@@ -37,11 +41,11 @@
         </div>
         <div class="form-field">
           <label>{{ 'lots.startDate' | translate }}</label>
-          <input type="date" [(ngModel)]="newLot.startDate">
+          <input type="date" [(ngModel)]="newLot.startDate" />
         </div>
         <div class="form-field">
           <label>{{ 'lots.endDate' | translate }}</label>
-          <input type="date" [(ngModel)]="newLot.endDate">
+          <input type="date" [(ngModel)]="newLot.endDate" />
         </div>
       </div>
       <div class="form-footer">
@@ -49,8 +53,11 @@
           <mat-icon>clear_all</mat-icon>
           {{ 'lots.clearForm' | translate }}
         </button>
-        <button class="btn-primary" (click)="createLot()"
-                [disabled]="!newLot.name || !newLot.cropId || !newLot.startDate || loading">
+        <button
+          class="btn-primary"
+          (click)="createLot()"
+          [disabled]="!newLot.name || !newLot.cropId || !newLot.startDate || loading"
+        >
           <mat-icon>add</mat-icon>
           {{ 'lots.create' | translate }}
         </button>
@@ -61,7 +68,7 @@
       <div class="form-grid">
         <div class="form-field">
           <label>{{ 'lots.name' | translate }}</label>
-          <input type="text" [(ngModel)]="editingLot.name">
+          <input type="text" [(ngModel)]="editingLot.name" />
         </div>
         <div class="form-field">
           <label>{{ 'lots.crop' | translate }}</label>
@@ -71,11 +78,11 @@
         </div>
         <div class="form-field">
           <label>{{ 'lots.startDate' | translate }}</label>
-          <input type="date" [ngModel]="editingLot.startDate" disabled>
+          <input type="date" [ngModel]="editingLot.startDate" disabled />
         </div>
         <div class="form-field">
           <label>{{ 'lots.endDate' | translate }}</label>
-          <input type="date" [ngModel]="editingLot.endDate" disabled>
+          <input type="date" [ngModel]="editingLot.endDate" disabled />
         </div>
       </div>
       <div class="form-footer">
@@ -110,26 +117,40 @@
       </thead>
       <tbody>
         <tr *ngFor="let lot of lots" [class.row-editing]="editingLotId === lot.id">
-          <td><strong>{{ lot.name }}</strong></td>
+          <td>
+            <strong>{{ lot.name }}</strong>
+          </td>
           <td>{{ getCropName(lot.cropId) }}</td>
           <td>{{ lot.startDate | date: 'dd/MM/yyyy' }}</td>
-          <td>{{ lot.endDate ? (lot.endDate | date: 'dd/MM/yyyy') : ('events.noDescription' | translate) }}</td>
+          <td>
+            {{
+              lot.endDate
+                ? (lot.endDate | date: 'dd/MM/yyyy')
+                : ('events.noDescription' | translate)
+            }}
+          </td>
           <td class="center">
             <div class="actions-cell">
-              <button class="btn-action btn-summary"
-                      (click)="openSummary(lot.id)"
-                      title="{{ 'lots.viewSummary' | translate }}">
+              <button
+                class="btn-action btn-summary"
+                (click)="openSummary(lot.id)"
+                title="{{ 'lots.viewSummary' | translate }}"
+              >
                 <mat-icon>analytics</mat-icon>
               </button>
-              <button *ngIf="isAdminOrOperator"
-                      class="btn-action btn-edit"
-                      (click)="startEdit(lot)"
-                      title="{{ 'lots.edit' | translate }}">
+              <button
+                *ngIf="isAdminOrOperator"
+                class="btn-action btn-edit"
+                (click)="startEdit(lot)"
+                title="{{ 'lots.edit' | translate }}"
+              >
                 <mat-icon>edit</mat-icon>
               </button>
-              <button class="btn-action btn-delete"
-                      (click)="deleteLot(lot.id)"
-                      title="{{ 'lots.delete' | translate }}">
+              <button
+                class="btn-action btn-delete"
+                (click)="deleteLot(lot.id)"
+                title="{{ 'lots.delete' | translate }}"
+              >
                 <mat-icon>delete_outline</mat-icon>
               </button>
             </div>
@@ -151,7 +172,10 @@
   <div class="modal-card" (click)="$event.stopPropagation()">
     <div class="modal-header">
       <div class="modal-header-info">
-        <div class="modal-status-dot" [style.background]="getStatusColor(summary?.status || '')"></div>
+        <div
+          class="modal-status-dot"
+          [style.background]="getStatusColor(summary?.status || '')"
+        ></div>
         <div>
           <h3 class="modal-title">{{ summary?.lotName }}</h3>
           <div class="modal-status-row">
@@ -159,7 +183,10 @@
               <mat-icon>{{ getStatusIcon(summary?.status || '') }}</mat-icon>
               {{ getStatusLabel(summary?.status || '') }}
             </span>
-            <span class="inactivity-badge" [style.background]="getInactivityColor(summary?.inactivityStatus || '')">
+            <span
+              class="inactivity-badge"
+              [style.background]="getInactivityColor(summary?.inactivityStatus || '')"
+            >
               <mat-icon>{{ getInactivityIcon(summary?.inactivityStatus || '') }}</mat-icon>
               {{ getInactivityLabel(summary?.inactivityStatus || '') }}
             </span>
@@ -184,7 +211,9 @@
         </div>
         <div class="kpi-mini">
           <span class="kpi-mini-value">{{ summary.durationDays }}</span>
-          <span class="kpi-mini-label">{{ 'lots.duration' | translate }} ({{ 'lots.days' | translate }})</span>
+          <span class="kpi-mini-label"
+            >{{ 'lots.duration' | translate }} ({{ 'lots.days' | translate }})</span
+          >
         </div>
         <div class="kpi-mini">
           <span class="kpi-mini-value">{{ getEventFrequencyLabel() }}</span>
@@ -211,7 +240,8 @@
           </span>
           <span class="date-tag" *ngIf="summary.estimatedHarvestDate !== 'null'">
             <mat-icon>event</mat-icon>
-            {{ 'lots.estimatedHarvest' | translate }}: {{ formatDate(summary.estimatedHarvestDate) }}
+            {{ 'lots.estimatedHarvest' | translate }}:
+            {{ formatDate(summary.estimatedHarvestDate) }}
           </span>
         </div>
       </div>

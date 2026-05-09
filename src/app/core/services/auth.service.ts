@@ -5,18 +5,20 @@ import { environment } from '../../../environments/environment';
 import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-
   private api = `${environment.apiUrl}/auth`;
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+  ) {}
 
   login(email: string, password: string) {
     return this.http.post<{ token: string }>(`${this.api}/login`, {
       email,
-      password
+      password,
     });
   }
 
@@ -107,7 +109,7 @@ export class AuthService {
     }
 
     const userRoles = this.getUserRoles();
-    return requiredRoles.some(role => userRoles.includes(role));
+    return requiredRoles.some((role) => userRoles.includes(role));
   }
 
   getUserId(): number {

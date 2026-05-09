@@ -11,10 +11,9 @@ import { MatIconModule } from '@angular/material/icon';
   standalone: true,
   imports: [FormsModule, TranslateModule, CommonModule, MatIconModule],
   templateUrl: './login.html',
-  styleUrl: './login.css'
+  styleUrl: './login.css',
 })
 export class LoginComponent {
-
   email = '';
   password = '';
   loading = false;
@@ -23,7 +22,7 @@ export class LoginComponent {
 
   constructor(
     private auth: AuthService,
-    private router: Router
+    private router: Router,
   ) {}
 
   login() {
@@ -41,7 +40,7 @@ export class LoginComponent {
         this.loading = false;
         this.errorMessage = 'Credenciales inválidas. Por favor intenta de nuevo.';
         console.error('Error de login:', err);
-      }
+      },
     });
   }
 

@@ -11,16 +11,22 @@ import { TranslateModule } from '@ngx-translate/core';
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [RouterOutlet, MatToolbarModule, MatButtonModule, MatIconModule, CommonModule, TranslateModule],
+  imports: [
+    RouterOutlet,
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+    CommonModule,
+    TranslateModule,
+  ],
   templateUrl: './layout.html',
-  styleUrl: './layout.css'
+  styleUrl: './layout.css',
 })
 export class LayoutComponent {
-
   constructor(
     private auth: AuthService,
     private router: Router,
-    private i18n: I18nService
+    private i18n: I18nService,
   ) {}
 
   logout() {

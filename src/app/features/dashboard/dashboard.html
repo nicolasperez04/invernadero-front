@@ -10,8 +10,15 @@
   <div *ngIf="hasAlerts" class="alert-banner">
     <mat-icon>notifications_active</mat-icon>
     <div class="alert-content">
-      <strong>{{ alertLots.length }} {{ alertLots.length === 1 ? ('dashboard.alertTitle' | translate) : ('dashboard.alertTitlePlural' | translate) }}</strong>
-      <span>{{ alertLots.map(l => l.lotName).join(', ') }}</span>
+      <strong
+        >{{ alertLots.length }}
+        {{
+          alertLots.length === 1
+            ? ('dashboard.alertTitle' | translate)
+            : ('dashboard.alertTitlePlural' | translate)
+        }}</strong
+      >
+      <span>{{ alertLots.map((l) => l.lotName).join(', ') }}</span>
     </div>
   </div>
 
@@ -83,7 +90,6 @@
   </div>
 
   <div *ngIf="!loading" class="dashboard-content">
-
     <div class="chart-card">
       <div class="chart-header">
         <div class="chart-title-group">
@@ -155,23 +161,27 @@
         <div *ngFor="let lot of lotProgress" class="progress-item">
           <div class="progress-item-header">
             <span class="progress-item-name">{{ lot.lotName }}</span>
-            <span class="progress-percentage">{{ lot.progress | number:'1.1-1' }}%</span>
+            <span class="progress-percentage">{{ lot.progress | number: '1.1-1' }}%</span>
           </div>
 
           <div class="progress-bar-container">
             <div
               class="progress-bar"
               [style.width]="getProgressWidth(lot.progress) + '%'"
-              [class.progress-zero]="lot.progress === 0">
-            </div>
+              [class.progress-zero]="lot.progress === 0"
+            ></div>
           </div>
 
           <div class="progress-item-footer">
             <div class="progress-meta">
-              <span class="remaining-label" *ngIf="hasSowing(lot)">{{ getRemainingLabel(lot) }}</span>
-              <span class="no-sowing-msg" *ngIf="!hasSowing(lot)">{{ 'dashboard.noSowingMessage' | translate }}</span>
+              <span class="remaining-label" *ngIf="hasSowing(lot)">{{
+                getRemainingLabel(lot)
+              }}</span>
+              <span class="no-sowing-msg" *ngIf="!hasSowing(lot)">{{
+                'dashboard.noSowingMessage' | translate
+              }}</span>
             </div>
-            <div style="display:flex;gap:16px;align-items:center;">
+            <div style="display: flex; gap: 16px; align-items: center">
               <span class="sowing-date" *ngIf="hasSowing(lot)">
                 <mat-icon>grass</mat-icon>
                 {{ getSowingDateLabel(lot) }}
@@ -185,6 +195,5 @@
         </div>
       </div>
     </div>
-
   </div>
 </div>

@@ -3,8 +3,8 @@
  */
 
 export interface EventChartDTO {
-  labels: string[];  // Fechas en formato ISO (yyyy-MM-dd)
-  values: number[];  // Cantidad de eventos por día
+  labels: string[]; // Fechas en formato ISO (yyyy-MM-dd)
+  values: number[]; // Cantidad de eventos por día
 }
 
 export interface LotStatusDTO {
@@ -37,17 +37,17 @@ export type StatusColor = 'green' | 'yellow' | 'red';
 export const STATUS_COLORS: Record<'GREEN' | 'YELLOW' | 'RED', StatusColor> = {
   GREEN: 'green',
   YELLOW: 'yellow',
-  RED: 'red'
+  RED: 'red',
 };
 
 export const STATUS_LABELS: Record<'GREEN' | 'YELLOW' | 'RED', string> = {
   GREEN: 'Activo',
   YELLOW: 'Inactividad moderada',
-  RED: 'Inactividad crítica'
+  RED: 'Inactividad crítica',
 };
 
 export const STATUS_ICONS: Record<'GREEN' | 'YELLOW' | 'RED', string> = {
   GREEN: 'check_circle',
   YELLOW: 'warning',
-  RED: 'error'
+  RED: 'error',
 };

@@ -2,10 +2,14 @@ import { Page } from '@playwright/test';
 
 export const TEST_USER = {
   email: 'nicolas@gmail.com',
-  password: 'nicolas'
+  password: 'nicolas',
 };
 
-export async function login(page: Page, email: string = TEST_USER.email, password: string = TEST_USER.password): Promise<void> {
+export async function login(
+  page: Page,
+  email: string = TEST_USER.email,
+  password: string = TEST_USER.password,
+): Promise<void> {
   await page.goto('/login');
   await page.fill('#email', email);
   await page.fill('#password', password);

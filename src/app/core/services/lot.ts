@@ -5,10 +5,9 @@ import { Lot, LotSummary } from '../../models/lot.model';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LotService {
-
   private api = `${environment.apiUrl}/lots`;
 
   constructor(private http: HttpClient) {}

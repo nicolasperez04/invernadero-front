@@ -3,7 +3,6 @@ import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({ providedIn: 'root' })
 export class I18nService {
-
   constructor(private translate: TranslateService) {
     this.translate.setDefaultLang('es');
 

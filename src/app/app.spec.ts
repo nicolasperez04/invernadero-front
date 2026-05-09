@@ -7,7 +7,7 @@ describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App, TranslateModule.forRoot()],
-      providers: [I18nService]
+      providers: [I18nService],
     }).compileComponents();
   });
 
