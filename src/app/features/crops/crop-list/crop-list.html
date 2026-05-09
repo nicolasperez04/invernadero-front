@@ -12,9 +12,9 @@
       <mat-icon>{{ isEditing ? 'edit_square' : 'add_circle' }}</mat-icon>
     </div>
     <div>
-      <h3 class="form-header-title">{{ isEditing ? 'Editar cultivo' : 'Nuevo cultivo' }}</h3>
+      <h3 class="form-header-title">{{ isEditing ? ('crops.editTitle' | translate) : ('crops.newTitle' | translate) }}</h3>
       <p class="form-header-subtitle">
-        {{ isEditing ? 'Modifica los datos del cultivo' : 'Completa los datos para registrar un nuevo cultivo' }}
+        {{ isEditing ? ('crops.editSubtitle' | translate) : ('crops.newSubtitle' | translate) }}
       </p>
     </div>
   </div>
@@ -25,21 +25,21 @@
         <label>{{ 'crops.name' | translate }}</label>
         <input type="text"
                [(ngModel)]="newCrop.name"
-               placeholder="Ej: Tomate, Maíz, Lechuga...">
+               placeholder="{{ 'crops.namePlaceholder' | translate }}">
       </div>
 
       <div class="form-field">
         <label>{{ 'crops.description' | translate }}</label>
         <input type="text"
                [(ngModel)]="newCrop.description"
-               placeholder="Breve descripción del cultivo">
+               placeholder="{{ 'crops.descriptionPlaceholderShort' | translate }}">
       </div>
 
       <div class="form-field">
         <label>{{ 'crops.estimatedGrowthDays' | translate }}</label>
         <input type="number"
                [(ngModel)]="newCrop.estimatedGrowthDays"
-               placeholder="Ej: 90"
+               placeholder="{{ 'crops.growthDaysPlaceholder' | translate }}"
                min="1">
       </div>
 
@@ -47,7 +47,7 @@
         <label>{{ 'crops.inactivityDaysThreshold' | translate }}</label>
         <input type="number"
                [(ngModel)]="newCrop.inactivityDaysThreshold"
-               placeholder="Ej: 15"
+               placeholder="{{ 'crops.inactivityPlaceholder' | translate }}"
                min="1">
       </div>
     </div>
@@ -55,19 +55,19 @@
     <div class="form-footer">
       <button class="btn-ghost" (click)="cancelEdit()" *ngIf="isEditing">
         <mat-icon>close</mat-icon>
-        Cancelar
+        {{ 'crops.cancelEdit' | translate }}
       </button>
 
       <button class="btn-secondary" (click)="resetForm()" *ngIf="!isEditing">
         <mat-icon>clear_all</mat-icon>
-        Limpiar
+        {{ 'crops.clearForm' | translate }}
       </button>
 
       <button class="btn-primary"
               (click)="createOrUpdate()"
               [disabled]="!newCrop.name || !newCrop.estimatedGrowthDays || !newCrop.inactivityDaysThreshold || loading">
         <mat-icon>{{ isEditing ? 'check' : 'add' }}</mat-icon>
-        {{ isEditing ? 'Guardar cambios' : ('crops.create' | translate) }}
+        {{ isEditing ? ('crops.update' | translate) : ('crops.create' | translate) }}
       </button>
     </div>
   </div>
@@ -76,7 +76,7 @@
 <div class="table-card">
   <div class="table-header">
     <h3>{{ 'crops.list' | translate }}</h3>
-    <span class="table-count">{{ crops.length }} cultivos</span>
+    <span class="table-count">{{ crops.length }} {{ 'crops.totalCrops' | translate }}</span>
   </div>
 
   <div class="table-wrapper">
@@ -95,10 +95,10 @@
           <td><strong>{{ crop.name }}</strong></td>
           <td class="desc-cell">{{ crop.description || '—' }}</td>
           <td class="center">
-            <span class="metric-badge">{{ crop.estimatedGrowthDays }} días</span>
+            <span class="metric-badge">{{ crop.estimatedGrowthDays }} {{ 'crops.days' | translate }}</span>
           </td>
           <td class="center">
-            <span class="metric-badge warning">{{ crop.inactivityDaysThreshold }} días</span>
+            <span class="metric-badge warning">{{ crop.inactivityDaysThreshold }} {{ 'crops.days' | translate }}</span>
           </td>
           <td class="center">
             <div class="actions-cell">
@@ -122,8 +122,8 @@
     <ng-template #emptyState>
       <div class="empty-state">
         <mat-icon>eco</mat-icon>
-        <p>No hay cultivos registrados</p>
-        <small>Usa el formulario de arriba para crear tu primer cultivo</small>
+        <p>{{ 'crops.empty' | translate }}</p>
+        <small>{{ 'crops.emptyHint' | translate }}</small>
       </div>
     </ng-template>
   </div>

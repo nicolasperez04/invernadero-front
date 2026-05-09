@@ -4,7 +4,7 @@ import { AuthService } from '../../../core/services/auth.service';
 import { Crop } from '../../../models/crop.model';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ConfirmDialogService } from '../../../core/services/confirm-dialog.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router, NavigationEnd } from '@angular/router';
@@ -43,7 +43,8 @@ export class CropListComponent implements OnInit, OnDestroy {
     private confirmDialog: ConfirmDialogService,
     private router: Router,
     private cdr: ChangeDetectorRef,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private translate: TranslateService
   ) {}
 
   get isAdmin(): boolean {

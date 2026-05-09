@@ -10,7 +10,7 @@
   <div *ngIf="hasAlerts" class="alert-banner">
     <mat-icon>notifications_active</mat-icon>
     <div class="alert-content">
-      <strong>{{ alertLots.length }} lote{{ alertLots.length > 1 ? 's' : '' }} requiere{{ alertLots.length === 1 ? '' : 'n' }} atención</strong>
+      <strong>{{ alertLots.length }} {{ alertLots.length === 1 ? ('dashboard.alertTitle' | translate) : ('dashboard.alertTitlePlural' | translate) }}</strong>
       <span>{{ alertLots.map(l => l.lotName).join(', ') }}</span>
     </div>
   </div>
@@ -57,7 +57,7 @@
       </div>
       <div class="kpi-content">
         <span class="kpi-value">{{ kpiAvgProgress }}%</span>
-        <span class="kpi-label">Avance promedio</span>
+        <span class="kpi-label">{{ 'dashboard.avgProgress' | translate }}</span>
       </div>
     </div>
   </div>
@@ -92,7 +92,7 @@
         </div>
         <div class="chart-total">
           <span class="chart-total-value">{{ kpiEventsThisWeek }}</span>
-          <span class="chart-total-label">eventos totales</span>
+          <span class="chart-total-label">{{ 'dashboard.totalEvents' | translate }}</span>
         </div>
       </div>
 
@@ -209,7 +209,7 @@
           <div class="progress-item-footer">
             <div class="progress-meta">
               <span class="remaining-label" *ngIf="hasSowing(lot)">{{ getRemainingLabel(lot) }}</span>
-              <span class="no-sowing-msg" *ngIf="!hasSowing(lot)">Registra un evento de Siembra para ver el progreso</span>
+              <span class="no-sowing-msg" *ngIf="!hasSowing(lot)">{{ 'dashboard.noSowingMessage' | translate }}</span>
             </div>
             <div style="display:flex;gap:16px;align-items:center;">
               <span class="sowing-date" *ngIf="hasSowing(lot)">

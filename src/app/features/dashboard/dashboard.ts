@@ -123,7 +123,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       },
       error: (err) => {
         console.error('Error cargando dashboard:', err);
-        this.errorMessage = 'Error al cargar los datos del dashboard';
+        this.errorMessage = this.translate.instant('dashboard.loadingError');
         this.loading = false;
         this.cdr.markForCheck();
       }

@@ -27,9 +27,12 @@
     "cropsSub": "active crops",
     "lotsSub": "registered lots",
     "eventsSub": "registered events",
+    "avgProgress": "Average Progress",
+    "totalEvents": "total events",
     "filterByCrop": "Filter by crop",
     "allCrops": "All crops",
     "loading": "Loading data...",
+    "loadingError": "Error loading dashboard data",
     "eventActivity": "Event Activity",
     "last7Days": "Last 7 days",
     "lotStatus": "Lot Status",
@@ -39,7 +42,10 @@
     "noData": "No data available",
     "inactivityGreen": "Recent activity",
     "inactivityYellow": "Moderate inactivity",
-    "inactivityRed": "Critical inactivity"
+    "inactivityRed": "Critical inactivity",
+    "alertTitle": "lot requires attention",
+    "alertTitlePlural": "lots require attention",
+    "noSowingMessage": "Register a Sowing event to see progress"
   },
   "crops": {
     "title": "Crops",
@@ -51,8 +57,13 @@
     "actions": "Actions",
     "namePlaceholder": "Crop name",
     "descriptionPlaceholder": "Crop description",
+    "descriptionPlaceholderShort": "Brief crop description",
+    "growthDaysPlaceholder": "Ex: 90",
+    "inactivityPlaceholder": "Ex: 15",
     "list": "Crops List",
+    "totalCrops": "crops",
     "empty": "No crops registered yet",
+    "emptyHint": "Use the form above to create your first crop",
     "success": "Crop created successfully",
     "deleteSuccess": "Crop deleted successfully",
     "error": "Error processing crop",
@@ -62,10 +73,14 @@
     "inactivityDaysThresholdPlaceholder": "Ex: 7",
     "edit": "Edit",
     "editTitle": "Editing crop",
-    "update": "Update",
+    "newTitle": "New crop",
+    "newSubtitle": "Complete the data to register a new crop",
+    "editSubtitle": "Modify the crop data",
+    "update": "Save changes",
     "cancelEdit": "Cancel",
     "clearForm": "Clear",
-    "updateSuccess": "Crop updated successfully"
+    "updateSuccess": "Crop updated successfully",
+    "days": "days"
   },
   "lots": {
     "title": "Lots",
@@ -78,6 +93,9 @@
     "delete": "Delete",
     "edit": "Edit",
     "editTitle": "Editing lot",
+    "newTitle": "Create lot",
+    "newSubtitle": "Complete the data to register a new lot",
+    "editSubtitle": "Modify the lot data",
     "update": "Update",
     "cancelEdit": "Cancel",
     "clearForm": "Clear",
@@ -88,6 +106,7 @@
     "days": "days",
     "frequency": "Frequency",
     "list": "Lots List",
+    "totalLots": "lots",
     "actions": "Actions",
     "namePlaceholder": "Lot name",
     "empty": "No lots registered yet",
@@ -114,7 +133,9 @@
     "inactivityGreen": "Active",
     "inactivityYellow": "Attention",
     "inactivityRed": "Critical",
-    "noEvents": "No events registered"
+    "noEvents": "No events registered",
+    "harvestReady": "Harvest ready",
+    "daysRemainingLabel": "days remaining"
   },
   "events": {
     "title": "Events",
@@ -133,6 +154,7 @@
     "success": "Event registered successfully",
     "deleteSuccess": "Event deleted successfully",
     "error": "Error processing event",
+    "noDescription": "—",
     "eventTypes": {
       "SOWING": "Sowing",
       "IRRIGATION": "Irrigation",

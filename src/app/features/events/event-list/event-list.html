@@ -86,7 +86,7 @@
           <td>
             <span class="event-badge">{{ translateType(event.type) }}</span>
           </td>
-          <td>{{ event.description || '-' }}</td>
+          <td>{{ event.description || ('events.noDescription' | translate) }}</td>
         </tr>
       </tbody>
     </table>

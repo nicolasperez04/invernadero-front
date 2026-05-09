@@ -27,9 +27,12 @@
     "cropsSub": "cultivos activos",
     "lotsSub": "lotes registrados",
     "eventsSub": "eventos registrados",
+    "avgProgress": "Avance promedio",
+    "totalEvents": "eventos totales",
     "filterByCrop": "Filtrar por cultivo",
     "allCrops": "Todos los cultivos",
     "loading": "Cargando datos...",
+    "loadingError": "Error al cargar los datos del dashboard",
     "eventActivity": "Actividad de Eventos",
     "last7Days": "Últimos 7 días",
     "lotStatus": "Estado de Lotes",
@@ -39,7 +42,10 @@
     "noData": "No hay datos disponibles",
     "inactivityGreen": "Actividad reciente",
     "inactivityYellow": "Inactividad moderada",
-    "inactivityRed": "Inactividad crítica"
+    "inactivityRed": "Inactividad crítica",
+    "alertTitle": "lote requiere atención",
+    "alertTitlePlural": "lotes requieren atención",
+    "noSowingMessage": "Registra un evento de Siembra para ver el progreso"
   },
   "crops": {
     "title": "Cultivos",
@@ -51,8 +57,13 @@
     "actions": "Acciones",
     "namePlaceholder": "Nombre del cultivo",
     "descriptionPlaceholder": "Descripción del cultivo",
+    "descriptionPlaceholderShort": "Breve descripción del cultivo",
+    "growthDaysPlaceholder": "Ej: 90",
+    "inactivityPlaceholder": "Ej: 15",
     "list": "Lista de Cultivos",
+    "totalCrops": "cultivos",
     "empty": "No hay cultivos registrados aún",
+    "emptyHint": "Usa el formulario de arriba para crear tu primer cultivo",
     "success": "Cultivo creado exitosamente",
     "deleteSuccess": "Cultivo eliminado exitosamente",
     "error": "Error al procesar cultivo",
@@ -62,10 +73,14 @@
     "inactivityDaysThresholdPlaceholder": "Ej: 7",
     "edit": "Editar",
     "editTitle": "Editando cultivo",
-    "update": "Actualizar",
+    "newTitle": "Nuevo cultivo",
+    "newSubtitle": "Completa los datos para registrar un nuevo cultivo",
+    "editSubtitle": "Modifica los datos del cultivo",
+    "update": "Guardar cambios",
     "cancelEdit": "Cancelar",
     "clearForm": "Limpiar",
-    "updateSuccess": "Cultivo actualizado exitosamente"
+    "updateSuccess": "Cultivo actualizado exitosamente",
+    "days": "días"
   },
   "lots": {
     "title": "Lotes",
@@ -78,6 +93,9 @@
     "delete": "Eliminar",
     "edit": "Editar",
     "editTitle": "Editando lote",
+    "newTitle": "Crear lote",
+    "newSubtitle": "Completa los datos para registrar un nuevo lote",
+    "editSubtitle": "Modifica los datos del lote",
     "update": "Actualizar",
     "cancelEdit": "Cancelar",
     "clearForm": "Limpiar",
@@ -88,6 +106,7 @@
     "days": "días",
     "frequency": "Frecuencia",
     "list": "Lista de Lotes",
+    "totalLots": "lotes",
     "actions": "Acciones",
     "namePlaceholder": "Nombre del lote",
     "empty": "No hay lotes registrados aún",
@@ -114,7 +133,9 @@
     "inactivityGreen": "Activo",
     "inactivityYellow": "Atención",
     "inactivityRed": "Crítico",
-    "noEvents": "Sin eventos registrados"
+    "noEvents": "Sin eventos registrados",
+    "harvestReady": "Cosecha lista",
+    "daysRemainingLabel": "días restantes"
   },
   "events": {
     "title": "Eventos",
@@ -133,6 +154,7 @@
     "success": "Evento registrado exitosamente",
     "deleteSuccess": "Evento eliminado exitosamente",
     "error": "Error al procesar evento",
+    "noDescription": "—",
     "eventTypes": {
       "SOWING": "Siembra",
       "IRRIGATION": "Riego",

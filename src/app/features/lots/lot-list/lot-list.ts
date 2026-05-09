@@ -188,7 +188,7 @@ export class LotListComponent implements OnInit, OnDestroy {
 
   getCropName(cropId: number): string {
     const crop = this.crops.find(c => c.id === cropId);
-    return crop ? crop.name : '-';
+    return crop ? crop.name : this.translate.instant('events.noDescription');
   }
 
   startEdit(lot: Lot): void {
@@ -294,24 +294,24 @@ export class LotListComponent implements OnInit, OnDestroy {
   }
 
   formatDate(dateStr: string | null): string {
-    if (!dateStr || dateStr === 'null') return '-';
+    if (!dateStr || dateStr === 'null') return this.translate.instant('events.noDescription');
     try {
       const d = new Date(dateStr);
-      if (isNaN(d.getTime())) return '-';
+      if (isNaN(d.getTime())) return this.translate.instant('events.noDescription');
       return d.toLocaleDateString('es-ES', { year: 'numeric', month: 'short', day: 'numeric' });
     } catch {
-      return '-';
+      return this.translate.instant('events.noDescription');
     }
   }
 
   formatLastEventDate(dateStr: string | null): string {
-    if (!dateStr || dateStr === 'null') return '-';
+    if (!dateStr || dateStr === 'null') return this.translate.instant('events.noDescription');
     try {
       const d = new Date(dateStr);
-      if (isNaN(d.getTime())) return '-';
+      if (isNaN(d.getTime())) return this.translate.instant('events.noDescription');
       return d.toLocaleDateString('es-ES', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
     } catch {
-      return '-';
+      return this.translate.instant('events.noDescription');
     }
   }
 
@@ -321,25 +321,25 @@ export class LotListComponent implements OnInit, OnDestroy {
   }
 
   getProgressDaysLabel(): string {
-    if (!this.summary || this.summary.totalDays === 0 || !this.hasSowing()) return '-';
-    return `${this.summary.daysElapsed} / ${this.summary.totalDays} días`;
+    if (!this.summary || this.summary.totalDays === 0 || !this.hasSowing()) return this.translate.instant('events.noDescription');
+    return `${this.summary.daysElapsed} / ${this.summary.totalDays} ${this.translate.instant('lots.days')}`;
   }
 
   getRemainingLabel(): string {
     if (!this.summary || !this.hasSowing()) return '';
     if (this.summary.daysRemaining > 0) {
-      return `${this.summary.daysRemaining} días restantes`;
+      return `${this.summary.daysRemaining} ${this.translate.instant('lots.daysRemainingLabel')}`;
     }
-    return '✓ Listo para cosecha';
+    return this.translate.instant('lots.harvestReady');
   }
 
   getEventTypeLabel(type: string | null): string {
-    if (!type) return '-';
+    if (!type) return this.translate.instant('events.noDescription');
     return this.translate.instant('events.eventTypes.' + type) || type;
   }
 
   getEventFrequencyLabel(): string {
-    if (!this.summary) return '-';
+    if (!this.summary) return this.translate.instant('events.noDescription');
     return this.summary.eventFrequency.toFixed(2);
   }
 }

@@ -13,10 +13,10 @@
     </div>
     <div>
       <h3 class="form-header-title">
-        {{ isEditing ? ('lots.editTitle' | translate) : ('lots.create' | translate) }}
+        {{ isEditing ? ('lots.editTitle' | translate) : ('lots.newTitle' | translate) }}
       </h3>
       <p class="form-header-subtitle">
-        {{ isEditing ? 'Modifica los datos del lote' : 'Completa los datos para registrar un nuevo lote' }}
+        {{ isEditing ? ('lots.editSubtitle' | translate) : ('lots.newSubtitle' | translate) }}
       </p>
     </div>
   </div>
@@ -95,7 +95,7 @@
 <div class="table-card">
   <div class="table-header">
     <h3>{{ 'lots.list' | translate }}</h3>
-    <span class="table-count">{{ lots.length }} lotes</span>
+    <span class="table-count">{{ lots.length }} {{ 'lots.totalLots' | translate }}</span>
   </div>
   <div class="table-wrapper">
     <table *ngIf="lots.length > 0; else emptyState">
@@ -113,7 +113,7 @@
           <td><strong>{{ lot.name }}</strong></td>
           <td>{{ getCropName(lot.cropId) }}</td>
           <td>{{ lot.startDate | date: 'dd/MM/yyyy' }}</td>
-          <td>{{ lot.endDate ? (lot.endDate | date: 'dd/MM/yyyy') : '—' }}</td>
+          <td>{{ lot.endDate ? (lot.endDate | date: 'dd/MM/yyyy') : ('events.noDescription' | translate) }}</td>
           <td class="center">
             <div class="actions-cell">
               <button class="btn-action btn-summary"
