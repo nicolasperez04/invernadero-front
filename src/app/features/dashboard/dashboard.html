@@ -96,26 +96,11 @@
         </div>
       </div>
 
-      <div class="chart-wrapper" *ngIf="eventChart && chartData.length > 0">
-        <ngx-charts-bar-vertical
-          [results]="chartData"
-          [scheme]="colorScheme"
-          [xAxis]="showXAxis"
-          [yAxis]="showYAxis"
-          [legend]="showLegend"
-          [showXAxisLabel]="showXAxisLabel"
-          [showYAxisLabel]="showYAxisLabel"
-          [xAxisLabel]="xAxisLabel"
-          [yAxisLabel]="yAxisLabel"
-          [gradient]="gradient"
-          [animations]="animations"
-          [showDataLabel]="true"
-          [roundEdges]="true"
-          [tooltipDisabled]="false">
-        </ngx-charts-bar-vertical>
+      <div class="chart-wrapper">
+        <canvas #eventChartCanvas *ngIf="eventChart"></canvas>
       </div>
 
-      <div *ngIf="!eventChart || chartData.length === 0" class="empty-state">
+      <div *ngIf="!eventChart" class="empty-state">
         <mat-icon>bar_chart</mat-icon>
         <p>{{ 'dashboard.noData' | translate }}</p>
       </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import Chart from 'chart.js/auto';
 
 import { DashboardService } from '../../core/services/dashboard.service';
 import { CropService } from '../../core/services/crop';
@@ -19,27 +20,20 @@ import {
   STATUS_ICONS
 } from '../../core/models/dashboard.model';
 
-import { NgxChartsModule } from '@swimlane/ngx-charts';
-
 interface Crop {
   id: number;
   name: string;
   description?: string;
 }
 
-interface ChartData {
-  name: string;
-  value: number;
-}
-
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule, MatIconModule, NgxChartsModule],
+  imports: [CommonModule, FormsModule, TranslateModule, MatIconModule],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
 })
-export class DashboardComponent implements OnInit, OnDestroy {
+export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // Data
   eventChart: EventChartDTO | null = null;
@@ -52,10 +46,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   loading = false;
   errorMessage = '';
 
-  // Chart data for SVG rendering
-  chartMaxValue = 0;
-  chartWidth = 1200;
-  chartHeight = 250;
+  // Chart.js
+  @ViewChild('eventChartCanvas') eventChartCanvas!: ElementRef<HTMLCanvasElement>;
+  private eventChartInstance: Chart | null = null;
 
   private destroy$ = new Subject<void>();
 
@@ -86,6 +79,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    if (this.eventChartInstance) {
+      this.eventChartInstance.destroy();
+    }
+  }
+
+  ngAfterViewInit(): void {
   }
 
   /**
@@ -120,19 +119,124 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.lotStatuses = response.lotStatuses;
         this.lotProgress = response.lotProgress;
 
-        // Calcular max valor para gráfica
-        if (this.eventChart?.values.length) {
-          this.chartMaxValue = Math.max(...this.eventChart.values, 1);
-        }
-
         this.loading = false;
-        this.cdr.markForCheck();
+        
+        setTimeout(() => {
+          console.log('DEBUG - eventChart:', this.eventChart);
+          console.log('DEBUG - canvas:', this.eventChartCanvas?.nativeElement);
+          this.createEventChart();
+          this.cdr.markForCheck();
+        }, 200);
       },
       error: (err) => {
         console.error('Error cargando dashboard:', err);
         this.errorMessage = this.translate.instant('dashboard.loadingError');
         this.loading = false;
         this.cdr.markForCheck();
+      }
+    });
+  }
+
+  createEventChart(): void {
+    console.log('DEBUG createEventChart - START');
+    console.log('DEBUG - canvas:', this.eventChartCanvas?.nativeElement);
+    console.log('DEBUG - eventChart:', this.eventChart);
+    
+    if (!this.eventChartCanvas || !this.eventChart) {
+      console.log('DEBUG createEventChart - NO CANVAS OR DATA');
+      return;
+    }
+    
+    if (!this.eventChart.labels || !this.eventChart.values) {
+      console.log('DEBUG createEventChart - NO LABELS OR VALUES');
+      return;
+    }
+
+    console.log('DEBUG - labels:', this.eventChart.labels);
+    console.log('DEBUG - values:', this.eventChart.values);
+
+    if (this.eventChartInstance) {
+      this.eventChartInstance.destroy();
+    }
+
+    const labels = this.eventChart.labels.map((d: string) => {
+      const date = new Date(d + 'T00:00:00');
+      return date.toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
+    });
+
+    const data = this.eventChart.values;
+    
+    console.log('DEBUG - processed labels:', labels);
+    console.log('DEBUG - processed data:', data);
+
+    this.eventChartInstance = new Chart(this.eventChartCanvas.nativeElement, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: this.translate.instant('dashboard.eventActivity'),
+          data: data,
+          backgroundColor: 'rgba(45, 125, 77, 0.85)',
+          borderColor: '#2d7d4d',
+          borderWidth: 1,
+          borderRadius: 6,
+          borderSkipped: false,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            titleColor: '#fff',
+            bodyColor: '#fff',
+            padding: 12,
+            cornerRadius: 8,
+            displayColors: false,
+            callbacks: {
+              label: (context) => {
+                const label = context.parsed.y;
+                return `${label} ${this.translate.instant('dashboard.totalEvents')}`;
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: {
+              display: false
+            },
+            ticks: {
+              color: '#666',
+              font: {
+                size: 11
+              },
+              maxRotation: 45,
+              minRotation: 45
+            }
+          },
+          y: {
+            beginAtZero: true,
+            grid: {
+              color: 'rgba(0, 0, 0, 0.05)'
+            },
+            ticks: {
+              color: '#666',
+              font: {
+                size: 11
+              },
+              stepSize: 1
+            }
+          }
+        },
+        animation: {
+          duration: 1000,
+          easing: 'easeOutQuart'
+        }
       }
     });
   }
@@ -180,14 +284,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       RED: this.translate.instant('dashboard.inactivityRed')
     };
     return inactivityLabels[level];
-  }
-
-  /**
-   * Calcula altura de la barra en la gráfica
-   */
-  getBarHeight(value: number): number {
-    if (this.chartMaxValue === 0) return 0;
-    return (value / this.chartMaxValue) * this.chartHeight;
   }
 
   /**
@@ -260,44 +356,4 @@ export class DashboardComponent implements OnInit, OnDestroy {
   get hasAlerts(): boolean {
     return this.alertLots.length > 0;
   }
-
-  get chartLabelsFormatted(): string[] {
-    if (!this.eventChart?.labels) return [];
-    return this.eventChart.labels.map(d => {
-      const date = new Date(d + 'T00:00:00');
-      const dayName = date.toLocaleDateString('es-ES', { weekday: 'short' }).replace('.', '');
-      const dayNum = date.getDate().toString().padStart(2, '0');
-      return `${dayName} ${dayNum}`;
-    });
-  }
-
-  get chartData(): ChartData[] {
-    if (!this.eventChart?.labels || !this.eventChart?.values) return [];
-    return this.eventChart.labels.map((label, i) => ({
-      name: this.formatDateLabel(label),
-      value: this.eventChart!.values[i]
-    }));
-  }
-
-  private formatDateLabel(dateStr: string): string {
-    const date = new Date(dateStr + 'T00:00:00');
-    return date.toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
-  }
-
-  colorScheme: any = {
-    name: 'greenhouse',
-    selectable: true,
-    group: 'Ordinal',
-    domain: ['#2d7d4d', '#1e88e5', '#7b1fa2', '#f57c00', '#e91e63', '#00bcd4']
-  };
-
-  showXAxis = true;
-  showYAxis = true;
-  gradient = true;
-  showLegend = false;
-  showXAxisLabel = false;
-  showYAxisLabel = false;
-  animations = true;
-  xAxisLabel = 'Fecha';
-  yAxisLabel = 'Eventos';
 }
