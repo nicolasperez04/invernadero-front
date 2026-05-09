@@ -47,7 +47,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   // Chart data for SVG rendering
   chartMaxValue = 0;
-  chartWidth = 600;
+  chartWidth = 1200;
   chartHeight = 250;
 
   private destroy$ = new Subject<void>();
@@ -235,7 +235,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return this.lotStatuses.length;
   }
 
-  get kpiEventsThisWeek(): number {
+  get kpiEventsLast30Days(): number {
     if (!this.eventChart?.values) return 0;
     return this.eventChart.values.reduce((sum, v) => sum + v, 0);
   }
