@@ -121,12 +121,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.loading = false;
         
-        setTimeout(() => {
-          console.log('DEBUG - eventChart:', this.eventChart);
-          console.log('DEBUG - canvas:', this.eventChartCanvas?.nativeElement);
-          this.createEventChart();
-          this.cdr.markForCheck();
-        }, 200);
+        this.waitForCanvas();
       },
       error: (err) => {
         console.error('Error cargando dashboard:', err);
@@ -239,6 +234,27 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       }
     });
+  }
+
+  private waitForCanvas(): void {
+    let attempts = 0;
+    const maxAttempts = 40; // 40 intentos * 50ms = 2 segundos máximo
+    const checkInterval = setInterval(() => {
+      attempts++;
+      console.log(`DEBUG waitForCanvas - intento ${attempts}, canvas:`, this.eventChartCanvas?.nativeElement);
+      
+      if (this.eventChartCanvas?.nativeElement) {
+        clearInterval(checkInterval);
+        this.createEventChart();
+        this.cdr.markForCheck();
+        return;
+      }
+      
+      if (attempts >= maxAttempts) {
+        clearInterval(checkInterval);
+        console.log('DEBUG waitForCanvas - TIMEOUT, el canvas nunca estuvo disponible');
+      }
+    }, 50);
   }
 
   /**
