@@ -47,8 +47,7 @@ Thumbs.db
 .env
 .env.local
 
-# Taiga config (contains real auth token - NOT committed)
-src/app/core/services/taiga-config.ts
+
 
 # E2E auth state (contains real JWT tokens)
 e2e/.auth/
