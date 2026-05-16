@@ -1,0 +1,82 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.sigma-table__scroll {
+  overflow-x: auto;
+}
+
+.sigma-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.sigma-table thead th {
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--earth-500);
+  border-bottom: 1.5px solid var(--earth-100);
+  white-space: nowrap;
+}
+
+.sigma-table thead th.tc,
+.sigma-table tbody td.tc {
+  text-align: center;
+}
+
+.sigma-table tbody td {
+  padding: 10px 14px;
+  color: var(--earth-800);
+  border-bottom: 1px solid var(--earth-20);
+  vertical-align: middle;
+}
+
+.sigma-table tbody td strong {
+  font-weight: 600;
+}
+
+.sigma-table tbody tr:hover {
+  background: var(--cream-50);
+}
+
+.sigma-table tbody tr.row-active {
+  background: var(--amber-50);
+}
+
+.sigma-table tbody td.desc {
+  max-width: 200px;
+  color: var(--neutral-500);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sigma-table__skeleton {
+  padding: 4px 0;
+}
+
+.sigma-table__skeleton-row {
+  display: flex;
+  gap: 14px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--earth-20);
+}
+
+.sigma-table__skeleton-cell {
+  flex: 1;
+  height: 12px;
+  background: var(--earth-20);
+  border-radius: var(--radius-sm);
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}

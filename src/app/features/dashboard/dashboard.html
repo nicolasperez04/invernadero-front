@@ -1,199 +1,205 @@
-<div class="dashboard-container">
-  <div class="page-header">
-    <h1 class="page-title">
-      <mat-icon>dashboard</mat-icon>
-      {{ 'dashboard.title' | translate }}
-    </h1>
-    <p class="page-subtitle">{{ 'dashboard.welcome' | translate }}</p>
-  </div>
+<div class="dashboard">
 
-  <div *ngIf="hasAlerts" class="alert-banner">
-    <mat-icon>notifications_active</mat-icon>
-    <div class="alert-content">
-      <strong
-        >{{ alertLots.length }}
-        {{
-          alertLots.length === 1
-            ? ('dashboard.alertTitle' | translate)
-            : ('dashboard.alertTitlePlural' | translate)
-        }}</strong
-      >
+  <!-- ALERT BANNER -->
+  <div *ngIf="hasAlerts && !loading" class="alert-banner">
+    <mat-icon class="alert-banner__icon">notifications_active</mat-icon>
+    <div class="alert-banner__content">
+      <strong>
+        {{ alertLots.length }}
+        {{ alertLots.length === 1 ? ('dashboard.alertTitle' | translate) : ('dashboard.alertTitlePlural' | translate) }}
+      </strong>
       <span>{{ alertLots.map((l) => l.lotName).join(', ') }}</span>
     </div>
   </div>
 
-  <div *ngIf="errorMessage" class="error-banner">
+  <!-- ERROR BANNER -->
+  <div *ngIf="errorMessage && !loading" class="error-banner">
     <mat-icon>error</mat-icon>
-    {{ errorMessage }}
+    <span>{{ errorMessage }}</span>
   </div>
 
-  <div class="kpi-grid" *ngIf="!loading">
-    <div class="kpi-card kpi-crops">
-      <div class="kpi-icon">
-        <mat-icon>grass</mat-icon>
-      </div>
-      <div class="kpi-content">
-        <span class="kpi-value">{{ kpiTotalCrops }}</span>
-        <span class="kpi-label">{{ 'dashboard.cropsSub' | translate }}</span>
-      </div>
-    </div>
-
-    <div class="kpi-card kpi-lots">
-      <div class="kpi-icon">
-        <mat-icon>place</mat-icon>
-      </div>
-      <div class="kpi-content">
-        <span class="kpi-value">{{ kpiTotalLots }}</span>
-        <span class="kpi-label">{{ 'dashboard.lotsSub' | translate }}</span>
-      </div>
-    </div>
-
-    <div class="kpi-card kpi-events">
-      <div class="kpi-icon">
-        <mat-icon>event</mat-icon>
-      </div>
-      <div class="kpi-content">
-        <span class="kpi-value">{{ kpiEventsLast30Days }}</span>
-        <span class="kpi-label">{{ 'dashboard.eventsSub' | translate }}</span>
-      </div>
-    </div>
-
-    <div class="kpi-card kpi-progress">
-      <div class="kpi-icon">
-        <mat-icon>trending_up</mat-icon>
-      </div>
-      <div class="kpi-content">
-        <span class="kpi-value">{{ kpiAvgProgress }}%</span>
-        <span class="kpi-label">{{ 'dashboard.avgProgress' | translate }}</span>
-      </div>
-    </div>
+  <!-- LOADING STATE -->
+  <div *ngIf="loading" class="dashboard-loading">
+    <sigma-spinner size="lg" [label]="'dashboard.loading' | translate"></sigma-spinner>
   </div>
 
-  <div class="filter-bar">
-    <label for="cropFilter">{{ 'dashboard.filterByCrop' | translate }}</label>
-    <select
-      id="cropFilter"
-      [(ngModel)]="selectedCropId"
-      (change)="onCropChange()"
-      [disabled]="loading"
-    >
-      <option [value]="null">{{ 'dashboard.allCrops' | translate }}</option>
-      <option *ngFor="let crop of crops" [value]="crop.id">
-        {{ crop.name }}
-      </option>
-    </select>
-  </div>
-
-  <div *ngIf="loading" class="loading-container">
-    <div class="spinner"></div>
-    <p>{{ 'dashboard.loading' | translate }}</p>
-  </div>
-
+  <!-- CONTENT (loaded) -->
   <div *ngIf="!loading" class="dashboard-content">
-    <div class="chart-card">
-      <div class="chart-header">
-        <div class="chart-title-group">
-          <h2>{{ 'dashboard.eventActivity' | translate }}</h2>
-          <p>{{ 'dashboard.last30Days' | translate }}</p>
+
+    <!-- KPI GRID -->
+    <div class="kpi-grid">
+      <div class="kpi-card" style="--kpi-delay: 0ms">
+        <div class="kpi-card__icon kpi-card__icon--crops">
+          <mat-icon>grass</mat-icon>
         </div>
-        <div class="chart-total">
-          <span class="chart-total-value">{{ kpiEventsLast30Days }}</span>
-          <span class="chart-total-label">{{ 'dashboard.totalEvents' | translate }}</span>
+        <div class="kpi-card__body">
+          <span class="kpi-card__value">{{ kpiTotalCrops }}</span>
+          <span class="kpi-card__label">{{ 'dashboard.cropsSub' | translate }}</span>
         </div>
       </div>
 
-      <div class="chart-wrapper">
-        <canvas #eventChartCanvas id="eventChartCanvas"></canvas>
-      </div>
-
-      <div *ngIf="!eventChart || !eventChart.labels?.length" class="empty-state">
-        <mat-icon>bar_chart</mat-icon>
-        <p>{{ 'dashboard.noData' | translate }}</p>
-      </div>
-    </div>
-
-    <div class="status-section">
-      <div class="section-title">
-        <mat-icon>traffic</mat-icon>
-        {{ 'dashboard.lotStatus' | translate }}
-      </div>
-
-      <div class="status-grid">
-        <div *ngIf="lotStatuses.length === 0" class="empty-message">
-          {{ 'dashboard.noLotsData' | translate }}
+      <div class="kpi-card" style="--kpi-delay: 80ms">
+        <div class="kpi-card__icon kpi-card__icon--lots">
+          <mat-icon>place</mat-icon>
         </div>
+        <div class="kpi-card__body">
+          <span class="kpi-card__value">{{ kpiTotalLots }}</span>
+          <span class="kpi-card__label">{{ 'dashboard.lotsSub' | translate }}</span>
+        </div>
+      </div>
 
-        <div
-          *ngFor="let lot of lotStatuses"
-          class="status-card"
-          [class]="'status-' + lot.status.toLowerCase()"
-        >
-          <div class="status-header">
-            <div class="status-header-left">
-              <h3>{{ lot.lotName }}</h3>
-              <p class="inactivity-label">{{ getInactivityLabel(lot.inactivityLevel) }}</p>
-            </div>
-            <mat-icon [style.color]="getStatusColor(lot.status)" class="status-icon">
-              {{ getStatusIcon(lot.status) }}
-            </mat-icon>
-          </div>
+      <div class="kpi-card" style="--kpi-delay: 160ms">
+        <div class="kpi-card__icon kpi-card__icon--events">
+          <mat-icon>event</mat-icon>
+        </div>
+        <div class="kpi-card__body">
+          <span class="kpi-card__value">{{ kpiEventsLast30Days }}</span>
+          <span class="kpi-card__label">{{ 'dashboard.eventsSub' | translate }}</span>
+        </div>
+      </div>
 
-          <div class="status-badge" [style.background]="getStatusColor(lot.status)">
-            {{ getStatusLabel(lot.status) }}
-          </div>
-
-          <p class="status-id">ID: {{ lot.lotId }}</p>
+      <div class="kpi-card" style="--kpi-delay: 240ms">
+        <div class="kpi-card__icon kpi-card__icon--progress">
+          <mat-icon>trending_up</mat-icon>
+        </div>
+        <div class="kpi-card__body">
+          <span class="kpi-card__value">{{ kpiAvgProgress }}%</span>
+          <span class="kpi-card__label">{{ 'dashboard.avgProgress' | translate }}</span>
         </div>
       </div>
     </div>
 
-    <div class="progress-section">
-      <div class="section-title">
-        <mat-icon>grain</mat-icon>
-        {{ 'dashboard.cropProgress' | translate }}
-      </div>
+    <!-- FILTER BAR -->
+    <div class="filter-bar">
+      <mat-icon class="filter-bar__icon">filter_alt</mat-icon>
+      <label class="filter-bar__label" for="cropFilter">{{ 'dashboard.filterByCrop' | translate }}</label>
+      <select id="cropFilter" class="filter-bar__select" [(ngModel)]="selectedCropId" (change)="onCropChange()">
+        <option [ngValue]="null">{{ 'dashboard.allCrops' | translate }}</option>
+        <option *ngFor="let crop of crops" [ngValue]="crop.id">{{ crop.name }}</option>
+      </select>
+    </div>
 
-      <div class="progress-list">
-        <div *ngIf="lotProgress.length === 0" class="empty-message">
-          {{ 'dashboard.noProgressData' | translate }}
-        </div>
+    <!-- GRID 2-COLUMN: Chart + Upcoming Harvests -->
+    <div class="grid-2col">
 
-        <div *ngFor="let lot of lotProgress" class="progress-item">
-          <div class="progress-item-header">
-            <span class="progress-item-name">{{ lot.lotName }}</span>
-            <span class="progress-percentage">{{ lot.progress | number: '1.1-1' }}%</span>
+      <!-- CHART CARD -->
+      <sigma-card variant="default" class="chart-card">
+        <div slot="header" class="chart-header">
+          <div>
+            <h3 class="chart-title">{{ 'dashboard.eventActivity' | translate }}</h3>
+            <p class="chart-subtitle">{{ 'dashboard.last30Days' | translate }}</p>
           </div>
-
-          <div class="progress-bar-container">
-            <div
-              class="progress-bar"
-              [style.width]="getProgressWidth(lot.progress) + '%'"
-              [class.progress-zero]="lot.progress === 0"
-            ></div>
-          </div>
-
-          <div class="progress-item-footer">
-            <div class="progress-meta">
-              <span class="remaining-label" *ngIf="hasSowing(lot)">{{
-                getRemainingLabel(lot)
-              }}</span>
-              <span class="no-sowing-msg" *ngIf="!hasSowing(lot)">{{
-                'dashboard.noSowingMessage' | translate
-              }}</span>
-            </div>
-            <div style="display: flex; gap: 16px; align-items: center">
-              <span class="sowing-date" *ngIf="hasSowing(lot)">
-                <mat-icon>grass</mat-icon>
-                {{ getSowingDateLabel(lot) }}
-              </span>
-              <span class="harvest-date" *ngIf="lot.estimatedHarvestDate !== 'null'">
-                <mat-icon>event</mat-icon>
-                {{ formatHarvestDate(lot.estimatedHarvestDate) }}
-              </span>
-            </div>
+          <div class="chart-total">
+            <span class="chart-total__value">{{ kpiEventsLast30Days }}</span>
+            <span class="chart-total__label">{{ 'dashboard.totalEvents' | translate }}</span>
           </div>
         </div>
-      </div>
+
+        <div class="chart-wrapper" *ngIf="eventChart && eventChart.labels.length; else chartEmpty">
+          <canvas #eventChartCanvas id="eventChartCanvas"></canvas>
+        </div>
+
+        <ng-template #chartEmpty>
+          <sigma-empty-state icon="bar_chart" [title]="'dashboard.noData' | translate"></sigma-empty-state>
+        </ng-template>
+      </sigma-card>
+
+      <!-- UPCOMING HARVESTS TIMELINE -->
+      <sigma-card variant="default" class="timeline-card">
+        <div slot="header" class="section-header">
+          <mat-icon class="section-header__icon">calendar_month</mat-icon>
+          <h3 class="section-header__title">{{ 'dashboard.upcomingHarvests' | translate }}</h3>
+        </div>
+
+        <ng-container *ngIf="upcomingHarvests.length > 0; else harvestsEmpty">
+          <div class="timeline">
+            <div *ngFor="let h of upcomingHarvests; let last = last" class="timeline-item">
+              <div class="timeline-dot"
+                [class.timeline-dot--soon]="h.daysRemaining <= 7 && h.daysRemaining >= 0"
+                [class.timeline-dot--overdue]="h.daysRemaining < 0">
+              </div>
+              <div class="timeline-line" *ngIf="!last"></div>
+              <div class="timeline-content">
+                <span class="timeline-lot">{{ h.lotName }}</span>
+                <span class="timeline-date">{{ h.estimatedHarvestDate }}</span>
+              </div>
+              <sigma-badge [color]="getTimelineBadgeColor(h)" size="sm">
+                <ng-container *ngIf="h.daysRemaining >= 0">{{ 'dashboard.daysRemaining' | translate: { days: h.daysRemaining } }}</ng-container>
+                <ng-container *ngIf="h.daysRemaining < 0">{{ 'dashboard.overdue' | translate }}</ng-container>
+              </sigma-badge>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-template #harvestsEmpty>
+          <sigma-empty-state icon="event" [title]="'dashboard.noUpcomingHarvests' | translate"></sigma-empty-state>
+        </ng-template>
+      </sigma-card>
+    </div>
+
+    <!-- GRID 2-COLUMN: Lot Status + Crop Progress -->
+    <div class="grid-2col">
+
+      <!-- LOT STATUS -->
+      <sigma-card variant="default">
+        <div slot="header" class="section-header">
+          <mat-icon class="section-header__icon">traffic</mat-icon>
+          <h3 class="section-header__title">{{ 'dashboard.lotStatus' | translate }}</h3>
+        </div>
+
+        <ng-container *ngIf="lotStatuses.length > 0; else statusEmpty">
+          <div class="status-list">
+            <div *ngFor="let lot of lotStatuses" class="status-item"
+              [class.status-item--green]="lot.status === 'GREEN'"
+              [class.status-item--yellow]="lot.status === 'YELLOW'"
+              [class.status-item--red]="lot.status === 'RED'">
+              <div class="status-item__dot" [style.background]="getStatusDotColor(lot.status)"></div>
+              <div class="status-item__info">
+                <span class="status-item__name">{{ lot.lotName }}</span>
+                <span class="status-item__meta">{{ getInactivityLabel(lot.inactivityLevel) }}</span>
+              </div>
+              <sigma-badge [color]="getBadgeColor(lot.status)" size="sm">{{ getStatusLabel(lot.status) }}</sigma-badge>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-template #statusEmpty>
+          <sigma-empty-state icon="traffic" [title]="'dashboard.noLotsData' | translate"></sigma-empty-state>
+        </ng-template>
+      </sigma-card>
+
+      <!-- CROP PROGRESS -->
+      <sigma-card variant="default">
+        <div slot="header" class="section-header">
+          <mat-icon class="section-header__icon">grain</mat-icon>
+          <h3 class="section-header__title">{{ 'dashboard.cropProgress' | translate }}</h3>
+        </div>
+
+        <ng-container *ngIf="lotProgress.length > 0; else progressEmpty">
+          <div class="progress-list">
+            <div *ngFor="let lot of lotProgress" class="progress-item">
+              <div class="progress-item__head">
+                <span class="progress-item__name">{{ lot.lotName }}</span>
+                <span class="progress-item__pct">{{ lot.progress | number:'1.0-0' }}%</span>
+              </div>
+
+              <sigma-progress [value]="getProgressWidth(lot.progress)" [max]="100"
+                [color]="lot.progress === 0 ? 'amber' : 'green'" size="sm" [showPercent]="false">
+              </sigma-progress>
+
+              <div class="progress-item__foot">
+                <span class="progress-item__days" *ngIf="hasSowing(lot)">{{ getDaysLabel(lot) }}</span>
+                <span class="progress-item__days" *ngIf="!hasSowing(lot)">{{ 'dashboard.noSowingMessage' | translate }}</span>
+                <span class="progress-item__remaining" *ngIf="hasSowing(lot)">{{ getRemainingLabel(lot) }}</span>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-template #progressEmpty>
+          <sigma-empty-state icon="grain" [title]="'dashboard.noProgressData' | translate"></sigma-empty-state>
+        </ng-template>
+      </sigma-card>
     </div>
   </div>
 </div>

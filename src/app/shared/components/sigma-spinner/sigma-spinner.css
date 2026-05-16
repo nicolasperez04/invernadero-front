@@ -1,0 +1,40 @@
+:host {
+  --sigma-spinner-s: 28px;
+  --sigma-spinner-border: 3px;
+
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.sigma-spinner__ring {
+  width: var(--sigma-spinner-s);
+  height: var(--sigma-spinner-s);
+  border: var(--sigma-spinner-border) solid var(--earth-100);
+  border-top-color: var(--olive-500);
+  border-radius: 50%;
+  animation: sigma-spinner-rotate 0.7s var(--ease-out-quart) infinite;
+}
+
+.sigma-spinner__label {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--neutral-500);
+  font-weight: 500;
+}
+
+/* ── Sizes ── */
+:host.sigma-spinner--sm {
+  --sigma-spinner-s: 18px;
+  --sigma-spinner-border: 2px;
+}
+
+:host.sigma-spinner--lg {
+  --sigma-spinner-s: 42px;
+  --sigma-spinner-border: 4px;
+}
+
+@keyframes sigma-spinner-rotate {
+  to { transform: rotate(360deg); }
+}

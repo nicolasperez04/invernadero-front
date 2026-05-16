@@ -1,0 +1,71 @@
+:host {
+  --sigma-progress-h: 8px;
+  --sigma-progress-radius: var(--radius-full);
+  --sigma-progress-fill: var(--olive-500);
+  --sigma-progress-track: var(--olive-100);
+
+  display: block;
+  width: 100%;
+}
+
+/* ── Header ── */
+.sigma-progress__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.sigma-progress__label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--earth-600);
+}
+
+.sigma-progress__percent {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--earth-500);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Track ── */
+.sigma-progress__track {
+  width: 100%;
+  height: var(--sigma-progress-h);
+  background: var(--sigma-progress-track);
+  border-radius: var(--sigma-progress-radius);
+  overflow: hidden;
+}
+
+/* ── Fill ── */
+.sigma-progress__fill {
+  height: 100%;
+  background: var(--sigma-progress-fill);
+  border-radius: var(--sigma-progress-radius);
+  transition: width 0.5s var(--ease-out-expo);
+}
+
+/* ── Colors ── */
+:host.sigma-progress--amber {
+  --sigma-progress-fill: var(--amber-500);
+  --sigma-progress-track: var(--amber-100);
+}
+
+:host.sigma-progress--red {
+  --sigma-progress-fill: var(--danger-color);
+  --sigma-progress-track: var(--danger-light);
+}
+
+/* ── Size ── */
+:host.sigma-progress--sm {
+  --sigma-progress-h: 5px;
+}
+
+:host.sigma-progress--sm .sigma-progress__header {
+  margin-bottom: 4px;
+}
+
+:host.sigma-progress--sm .sigma-progress__label {
+  font-size: 12px;
+}

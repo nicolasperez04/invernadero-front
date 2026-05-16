@@ -1,22 +1,77 @@
 @use '@angular/material' as mat;
 
-/* THEME CONFIG */
+$earth-primary: (
+  0: #000000,
+  10: #1A120C,
+  20: #2C2018,
+  25: #3E2E22,
+  30: #4A3A2C,
+  35: #5C4A3A,
+  40: #6B5A4A,
+  50: #8D7E6E,
+  60: #A89A8A,
+  70: #C4B8A8,
+  80: #DED5C8,
+  90: #EDE6DB,
+  95: #F5F0E8,
+  98: #FAF7F2,
+  99: #FDFBF8,
+  100: #FFFFFF,
+);
+
+$olive-tertiary: (
+  0: #000000,
+  10: #1B3D22,
+  20: #2C5E35,
+  25: #3D7A48,
+  30: #4E965B,
+  35: #5FB26D,
+  40: #6BBE79,
+  50: #7FC18A,
+  60: #9FD1A7,
+  70: #BFE0C4,
+  80: #DFF0E2,
+  90: #F2F9F4,
+  95: #F8FCF9,
+  98: #FCFEFC,
+  99: #FEFFFE,
+  100: #FFFFFF,
+);
+
+$amber-accent: (
+  0: #000000,
+  10: #331F00,
+  20: #663D00,
+  25: #804D00,
+  30: #995C00,
+  35: #B36A00,
+  40: #CC7A00,
+  50: #E68C00,
+  60: #F5A623,
+  70: #F7B84E,
+  80: #F9C979,
+  90: #FBDFA8,
+  95: #FDF0D4,
+  98: #FFF9EE,
+  99: #FFFDF5,
+  100: #FFFFFF,
+);
+
 html {
   height: 100%;
 
   @include mat.theme(
     (
       color: (
-        primary: mat.$azure-palette,
-        tertiary: mat.$blue-palette,
+        primary: $earth-primary,
+        tertiary: $olive-tertiary,
       ),
-      typography: Roboto,
+      typography: 'Plus Jakarta Sans',
       density: 0,
     )
   );
 }
 
-/* GLOBAL STYLES */
 body {
   color-scheme: light;
   background-color: var(--mat-sys-surface);

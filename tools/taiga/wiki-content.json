@@ -1,0 +1,37 @@
+[
+  {
+    "slug": "modelo-datos",
+    "title": "Modelo de Datos",
+    "content": "Modelo de Datos - Entidades: User, Crop, Lot, Event, EventType. Relaciones: User 1:N Event, Crop 1:N Lot, Lot 1:N Event."
+  },
+  {
+    "slug": "seguridad-autenticacion",
+    "title": "Seguridad y Autenticacion",
+    "content": "Seguridad JWT: Login -> token -> requests con Bearer token. Roles: ADMIN, OPERATOR, VIEWER. Config: 24h expiration, BCrypt password."
+  },
+  {
+    "slug": "configuracion-proyecto",
+    "title": "Configuracion del Proyecto",
+    "content": "Config: Backend (application.properties), Frontend (.env). Scripts: npm start/build/test. Herramientas: Node 18+, Angular 21, Java 17+, Maven 3.9+, PostgreSQL 15+."
+  },
+  {
+    "slug": "flujo-git",
+    "title": "Flujo de Git y Branching",
+    "content": "Ramas: main (prod), develop (integracion), feature/US-123, bugfix/fix-xxx. Conventional commits: feat, fix, docs, refactor, test."
+  },
+  {
+    "slug": "proceso-code-review",
+    "title": "Proceso de Code Review",
+    "content": "Checklist: tests pasan, formateado, sin debug, sin hardcode. Criterios: funciona, conventions, coverage, validacion, seguridad. Reglas: no self-merge, 1 reviewer."
+  },
+  {
+    "slug": "proceso-release",
+    "title": "Proceso de Release",
+    "content": "Versionado: vMAJOR.MINOR.PATCH. Entornos: Dev, Staging, Production. Flujo: release branch -> tests -> merge main -> tag -> deploy. Checklist: CI, version, docs, QA."
+  },
+  {
+    "slug": "guia-contribucion",
+    "title": "Guia de Contribucion",
+    "content": "Contribuir: Report bugs (Issue), Sugerir features (Issue), Pull Requests. Estandares: ESLint/Prettier, TypeScript strict, funciones pequenas, conventional commits."
+  }
+]

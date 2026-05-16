@@ -1,0 +1,36 @@
+<div class="modal-overlay" (click)="onCancel()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-header__info">
+        <span class="material-icons modal-header__icon">settings</span>
+        <h3 class="modal-title">Tipos de evento — {{ cropName }}</h3>
+      </div>
+      <button class="modal-close-btn" (click)="onCancel()">
+        <span class="material-icons">close</span>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <p class="modal-subtitle">Selecciona los tipos de evento disponibles para este cultivo.</p>
+
+      <div class="event-types-list">
+        <label *ngFor="let et of allEventTypes" class="event-type-item" [class.event-type-item--checked]="selectedIds.has(et.id)">
+          <input type="checkbox" [checked]="selectedIds.has(et.id)" (change)="toggleType(et.id)" class="event-type-checkbox" />
+          <span class="event-type-name">{{ et.name }}</span>
+          <span class="event-type-category">({{ et.category }})</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button sigma-btn variant="ghost" size="sm" (click)="onCancel()">
+        <span class="material-icons">close</span>
+        Cancelar
+      </button>
+      <button sigma-btn variant="primary" size="sm" (click)="onSave()" [disabled]="!hasChanges">
+        <span class="material-icons">check</span>
+        Guardar cambios
+      </button>
+    </div>
+  </div>
+</div>

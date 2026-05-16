@@ -12,56 +12,73 @@ import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
 import { Router, NavigationEnd } from '@angular/router';
-import { filter, takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { filter, takeUntil, debounceTime } from 'rxjs/operators';
+import { Subject, Subscription } from 'rxjs';
 import Chart from 'chart.js/auto';
 
 import { DashboardService } from '../../core/services/dashboard.service';
 import { CropService } from '../../core/services/crop';
+import { SseService } from '../../core/services/sse.service';
 import {
   DashboardResponse,
   EventChartDTO,
   LotStatusDTO,
   LotProgressDTO,
+  UpcomingHarvestDTO,
   STATUS_COLORS,
   STATUS_LABELS,
   STATUS_ICONS,
 } from '../../core/models/dashboard.model';
 
+import { SigmaCardComponent } from '../../shared/components/sigma-card/sigma-card';
+import { SigmaBadgeComponent } from '../../shared/components/sigma-badge/sigma-badge';
+import { SigmaEmptyStateComponent } from '../../shared/components/sigma-empty-state/sigma-empty-state';
+import { SigmaSpinnerComponent } from '../../shared/components/sigma-spinner/sigma-spinner';
+import { SigmaProgressComponent } from '../../shared/components/sigma-progress/sigma-progress';
+
 interface Crop {
   id: number;
   name: string;
-  description?: string;
 }
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule, MatIconModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    TranslateModule,
+    MatIconModule,
+    SigmaCardComponent,
+    SigmaBadgeComponent,
+    SigmaEmptyStateComponent,
+    SigmaSpinnerComponent,
+    SigmaProgressComponent,
+  ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
 export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
-  // Data
   eventChart: EventChartDTO | null = null;
   lotStatuses: LotStatusDTO[] = [];
   lotProgress: LotProgressDTO[] = [];
+  upcomingHarvests: UpcomingHarvestDTO[] = [];
   crops: Crop[] = [];
 
-  // UI State
   selectedCropId: number | null = null;
   loading = false;
+  initialLoading = true;
   errorMessage = '';
 
-  // Chart.js
   @ViewChild('eventChartCanvas') eventChartCanvas!: ElementRef<HTMLCanvasElement>;
   private eventChartInstance: Chart | null = null;
-
   private destroy$ = new Subject<void>();
+  private dashboardSubscription?: Subscription;
 
   constructor(
     private dashboardService: DashboardService,
     private cropService: CropService,
+    private sseService: SseService,
     private router: Router,
     private cdr: ChangeDetectorRef,
     private translate: TranslateService,
@@ -71,7 +88,6 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     this.loadCrops();
     this.loadDashboard();
 
-    // Recargar al navegar a esta ruta
     this.router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),
@@ -81,11 +97,18 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe(() => {
         this.loadDashboard();
       });
+
+    this.sseService.events$
+      .pipe(takeUntil(this.destroy$), debounceTime(500))
+      .subscribe(() => this.loadDashboard());
+    this.sseService.connect();
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    this.sseService.disconnect();
+    this.dashboardSubscription?.unsubscribe();
     if (this.eventChartInstance) {
       this.eventChartInstance.destroy();
     }
@@ -93,9 +116,6 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit(): void {}
 
-  /**
-   * Carga la lista de cultivos disponibles
-   */
   loadCrops(): void {
     this.cropService.getAll().subscribe({
       next: (crops) => {
@@ -108,10 +128,8 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  /**
-   * Carga datos del dashboard (con o sin filtro de cultivo)
-   */
   loadDashboard(): void {
+    this.dashboardSubscription?.unsubscribe();
     this.loading = true;
     this.errorMessage = '';
 
@@ -119,53 +137,36 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       ? this.dashboardService.getDashboardByCrop(this.selectedCropId)
       : this.dashboardService.getDashboard();
 
-    request$.subscribe({
+    this.dashboardSubscription = request$.subscribe({
       next: (response: DashboardResponse) => {
         this.eventChart = response.eventChart;
         this.lotStatuses = response.lotStatuses;
         this.lotProgress = response.lotProgress;
+        this.upcomingHarvests = response.upcomingHarvests || [];
 
         this.loading = false;
-
-        // Usar MutationObserver para esperar a que el canvas esté en el DOM
+        this.initialLoading = false;
         this.waitForCanvasWithObserver();
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Error cargando dashboard:', err);
         this.errorMessage = this.translate.instant('dashboard.loadingError');
         this.loading = false;
+        this.initialLoading = false;
         this.cdr.markForCheck();
       },
     });
   }
 
   createEventChart(): void {
-    console.log('DEBUG createEventChart - START');
+    if (!this.eventChart || !this.eventChart.labels || !this.eventChart.values) return;
 
-    // Verificar datos del gráfico
-    if (!this.eventChart || !this.eventChart.labels || !this.eventChart.values) {
-      console.log('DEBUG createEventChart - NO DATA');
-      return;
-    }
-
-    console.log('DEBUG - eventChart:', this.eventChart);
-    console.log('DEBUG - labels:', this.eventChart.labels);
-    console.log('DEBUG - values:', this.eventChart.values);
-
-    // Usar querySelector como respaldo si @ViewChild no funciona
     let canvasElement: HTMLCanvasElement | null = this.eventChartCanvas?.nativeElement;
-
     if (!canvasElement) {
-      console.log('DEBUG - Canvas no encontrado por @ViewChild, usando querySelector');
       canvasElement = document.querySelector('#eventChartCanvas') as HTMLCanvasElement;
     }
-
-    console.log('DEBUG - canvasElement:', canvasElement);
-
-    if (!canvasElement) {
-      console.log('DEBUG createEventChart - CANVAS NOT FOUND AT ALL');
-      return;
-    }
+    if (!canvasElement) return;
 
     if (this.eventChartInstance) {
       this.eventChartInstance.destroy();
@@ -178,21 +179,18 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
     const data = this.eventChart.values;
 
-    console.log('DEBUG - processed labels:', labels);
-    console.log('DEBUG - processed data:', data);
-
-    this.eventChartInstance = new Chart(this.eventChartCanvas.nativeElement, {
+    this.eventChartInstance = new Chart(canvasElement, {
       type: 'bar',
       data: {
-        labels: labels,
+        labels,
         datasets: [
           {
             label: this.translate.instant('dashboard.eventActivity'),
-            data: data,
-            backgroundColor: 'rgba(45, 125, 77, 0.85)',
-            borderColor: '#2d7d4d',
+            data,
+            backgroundColor: 'rgba(94, 178, 109, 0.8)',
+            borderColor: '#5FB26D',
             borderWidth: 1,
-            borderRadius: 6,
+            borderRadius: 4,
             borderSkipped: false,
           },
         ],
@@ -201,14 +199,12 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-          legend: {
-            display: false,
-          },
+          legend: { display: false },
           tooltip: {
-            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-            titleColor: '#fff',
+            backgroundColor: '#3E2E22',
+            titleColor: 'rgba(255,255,255,0.85)',
             bodyColor: '#fff',
-            padding: 12,
+            padding: 10,
             cornerRadius: 8,
             displayColors: false,
             callbacks: {
@@ -221,76 +217,33 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
         },
         scales: {
           x: {
-            grid: {
-              display: false,
-            },
+            grid: { display: false },
             ticks: {
-              color: '#666',
-              font: {
-                size: 11,
-              },
-              maxRotation: 45,
-              minRotation: 45,
+              color: '#8D7E6E',
+              font: { size: 11, family: 'Plus Jakarta Sans' },
+              maxRotation: 40,
+              minRotation: 0,
             },
           },
           y: {
             beginAtZero: true,
-            grid: {
-              color: 'rgba(0, 0, 0, 0.05)',
-            },
+            grid: { color: 'rgba(92, 74, 58, 0.06)' },
             ticks: {
-              color: '#666',
-              font: {
-                size: 11,
-              },
+              color: '#8D7E6E',
+              font: { size: 11, family: 'Plus Jakarta Sans' },
               stepSize: 1,
             },
           },
         },
-        animation: {
-          duration: 1000,
-          easing: 'easeOutQuart',
-        },
+        animation: { duration: 800, easing: 'easeOutQuart' },
       },
     });
   }
 
-  private waitForCanvas(): void {
-    let attempts = 0;
-    const maxAttempts = 40;
-    const checkInterval = setInterval(() => {
-      attempts++;
-      console.log(
-        `DEBUG waitForCanvas - intento ${attempts}, canvas:`,
-        this.eventChartCanvas?.nativeElement,
-      );
-
-      if (this.eventChartCanvas?.nativeElement) {
-        clearInterval(checkInterval);
-        this.createEventChart();
-        this.cdr.markForCheck();
-        return;
-      }
-
-      if (attempts >= maxAttempts) {
-        clearInterval(checkInterval);
-        console.log('DEBUG waitForCanvas - TIMEOUT, intentando con querySelector');
-        // Último intento con querySelector
-        setTimeout(() => this.createEventChart(), 100);
-      }
-    }, 50);
-  }
-
   private waitForCanvasWithObserver(): void {
-    console.log('DEBUG waitForCanvasWithObserver - START');
-
-    // Primero intentar inmediatamente
     const tryCreateChart = () => {
       const canvasEl = document.getElementById('eventChartCanvas') as HTMLCanvasElement;
-      console.log('DEBUG - querySelector result:', canvasEl);
-
       if (canvasEl) {
-        console.log('DEBUG - Canvas encontrado inmediatamente!');
         this.createEventChart();
         this.cdr.markForCheck();
         return true;
@@ -298,89 +251,78 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       return false;
     };
 
-    // Intentar inmediatamente
     if (tryCreateChart()) return;
 
-    // Si no funciona, usar MutationObserver
-    console.log('DEBUG - Canvas no encontrado, usando MutationObserver');
-
-    const observer = new MutationObserver((mutations, obs) => {
-      console.log('DEBUG - MutationObserver: detectando cambios en el DOM');
-      if (tryCreateChart()) {
-        obs.disconnect();
-      }
+    const observer = new MutationObserver(() => {
+      if (tryCreateChart()) observer.disconnect();
     });
 
-    // Observar el cuerpo del documento
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-    });
-
-    // Timeout de 5 segundos
+    observer.observe(document.body, { childList: true, subtree: true });
     setTimeout(() => {
       observer.disconnect();
-      console.log('DEBUG - MutationObserver desconectado por timeout');
-      // Último intento
       tryCreateChart();
+      this.cdr.markForCheck();
     }, 5000);
   }
 
-  /**
-   * Maneja cambio de filtro de cultivo
-   */
   onCropChange(): void {
     this.loadDashboard();
   }
 
-  /**
-   * Retorna el color CSS para un estado de semáforo
-   */
   getStatusColor(status: 'GREEN' | 'YELLOW' | 'RED'): string {
-    const colorMap = {
-      GREEN: '#4caf50',
-      YELLOW: '#ff9800',
-      RED: '#f44336',
+    const colorMap: Record<string, string> = {
+      GREEN: 'var(--olive-600)',
+      YELLOW: 'var(--amber-500)',
+      RED: 'var(--danger-color)',
     };
-    return colorMap[status];
+    return colorMap[status] || 'var(--neutral-400)';
   }
 
-  /**
-   * Retorna el icono para un estado
-   */
+  getStatusDotColor(status: 'GREEN' | 'YELLOW' | 'RED'): string {
+    const colorMap: Record<string, string> = {
+      GREEN: '#4E965B',
+      YELLOW: '#F5A623',
+      RED: '#C94A4A',
+    };
+    return colorMap[status] || '#9E9E9E';
+  }
+
   getStatusIcon(status: 'GREEN' | 'YELLOW' | 'RED'): string {
     return STATUS_ICONS[status];
   }
 
-  /**
-   * Retorna la etiqueta traducida para un estado
-   */
   getStatusLabel(status: 'GREEN' | 'YELLOW' | 'RED'): string {
     return STATUS_LABELS[status];
   }
 
-  /**
-   * Retorna la etiqueta traducida para nivel de inactividad
-   */
+  getBadgeColor(status: 'GREEN' | 'YELLOW' | 'RED'): 'green' | 'amber' | 'red' | 'blue' | 'gray' {
+    const map: Record<string, 'green' | 'amber' | 'red' | 'blue' | 'gray'> = {
+      GREEN: 'green',
+      YELLOW: 'amber',
+      RED: 'red',
+    };
+    return map[status] || 'gray';
+  }
+
+  getTimelineBadgeColor(h: UpcomingHarvestDTO): 'green' | 'amber' | 'red' | 'blue' | 'gray' {
+    if (h.daysRemaining < 0) return 'red';
+    if (h.daysRemaining <= 7) return 'amber';
+    return 'green';
+  }
+
   getInactivityLabel(level: 'GREEN' | 'YELLOW' | 'RED'): string {
-    const inactivityLabels = {
+    const labels: Record<string, string> = {
       GREEN: this.translate.instant('dashboard.inactivityGreen'),
       YELLOW: this.translate.instant('dashboard.inactivityYellow'),
       RED: this.translate.instant('dashboard.inactivityRed'),
     };
-    return inactivityLabels[level];
+    return labels[level];
   }
 
-  /**
-   * Obtiene el progreso visual de un lote
-   */
   getProgressWidth(progress: number): number {
     return Math.min(Math.max(progress, 0), 100);
   }
 
-  /**
-   * Formatea fecha estimada de cosecha
-   */
   formatHarvestDate(dateString: string): string {
     if (!dateString || dateString === 'null') return '-';
     try {
@@ -397,13 +339,13 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   getDaysLabel(lot: LotProgressDTO): string {
     if (lot.sowingDate === 'null' || lot.totalDays === 0) return '-';
-    return `${lot.daysElapsed}/${lot.totalDays} días`;
+    return `${lot.daysElapsed}/${lot.totalDays} ${this.translate.instant('lots.days')}`;
   }
 
   getRemainingLabel(lot: LotProgressDTO): string {
     if (lot.sowingDate === 'null') return '';
-    if (lot.daysRemaining <= 0) return 'Cosecha lista';
-    return `${lot.daysRemaining} días restantes`;
+    if (lot.daysRemaining <= 0) return this.translate.instant('lots.harvestReady');
+    return `${lot.daysRemaining} ${this.translate.instant('lots.daysRemainingLabel')}`;
   }
 
   hasSowing(lot: LotProgressDTO): boolean {
@@ -414,6 +356,8 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     if (lot.sowingDate === 'null') return '';
     return this.formatHarvestDate(lot.sowingDate);
   }
+
+  // ── KPIs ──
 
   get kpiTotalCrops(): number {
     return this.crops.length;
@@ -434,11 +378,19 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     return Math.round(sum / this.lotProgress.length);
   }
 
+  // ── Alerts ──
+
   get alertLots(): LotStatusDTO[] {
     return this.lotStatuses.filter((l) => l.status !== 'GREEN' || l.inactivityLevel !== 'GREEN');
   }
 
   get hasAlerts(): boolean {
     return this.alertLots.length > 0;
+  }
+
+  // ── Skeleton helper ──
+
+  get skeletonItems(): number[] {
+    return [0, 1, 2, 3];
   }
 }

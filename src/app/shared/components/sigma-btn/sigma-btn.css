@@ -1,0 +1,148 @@
+:host {
+  --sigma-btn-h: 42px;
+  --sigma-btn-fz: 14px;
+  --sigma-btn-px: 20px;
+  --sigma-btn-gap: 8px;
+  --sigma-btn-radius: var(--radius-md);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sigma-btn-gap);
+  height: var(--sigma-btn-h);
+  padding: 0 var(--sigma-btn-px);
+  border: 1.5px solid transparent;
+  border-radius: var(--sigma-btn-radius);
+  font-family: var(--font-body);
+  font-size: var(--sigma-btn-fz);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast);
+  user-select: none;
+  white-space: nowrap;
+}
+
+:host:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+:host:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ── Primary ── */
+:host.sigma-btn--primary {
+  background: var(--olive-600);
+  color: #fff;
+  border-color: var(--olive-600);
+}
+
+:host.sigma-btn--primary:hover:not(:disabled) {
+  background: var(--olive-700);
+  border-color: var(--olive-700);
+  box-shadow: 0 4px 12px rgba(78, 150, 91, 0.35);
+}
+
+:host.sigma-btn--primary:focus-visible {
+  box-shadow: 0 0 0 3px rgba(78, 150, 91, 0.3);
+}
+
+/* ── Secondary ── */
+:host.sigma-btn--secondary {
+  background: var(--amber-500);
+  color: #fff;
+  border-color: var(--amber-500);
+}
+
+:host.sigma-btn--secondary:hover:not(:disabled) {
+  background: var(--amber-600);
+  border-color: var(--amber-600);
+  box-shadow: 0 4px 12px rgba(245, 166, 35, 0.35);
+}
+
+/* ── Ghost ── */
+:host.sigma-btn--ghost {
+  background: transparent;
+  color: var(--earth-600);
+  border-color: var(--earth-200);
+}
+
+:host.sigma-btn--ghost:hover:not(:disabled) {
+  background: var(--earth-20);
+  border-color: var(--earth-300);
+}
+
+/* ── Danger ── */
+:host.sigma-btn--danger {
+  background: var(--danger-color);
+  color: #fff;
+  border-color: var(--danger-color);
+}
+
+:host.sigma-btn--danger:hover:not(:disabled) {
+  background: #b53f3f;
+  border-color: #b53f3f;
+  box-shadow: 0 4px 12px rgba(201, 74, 74, 0.35);
+}
+
+/* ── Sizes ── */
+:host.sigma-btn--sm {
+  --sigma-btn-h: 32px;
+  --sigma-btn-fz: 12px;
+  --sigma-btn-px: 14px;
+  --sigma-btn-radius: var(--radius-sm);
+}
+
+:host.sigma-btn--lg {
+  --sigma-btn-h: 50px;
+  --sigma-btn-fz: 16px;
+  --sigma-btn-px: 28px;
+  --sigma-btn-radius: var(--radius-md);
+}
+
+/* ── Icon ── */
+.sigma-btn__icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+:host.sigma-btn--sm .sigma-btn__icon {
+  font-size: 16px;
+}
+
+:host.sigma-btn--lg .sigma-btn__icon {
+  font-size: 20px;
+}
+
+/* ── Loading ── */
+.sigma-btn__spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: sigma-spin 0.6s linear infinite;
+  flex-shrink: 0;
+}
+
+:host.sigma-btn--ghost .sigma-btn__spinner {
+  border-color: rgba(92, 74, 58, 0.25);
+  border-top-color: var(--earth-600);
+}
+
+:host.sigma-btn--danger .sigma-btn__spinner {
+  border-color: rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+}
+
+@keyframes sigma-spin {
+  to { transform: rotate(360deg); }
+}

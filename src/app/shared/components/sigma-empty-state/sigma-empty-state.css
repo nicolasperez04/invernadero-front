@@ -1,0 +1,45 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 48px 24px;
+  gap: 12px;
+}
+
+.sigma-empty-state__icon {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  background: var(--earth-20);
+  color: var(--earth-300);
+  margin-bottom: 4px;
+}
+
+.sigma-empty-state__icon .material-icons {
+  font-size: 32px;
+}
+
+.sigma-empty-state__title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: var(--earth-700);
+  font-weight: 400;
+  margin: 0;
+}
+
+.sigma-empty-state__desc {
+  font-size: 14px;
+  color: var(--neutral-500);
+  max-width: 320px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.sigma-empty-state__action {
+  margin-top: 8px;
+}

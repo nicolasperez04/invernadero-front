@@ -1,80 +1,73 @@
-<!-- TOP NAVBAR -->
-<div class="top-navbar">
-  <div class="navbar-left">🌾 {{ 'nav.title' | translate }}</div>
+<div class="layout" [class.sidebar-collapsed]="sidebarCollapsed">
 
-  <div class="navbar-right">
-    <div class="lang-switcher">
-      <button class="lang-btn" (click)="setLang('es')" [class.active-lang]="currentLang() === 'es'">
-        ES
+  <!-- TOOLBAR -->
+  <header class="toolbar">
+    <div class="toolbar-left">
+      <button class="toolbar-menu-btn" (click)="toggleSidebar()" aria-label="Toggle sidebar">
+        <mat-icon>menu</mat-icon>
       </button>
-      <span class="lang-sep">|</span>
-      <button class="lang-btn" (click)="setLang('en')" [class.active-lang]="currentLang() === 'en'">
-        EN
+      <h2 class="toolbar-title" *ngIf="pageTitle$ | async as title">{{ title | translate }}</h2>
+    </div>
+
+    <div class="toolbar-right">
+      <app-notification-bell></app-notification-bell>
+
+      <div class="lang-switcher">
+        <button
+          class="lang-btn"
+          [class.active]="currentLang() === 'es'"
+          (click)="setLang('es')"
+        >ES</button>
+        <span class="lang-sep">|</span>
+        <button
+          class="lang-btn"
+          [class.active]="currentLang() === 'en'"
+          (click)="setLang('en')"
+        >EN</button>
+      </div>
+
+      <div class="user-info">
+        <span class="user-avatar">{{ username.charAt(0).toUpperCase() }}</span>
+        <span class="user-name">{{ username }}</span>
+      </div>
+
+      <button class="logout-btn" (click)="logout()" [attr.title]="'nav.logout' | translate">
+        <mat-icon>logout</mat-icon>
       </button>
     </div>
+  </header>
 
-    <div class="user-info">
-      <mat-icon>account_circle</mat-icon>
-      <span>{{ username }}</span>
-    </div>
+  <!-- BODY -->
+  <div class="body">
+    <!-- SIDEBAR -->
+    <nav class="sidebar">
+      <div class="sidebar-brand">
 
-    <button class="logout-btn" (click)="logout()">
-      <mat-icon>logout</mat-icon>
-      {{ 'nav.logout' | translate }}
-    </button>
-  </div>
-</div>
+        <span class="sidebar-brand-text">{{ 'nav.title' | translate }}</span>
+      </div>
 
-<!-- MAIN CONTAINER -->
-<div class="main-container">
-  <!-- SIDEBAR NAVIGATION -->
-  <div class="sidebar">
-    <div class="sidebar-header">
-      <div class="sidebar-title">{{ 'nav.menu' | translate }}</div>
-    </div>
+      <div class="sidebar-nav">
+        <a
+          *ngFor="let item of filteredNavItems"
+          class="nav-item"
+          [class.active]="isActive(item.path)"
+          (click)="navigate(item.path)"
+          tabindex="0"
+          (keydown.enter)="navigate(item.path)"
+        >
+          <mat-icon class="nav-icon">{{ item.icon }}</mat-icon>
+          <span class="nav-label">{{ item.label | translate }}</span>
+        </a>
+      </div>
 
-    <!-- Dashboard -->
-    <div (click)="navigate('/dashboard')" [class.active]="isActive('/dashboard')" class="nav-item">
-      <mat-icon>dashboard</mat-icon>
-      <span>{{ 'nav.dashboard' | translate }}</span>
-    </div>
+      <div class="sidebar-footer">
+        <span class="sidebar-collapse-hint">{{ 'nav.menu' | translate }}</span>
+      </div>
+    </nav>
 
-    <!-- Crops (ADMIN, OPERATOR) -->
-    <div
-      *ngIf="canAccess(['ADMIN', 'OPERATOR'])"
-      (click)="navigate('/crops')"
-      [class.active]="isActive('/crops')"
-      class="nav-item"
-    >
-      <mat-icon>grass</mat-icon>
-      <span>{{ 'nav.crops' | translate }}</span>
-    </div>
-
-    <!-- Lots (ADMIN, OPERATOR) -->
-    <div
-      *ngIf="canAccess(['ADMIN', 'OPERATOR'])"
-      (click)="navigate('/lots')"
-      [class.active]="isActive('/lots')"
-      class="nav-item"
-    >
-      <mat-icon>place</mat-icon>
-      <span>{{ 'nav.lots' | translate }}</span>
-    </div>
-
-    <!-- Events (ADMIN, OPERATOR, VIEWER) -->
-    <div
-      *ngIf="canAccess(['ADMIN', 'OPERATOR', 'VIEWER'])"
-      (click)="navigate('/events')"
-      [class.active]="isActive('/events')"
-      class="nav-item"
-    >
-      <mat-icon>event</mat-icon>
-      <span>{{ 'nav.events' | translate }}</span>
-    </div>
-  </div>
-
-  <!-- MAIN CONTENT -->
-  <div class="content">
-    <router-outlet></router-outlet>
+    <!-- CONTENT -->
+    <main class="content">
+      <router-outlet></router-outlet>
+    </main>
   </div>
 </div>

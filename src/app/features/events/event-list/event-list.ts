@@ -7,35 +7,25 @@ import { Lot } from '../../../models/lot.model';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { ConfirmDialogService } from '../../../core/services/confirm-dialog.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter, takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
-import { MatInputModule } from '@angular/material/input';
-import { MatTableModule } from '@angular/material/table';
+import { Subject, forkJoin } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
-import { MatTooltipModule } from '@angular/material/tooltip';
+
+import { SigmaBtnComponent } from '../../../shared/components/sigma-btn/sigma-btn';
+import { SigmaCardComponent } from '../../../shared/components/sigma-card/sigma-card';
+import { SigmaBadgeComponent } from '../../../shared/components/sigma-badge/sigma-badge';
+import { SigmaEmptyStateComponent } from '../../../shared/components/sigma-empty-state/sigma-empty-state';
+import { SigmaInputComponent } from '../../../shared/components/sigma-input/sigma-input';
 
 @Component({
   selector: 'app-event-list',
   standalone: true,
   imports: [
-    FormsModule,
-    CommonModule,
-    TranslateModule,
-    MatCardModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    MatTableModule,
-    MatIconModule,
-    MatTooltipModule,
+    FormsModule, CommonModule, TranslateModule, MatIconModule,
+    SigmaBtnComponent, SigmaCardComponent, SigmaBadgeComponent,
+    SigmaEmptyStateComponent, SigmaInputComponent,
   ],
   templateUrl: './event-list.html',
   styleUrl: './event-list.css',
@@ -44,25 +34,27 @@ export class EventListComponent implements OnInit, OnDestroy {
   lots: Lot[] = [];
   eventTypes: EventType[] = [];
   events: Event[] = [];
-  displayedColumns: string[] = ['timestamp', 'type', 'description'];
 
   selectedLotId: number = 0;
 
-  newEvent = {
-    lotId: 0,
-    type: '',
-    userId: 0,
-    timestamp: '',
-    description: '',
-  };
+  newEvent = { lotId: 0, type: '', userId: 0, timestamp: '', description: '' };
+  loading = false;
+  submitted = false;
 
   private destroy$ = new Subject<void>();
+
+  get formErrors(): string[] {
+    if (!this.submitted) return [];
+    const errors: string[] = [];
+    if (!this.newEvent.type) errors.push('events.errors.typeRequired');
+    if (!this.newEvent.timestamp) errors.push('events.errors.timestampRequired');
+    return errors;
+  }
 
   constructor(
     private eventService: EventService,
     private eventTypeService: EventTypeService,
     private lotService: LotService,
-    private confirmDialog: ConfirmDialogService,
     private auth: AuthService,
     private router: Router,
     private translate: TranslateService,
@@ -70,97 +62,63 @@ export class EventListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // Cargar datos inicialmente
     this.loadLots();
     this.loadEventTypes();
-
-    // Cargar datos cada vez que se navega a esta ruta
-    this.router.events
-      .pipe(
-        filter((event) => event instanceof NavigationEnd),
-        filter((event: any) => event.url === '/events'),
-        takeUntil(this.destroy$),
-      )
-      .subscribe(() => {
-        this.loadLots();
-        this.loadEventTypes();
-        this.selectedLotId = 0;
-        this.events = [];
-      });
+    this.router.events.pipe(
+      filter((event) => event instanceof NavigationEnd),
+      filter((event: any) => event.url === '/events'),
+      takeUntil(this.destroy$),
+    ).subscribe(() => {
+      this.loadLots();
+      this.loadEventTypes();
+      this.selectedLotId = 0;
+      this.events = [];
+    });
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
+  ngOnDestroy(): void { this.destroy$.next(); this.destroy$.complete(); }
 
-  loadLots() {
+  loadLots(): void {
     this.lotService.getAll().subscribe({
-      next: (data) => {
-        this.lots = data;
-        this.cdr.markForCheck();
-      },
-      error: () => {
-        // Error interceptor maneja la visualización del snackbar
-      },
+      next: (data) => { this.lots = data; this.cdr.markForCheck(); },
+      error: () => { this.cdr.markForCheck(); },
     });
   }
 
-  loadEventTypes() {
+  loadEventTypes(): void {
     this.eventTypeService.getAll().subscribe({
-      next: (data) => {
-        this.eventTypes = data;
-        this.cdr.markForCheck();
-      },
-      error: () => {
-        // Error interceptor maneja la visualización del snackbar
-      },
+      next: (data) => { this.eventTypes = data; this.cdr.markForCheck(); },
+      error: () => { this.cdr.markForCheck(); },
     });
   }
 
-  loadEvents() {
+  loadEvents(): void {
     if (!this.selectedLotId) return;
-
-    this.eventService.getByLot(this.selectedLotId).subscribe({
-      next: (data) => {
-        this.events = data;
-        this.cdr.markForCheck();
-      },
-      error: () => {
-        // Error interceptor maneja la visualización del snackbar
-      },
+    const selectedLot = this.lots.find(l => l.id === this.selectedLotId);
+    forkJoin({
+      events: this.eventService.getByLot(this.selectedLotId),
+      eventTypes: selectedLot ? this.eventTypeService.getByCrop(selectedLot.cropId) : this.eventTypeService.getAll(),
+    }).subscribe({
+      next: ({ events, eventTypes }) => { this.events = events; this.eventTypes = eventTypes; this.cdr.markForCheck(); },
+      error: () => { this.cdr.markForCheck(); },
     });
   }
 
-  createEvent() {
-    if (!this.selectedLotId || !this.newEvent.type || !this.newEvent.timestamp) {
-      return;
-    }
-
-    const timestamp =
-      this.newEvent.timestamp.length === 16
-        ? this.newEvent.timestamp + ':00.000Z'
-        : this.newEvent.timestamp;
-
-    const payload = {
-      ...this.newEvent,
-      lotId: this.selectedLotId,
-      userId: this.auth.getUserId(),
-      timestamp,
-    };
-
+  createEvent(): void {
+    this.submitted = true;
+    if (this.formErrors.length) return;
+    if (!this.selectedLotId) return;
+    this.loading = true;
+    const timestamp = this.newEvent.timestamp.length === 16 ? this.newEvent.timestamp + ':00.000Z' : this.newEvent.timestamp;
+    const payload = { ...this.newEvent, lotId: this.selectedLotId, userId: this.auth.getUserId(), timestamp };
     this.eventService.create(payload).subscribe({
       next: () => {
-        this.newEvent = {
-          lotId: 0,
-          type: '',
-          userId: 0,
-          timestamp: '',
-          description: '',
-        };
+        this.loading = false;
+        this.submitted = false;
+        this.newEvent = { lotId: 0, type: '', userId: 0, timestamp: '', description: '' };
         this.loadEvents();
       },
-      error: () => {},
+      error: () => { this.loading = false; },
     });
   }
 

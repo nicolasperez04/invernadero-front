@@ -1,0 +1,54 @@
+:host {
+  --sigma-card-p: 20px 24px;
+  --sigma-card-radius: var(--radius-lg);
+
+  display: block;
+  background: #fff;
+  border-radius: var(--sigma-card-radius);
+  box-shadow: var(--shadow-sm);
+  padding: var(--sigma-card-p);
+  transition:
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+/* ── Elevated ── */
+:host.sigma-card--elevated {
+  box-shadow: var(--shadow-lg);
+}
+
+/* ── KPI ── */
+:host.sigma-card--kpi {
+  --sigma-card-p: 16px 20px;
+  --sigma-card-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ── Form ── */
+:host.sigma-card--form {
+  --sigma-card-p: 24px 28px;
+  box-shadow: var(--shadow-md);
+}
+
+/* ── Hover ── */
+:host.sigma-card--hover:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+:host.sigma-card--elevated.sigma-card--hover:hover {
+  box-shadow: var(--shadow-xl);
+}
+
+/* ── Slot spacing ── */
+::ng-deep [slot=header] {
+  display: block;
+  margin-bottom: 16px;
+}
+
+::ng-deep [slot=actions] {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+}

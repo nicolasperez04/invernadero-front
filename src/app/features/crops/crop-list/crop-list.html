@@ -1,157 +1,142 @@
-<div class="page-header">
-  <h1 class="page-title">
-    <mat-icon>grass</mat-icon>
-    {{ 'crops.title' | translate }}
-  </h1>
-  <p class="page-subtitle">{{ 'crops.description' | translate }}</p>
-</div>
+<div class="page-wrapper">
 
-<div class="form-card" [class.edit-mode]="isEditing">
-  <div class="form-header">
-    <div class="form-header-icon">
-      <mat-icon>{{ isEditing ? 'edit_square' : 'add_circle' }}</mat-icon>
+  <!-- FORM CARD -->
+  <sigma-card [variant]="isEditing ? 'elevated' : 'form'" [class.edit-mode]="isEditing">
+    <div slot="header" class="form-header">
+      <span class="form-header__icon material-icons">{{ isEditing ? 'edit_square' : 'add_circle' }}</span>
+      <div>
+        <h3 class="form-header__title">{{ isEditing ? ('crops.editTitle' | translate) : ('crops.newTitle' | translate) }}</h3>
+        <p class="form-header__sub">{{ isEditing ? ('crops.editSubtitle' | translate) : ('crops.newSubtitle' | translate) }}</p>
+      </div>
     </div>
-    <div>
-      <h3 class="form-header-title">
-        {{ isEditing ? ('crops.editTitle' | translate) : ('crops.newTitle' | translate) }}
-      </h3>
-      <p class="form-header-subtitle">
-        {{ isEditing ? ('crops.editSubtitle' | translate) : ('crops.newSubtitle' | translate) }}
-      </p>
-    </div>
-  </div>
 
-  <div class="form-body">
     <div class="form-grid">
-      <div class="form-field">
-        <label>{{ 'crops.name' | translate }}</label>
-        <input
-          type="text"
-          [(ngModel)]="newCrop.name"
-          placeholder="{{ 'crops.namePlaceholder' | translate }}"
-        />
-      </div>
-
-      <div class="form-field">
-        <label>{{ 'crops.description' | translate }}</label>
-        <input
-          type="text"
-          [(ngModel)]="newCrop.description"
-          placeholder="{{ 'crops.descriptionPlaceholderShort' | translate }}"
-        />
-      </div>
-
-      <div class="form-field">
-        <label>{{ 'crops.estimatedGrowthDays' | translate }}</label>
-        <input
-          type="number"
-          [(ngModel)]="newCrop.estimatedGrowthDays"
-          placeholder="{{ 'crops.growthDaysPlaceholder' | translate }}"
-          min="1"
-        />
-      </div>
-
-      <div class="form-field">
-        <label>{{ 'crops.inactivityDaysThreshold' | translate }}</label>
-        <input
-          type="number"
-          [(ngModel)]="newCrop.inactivityDaysThreshold"
-          placeholder="{{ 'crops.inactivityPlaceholder' | translate }}"
-          min="1"
-        />
-      </div>
+      <sigma-input
+        label="{{ 'crops.name' | translate }}"
+        type="text"
+        [(ngModel)]="newCrop.name"
+        [placeholder]="'crops.namePlaceholder' | translate"
+        [required]="true"
+        [error]="submitted && (!newCrop.name || newCrop.name.trim().length < 2) ? ('crops.errors.nameRequired' | translate) : undefined"
+      ></sigma-input>
+      <sigma-input
+        label="{{ 'crops.description' | translate }}"
+        type="text"
+        [(ngModel)]="newCrop.description"
+        [placeholder]="'crops.descriptionPlaceholderShort' | translate"
+      ></sigma-input>
+      <sigma-input
+        label="{{ 'crops.estimatedGrowthDays' | translate }}"
+        type="number"
+        [(ngModel)]="newCrop.estimatedGrowthDays"
+        [placeholder]="'crops.growthDaysPlaceholder' | translate"
+        [required]="true"
+        [error]="submitted && (!newCrop.estimatedGrowthDays || newCrop.estimatedGrowthDays < 1) ? ('crops.errors.growthDaysRequired' | translate) : undefined"
+      ></sigma-input>
+      <sigma-input
+        label="{{ 'crops.inactivityDaysThreshold' | translate }}"
+        type="number"
+        [(ngModel)]="newCrop.inactivityDaysThreshold"
+        [placeholder]="'crops.inactivityPlaceholder' | translate"
+        [required]="true"
+        [error]="submitted && (!newCrop.inactivityDaysThreshold || newCrop.inactivityDaysThreshold < 1) ? ('crops.errors.inactivityRequired' | translate) : undefined"
+      ></sigma-input>
+      <sigma-input
+        label="{{ 'crops.irrigationFrequencyHours' | translate }}"
+        type="number"
+        [(ngModel)]="newCrop.irrigationFrequencyHours"
+        [placeholder]="'crops.irrigationPlaceholder' | translate"
+      ></sigma-input>
+      <sigma-input
+        label="{{ 'crops.recommendedFertilizationDays' | translate }}"
+        type="number"
+        [(ngModel)]="newCrop.recommendedFertilizationDays"
+        [placeholder]="'crops.fertilizationPlaceholder' | translate"
+      ></sigma-input>
+      <sigma-input
+        label="{{ 'crops.recommendedPestControlDays' | translate }}"
+        type="number"
+        [(ngModel)]="newCrop.recommendedPestControlDays"
+        [placeholder]="'crops.pestControlPlaceholder' | translate"
+      ></sigma-input>
     </div>
 
-    <div class="form-footer">
-      <button class="btn-ghost" (click)="cancelEdit()" *ngIf="isEditing">
+    <div slot="actions" class="form-actions">
+      <button sigma-btn variant="ghost" size="sm" *ngIf="isEditing" (click)="cancelEdit()">
         <mat-icon>close</mat-icon>
         {{ 'crops.cancelEdit' | translate }}
       </button>
-
-      <button class="btn-secondary" (click)="resetForm()" *ngIf="!isEditing">
+      <button sigma-btn variant="ghost" size="sm" *ngIf="!isEditing" (click)="resetForm()">
         <mat-icon>clear_all</mat-icon>
         {{ 'crops.clearForm' | translate }}
       </button>
-
-      <button
-        class="btn-primary"
-        (click)="createOrUpdate()"
-        [disabled]="
-          !newCrop.name ||
-          !newCrop.estimatedGrowthDays ||
-          !newCrop.inactivityDaysThreshold ||
-          loading
-        "
-      >
+      <button sigma-btn [variant]="isEditing ? 'secondary' : 'primary'" [disabled]="!newCrop.name || !newCrop.estimatedGrowthDays || !newCrop.inactivityDaysThreshold || loading" (click)="createOrUpdate()" [loading]="loading">
         <mat-icon>{{ isEditing ? 'check' : 'add' }}</mat-icon>
         {{ isEditing ? ('crops.update' | translate) : ('crops.create' | translate) }}
       </button>
     </div>
-  </div>
-</div>
+  </sigma-card>
 
-<div class="table-card">
-  <div class="table-header">
-    <h3>{{ 'crops.list' | translate }}</h3>
-    <span class="table-count">{{ crops.length }} {{ 'crops.totalCrops' | translate }}</span>
+  <!-- TABLE CARD -->
+  <sigma-card>
+    <div slot="header" class="table-header">
+      <h3>{{ 'crops.list' | translate }}</h3>
+      <span class="table-count">{{ crops.length }} {{ 'crops.totalCrops' | translate }}</span>
+    </div>
+
+    <sigma-table
+      [columns]="cropColumns"
+      [data]="crops"
+      [loading]="loading"
+      emptyMessage="crops.empty"
+      emptyIcon="eco"
+      [rowClass]="getCropRowClass"
+    >
+      <ng-template sigmaCell="name" let-row><strong>{{ row.name }}</strong></ng-template>
+      <ng-template sigmaCell="description" let-row>{{ row.description || '—' }}</ng-template>
+      <ng-template sigmaCell="estimatedGrowthDays" let-row>
+        <sigma-badge size="sm">{{ row.estimatedGrowthDays }} {{ 'crops.days' | translate }}</sigma-badge>
+      </ng-template>
+      <ng-template sigmaCell="inactivityDaysThreshold" let-row>
+        <sigma-badge size="sm" color="amber">{{ row.inactivityDaysThreshold }} {{ 'crops.days' | translate }}</sigma-badge>
+      </ng-template>
+      <ng-template sigmaCell="irrigationFrequencyHours" let-row>
+        <sigma-badge size="sm">{{ row.irrigationFrequencyHours ?? '—' }} {{ 'crops.hours' | translate }}</sigma-badge>
+      </ng-template>
+      <ng-template sigmaCell="recommendedFertilizationDays" let-row>
+        <sigma-badge size="sm">{{ row.recommendedFertilizationDays ?? '—' }} {{ 'crops.days' | translate }}</sigma-badge>
+      </ng-template>
+      <ng-template sigmaCell="recommendedPestControlDays" let-row>
+        <sigma-badge size="sm">{{ row.recommendedPestControlDays ?? '—' }} {{ 'crops.days' | translate }}</sigma-badge>
+      </ng-template>
+      <ng-template sigmaCell="actions" let-row>
+        <div class="actions">
+          <button sigma-btn variant="ghost" size="sm" (click)="openEventTypesDialog(row.id, row.name)" title="Gestionar tipos de evento">
+            <mat-icon>category</mat-icon>
+          </button>
+          <button sigma-btn variant="ghost" size="sm" *ngIf="isAdmin" (click)="startEdit(row)" [title]="'crops.edit' | translate">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button sigma-btn variant="ghost" size="sm" *ngIf="isAdmin" (click)="deleteCrop(row.id)" [title]="'crops.delete' | translate">
+            <mat-icon>delete_outline</mat-icon>
+          </button>
+        </div>
+      </ng-template>
+    </sigma-table>
+  </sigma-card>
+
+  <!-- DIALOG: Event Types per Crop -->
+  <div *ngIf="dialogLoading" class="dialog-loading-overlay">
+    <sigma-spinner size="md" [label]="'dashboard.loading' | translate"></sigma-spinner>
   </div>
 
-  <div class="table-wrapper">
-    <table *ngIf="crops.length > 0; else emptyState">
-      <thead>
-        <tr>
-          <th>{{ 'crops.name' | translate }}</th>
-          <th>{{ 'crops.description' | translate }}</th>
-          <th class="center">{{ 'crops.estimatedGrowthDays' | translate }}</th>
-          <th class="center">{{ 'crops.inactivityDaysThreshold' | translate }}</th>
-          <th class="center">{{ 'crops.actions' | translate }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let crop of crops" [class.row-editing]="editingCropId === crop.id">
-          <td>
-            <strong>{{ crop.name }}</strong>
-          </td>
-          <td class="desc-cell">{{ crop.description || '—' }}</td>
-          <td class="center">
-            <span class="metric-badge"
-              >{{ crop.estimatedGrowthDays }} {{ 'crops.days' | translate }}</span
-            >
-          </td>
-          <td class="center">
-            <span class="metric-badge warning"
-              >{{ crop.inactivityDaysThreshold }} {{ 'crops.days' | translate }}</span
-            >
-          </td>
-          <td class="center">
-            <div class="actions-cell">
-              <button
-                *ngIf="isAdmin"
-                class="btn-action btn-edit"
-                (click)="startEdit(crop)"
-                title="{{ 'crops.edit' | translate }}"
-              >
-                <mat-icon>edit</mat-icon>
-              </button>
-              <button
-                class="btn-action btn-delete"
-                (click)="deleteCrop(crop.id)"
-                title="{{ 'crops.delete' | translate }}"
-              >
-                <mat-icon>delete_outline</mat-icon>
-              </button>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <app-crop-event-types-dialog
+    *ngIf="dialogVisible && !dialogLoading"
+    [cropId]="dialogCropId"
+    [cropName]="dialogCropName"
+    [allEventTypes]="dialogAllEventTypes"
+    [assignedEventTypeIds]="dialogAssignedIds"
+    (close)="onDialogClose($event)"
+  ></app-crop-event-types-dialog>
 
-    <ng-template #emptyState>
-      <div class="empty-state">
-        <mat-icon>eco</mat-icon>
-        <p>{{ 'crops.empty' | translate }}</p>
-        <small>{{ 'crops.emptyHint' | translate }}</small>
-      </div>
-    </ng-template>
-  </div>
 </div>

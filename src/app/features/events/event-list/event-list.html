@@ -1,107 +1,93 @@
-<div class="page-header">
-  <h1 class="page-title">
-    <mat-icon>event</mat-icon>
-    {{ 'events.title' | translate }}
-  </h1>
-  <p class="page-subtitle">{{ 'events.description' | translate }}</p>
-</div>
+<div class="page-wrapper">
 
-<!-- LOT SELECTOR CARD -->
-<div class="form-card">
-  <div class="form-card-title">
-    <mat-icon>place</mat-icon>
-    {{ 'events.selectLot' | translate }}
-  </div>
-
-  <div class="form-row">
-    <div class="form-field" style="flex: 1; max-width: none">
-      <label>{{ 'events.lot' | translate }}</label>
-      <select [(ngModel)]="selectedLotId" (change)="loadEvents()">
-        <option [value]="0">{{ 'events.selectLot' | translate }}</option>
-        <option *ngFor="let lot of lots" [value]="lot.id">
-          {{ lot.name }}
-        </option>
-      </select>
-    </div>
-  </div>
-</div>
-
-<!-- CREATE EVENT CARD -->
-<div class="form-card" *ngIf="selectedLotId">
-  <div class="form-card-title">
-    <mat-icon>add_circle</mat-icon>
-    {{ 'events.newEvent' | translate }}
-  </div>
-
-  <div class="form-row">
-    <div class="form-field">
-      <label>{{ 'events.type' | translate }}</label>
-      <select [(ngModel)]="newEvent.type">
-        <option value="">{{ 'events.selectType' | translate }}</option>
-        <option *ngFor="let t of eventTypes" [value]="t.name">
-          {{ translateType(t.name) }}
-        </option>
-      </select>
+  <!-- LOT SELECTOR -->
+  <sigma-card>
+    <div slot="header" class="section__header">
+      <mat-icon class="section__icon">place</mat-icon>
+      <h3 class="section__title">{{ 'events.selectLot' | translate }}</h3>
     </div>
 
-    <div class="form-field">
-      <label>{{ 'events.timestamp' | translate }}</label>
-      <input type="datetime-local" [(ngModel)]="newEvent.timestamp" />
+    <div class="selector-row">
+      <label class="native-select-wrapper">
+        <span class="native-select-label">{{ 'events.lot' | translate }}</span>
+        <select class="native-select" [(ngModel)]="selectedLotId" (change)="loadEvents()">
+          <option [ngValue]="0">{{ 'events.selectLot' | translate }}</option>
+          <option *ngFor="let lot of lots" [ngValue]="lot.id">{{ lot.name }}</option>
+        </select>
+      </label>
+    </div>
+  </sigma-card>
+
+  <!-- CREATE EVENT -->
+  <sigma-card *ngIf="selectedLotId">
+    <div slot="header" class="section__header">
+      <mat-icon class="section__icon">add_circle</mat-icon>
+      <h3 class="section__title">{{ 'events.newEvent' | translate }}</h3>
     </div>
 
-    <div class="form-field">
-      <label>{{ 'events.description' | translate }}</label>
-      <textarea
-        [(ngModel)]="newEvent.description"
-        placeholder="{{ 'events.descriptionPlaceholder' | translate }}"
-        rows="2"
-      ></textarea>
-    </div>
-  </div>
-
-  <div class="form-actions">
-    <button
-      class="btn-primary"
-      (click)="createEvent()"
-      [disabled]="!newEvent.type || !newEvent.timestamp"
-    >
-      <mat-icon>add</mat-icon>
-      {{ 'events.register' | translate }}
-    </button>
-  </div>
-</div>
-
-<!-- EVENTS TABLE CARD -->
-<div class="table-card" *ngIf="selectedLotId">
-  <div class="table-header">
-    <h3>{{ 'events.history' | translate }} - {{ getLotName(selectedLotId) }}</h3>
-  </div>
-
-  <div class="table-wrapper">
-    <table *ngIf="events.length > 0; else emptyState">
-      <thead>
-        <tr>
-          <th>{{ 'events.timestamp' | translate }}</th>
-          <th>{{ 'events.type' | translate }}</th>
-          <th>{{ 'events.description' | translate }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let event of events">
-          <td>{{ event.timestamp | date: 'dd/MM/yyyy HH:mm' }}</td>
-          <td>
-            <span class="event-badge">{{ translateType(event.type) }}</span>
-          </td>
-          <td>{{ event.description || ('events.noDescription' | translate) }}</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <ng-template #emptyState>
-      <div class="empty-state">
-        <mat-icon>inbox</mat-icon>
-        <p>{{ 'events.empty' | translate }}</p>
+    <div class="form-row">
+      <label class="native-select-wrapper">
+        <span class="native-select-label">{{ 'events.type' | translate }} <span class="native-select-required">*</span></span>
+        <select class="native-select" [(ngModel)]="newEvent.type" [class.native-select--error]="submitted && !newEvent.type">
+          <option value="">{{ 'events.selectType' | translate }}</option>
+          <option *ngFor="let t of eventTypes" [value]="t.name">{{ translateType(t.name) }}</option>
+        </select>
+        <span class="native-select-error" *ngIf="submitted && !newEvent.type">{{ 'events.errors.typeRequired' | translate }}</span>
+      </label>
+      <sigma-input
+        label="{{ 'events.timestamp' | translate }}"
+        type="datetime-local"
+        [(ngModel)]="newEvent.timestamp"
+        [required]="true"
+        [error]="submitted && !newEvent.timestamp ? ('events.errors.timestampRequired' | translate) : undefined"
+      ></sigma-input>
+      <div class="form-field--wide">
+        <sigma-input
+          label="{{ 'events.description' | translate }}"
+          type="textarea"
+          [(ngModel)]="newEvent.description"
+          [placeholder]="'events.descriptionPlaceholder' | translate"
+          [rows]="2"
+        ></sigma-input>
       </div>
+    </div>
+
+    <div slot="actions" class="form-actions">
+      <button sigma-btn [disabled]="loading" (click)="createEvent()">
+        <mat-icon>add</mat-icon> {{ 'events.register' | translate }}
+      </button>
+    </div>
+  </sigma-card>
+
+  <!-- EVENTS TABLE -->
+  <sigma-card *ngIf="selectedLotId">
+    <div slot="header" class="section__header">
+      <mat-icon class="section__icon">history</mat-icon>
+      <h3 class="section__title">{{ 'events.history' | translate }} — {{ getLotName(selectedLotId) }}</h3>
+    </div>
+
+    <div class="table-scroll">
+      <table *ngIf="events.length > 0; else empty">
+        <thead>
+          <tr>
+            <th>{{ 'events.timestamp' | translate }}</th>
+            <th>{{ 'events.type' | translate }}</th>
+            <th>{{ 'events.description' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let event of events">
+            <td>{{ event.timestamp | date: 'dd/MM/yyyy HH:mm' }}</td>
+            <td><sigma-badge color="blue" size="sm">{{ translateType(event.type) }}</sigma-badge></td>
+            <td>{{ event.description || ('events.noDescription' | translate) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ng-template #empty>
+      <sigma-empty-state icon="inbox" [title]="'events.empty' | translate"></sigma-empty-state>
     </ng-template>
-  </div>
+  </sigma-card>
+
 </div>

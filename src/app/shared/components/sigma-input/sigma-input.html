@@ -1,0 +1,34 @@
+<label class="sigma-input__wrapper">
+  <span class="sigma-input__label" *ngIf="label">
+    {{ label }}<span class="sigma-input__required" *ngIf="required"> *</span>
+  </span>
+
+  <div class="sigma-input__field">
+    <span class="sigma-input__icon material-icons" *ngIf="iconLeft">{{ iconLeft }}</span>
+
+    <textarea
+      *ngIf="type === 'textarea'"
+      class="sigma-input__el"
+      [value]="value"
+      [placeholder]="placeholder"
+      [disabled]="disabled"
+      [rows]="rows"
+      (input)="onInput($any($event.target).value)"
+      (blur)="onBlur()"
+    ></textarea>
+
+    <input
+      *ngIf="type !== 'textarea'"
+      class="sigma-input__el"
+      [type]="type"
+      [value]="value"
+      [placeholder]="placeholder"
+      [disabled]="disabled"
+      (input)="onInput($any($event.target).value)"
+      (blur)="onBlur()"
+    />
+  </div>
+
+  <span class="sigma-input__hint" *ngIf="hint && !error">{{ hint }}</span>
+  <span class="sigma-input__error" *ngIf="error">{{ error }}</span>
+</label>

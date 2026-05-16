@@ -1,0 +1,11 @@
+<div class="sigma-empty-state__icon">
+  <span class="material-icons">{{ icon }}</span>
+</div>
+<h3 class="sigma-empty-state__title" *ngIf="title">{{ title }}</h3>
+<p class="sigma-empty-state__desc" *ngIf="description">{{ description }}</p>
+<button
+  sigma-btn
+  class="sigma-empty-state__action"
+  *ngIf="actionLabel"
+  (click)="action.emit()"
+>{{ actionLabel }}</button>

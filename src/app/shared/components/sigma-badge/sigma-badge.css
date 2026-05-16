@@ -1,0 +1,57 @@
+:host {
+  --sigma-badge-fz: 12px;
+  --sigma-badge-h: 22px;
+  --sigma-badge-px: 10px;
+
+  display: inline-flex;
+  align-items: center;
+  height: var(--sigma-badge-h);
+  padding: 0 var(--sigma-badge-px);
+  border-radius: var(--radius-full);
+  font-family: var(--font-body);
+  font-size: var(--sigma-badge-fz);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* ── Sizes ── */
+:host.sigma-badge--sm {
+  --sigma-badge-fz: 10px;
+  --sigma-badge-h: 18px;
+  --sigma-badge-px: 7px;
+}
+
+:host.sigma-badge--lg {
+  --sigma-badge-fz: 13px;
+  --sigma-badge-h: 26px;
+  --sigma-badge-px: 14px;
+}
+
+/* ── Colors ── */
+:host.sigma-badge--green {
+  background: var(--olive-50);
+  color: var(--olive-800);
+}
+
+:host.sigma-badge--amber {
+  background: var(--amber-50);
+  color: var(--amber-800);
+}
+
+:host.sigma-badge--red {
+  background: var(--danger-light);
+  color: var(--danger-color);
+}
+
+:host.sigma-badge--blue {
+  background: var(--info-light);
+  color: var(--info-color);
+}
+
+:host.sigma-badge--gray {
+  background: var(--neutral-100);
+  color: var(--neutral-600);
+}

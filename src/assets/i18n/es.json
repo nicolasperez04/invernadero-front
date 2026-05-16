@@ -5,7 +5,8 @@
     "email": "Correo electrónico",
     "password": "Contraseña",
     "button": "Entrar",
-    "loading": "Iniciando sesión..."
+    "loading": "Iniciando sesión...",
+    "invalidCredentials": "Credenciales inválidas. Por favor intenta de nuevo."
   },
   "nav": {
     "title": "Sistema de Invernadero",
@@ -45,11 +46,20 @@
     "inactivityRed": "Inactividad crítica",
     "alertTitle": "lote requiere atención",
     "alertTitlePlural": "lotes requieren atención",
-    "noSowingMessage": "Registra un evento de Siembra para ver el progreso"
+    "noSowingMessage": "Registra un evento de Siembra para ver el progreso",
+    "upcomingHarvests": "Próximas cosechas",
+    "noUpcomingHarvests": "No hay cosechas próximas",
+    "daysRemaining": "{{days}} días",
+    "overdue": "Vencida"
+  },
+  "notifications": {
+    "title": "Notificaciones",
+    "empty": "No hay notificaciones",
+    "markAllRead": "Marcar todo como leído"
   },
   "crops": {
     "title": "Cultivos",
-    "description": "Administra todos tus cultivos",
+    "subtitle": "Administra todos tus cultivos",
     "name": "Nombre",
     "description": "Descripción",
     "create": "Crear",
@@ -80,7 +90,19 @@
     "cancelEdit": "Cancelar",
     "clearForm": "Limpiar",
     "updateSuccess": "Cultivo actualizado exitosamente",
-    "days": "días"
+    "days": "días",
+    "irrigationFrequencyHours": "Riego (c/horas)",
+    "irrigationPlaceholder": "Ej: 48",
+    "hours": "h",
+    "recommendedFertilizationDays": "Fertilización (c/días)",
+    "fertilizationPlaceholder": "Ej: 15",
+    "recommendedPestControlDays": "Control plagas (c/días)",
+    "pestControlPlaceholder": "Ej: 30",
+    "errors": {
+      "nameRequired": "El nombre es obligatorio (mín. 2 caracteres)",
+      "growthDaysRequired": "Los días de crecimiento son obligatorios (mín. 1)",
+      "inactivityRequired": "El umbral de inactividad es obligatorio (mín. 1)"
+    }
   },
   "lots": {
     "title": "Lotes",
@@ -135,7 +157,16 @@
     "inactivityRed": "Crítico",
     "noEvents": "Sin eventos registrados",
     "harvestReady": "Cosecha lista",
-    "daysRemainingLabel": "días restantes"
+    "daysRemainingLabel": "días restantes",
+    "downloadReport": "Descargar informe de cosecha",
+    "reportError": "Error al generar el informe",
+    "filterByStatus": "Filtrar por estado",
+    "allStatuses": "Todos los estados",
+    "errors": {
+      "nameRequired": "El nombre es obligatorio (mín. 2 caracteres)",
+      "cropRequired": "El cultivo es obligatorio",
+      "startDateRequired": "La fecha de inicio es obligatoria"
+    }
   },
   "events": {
     "title": "Eventos",
@@ -162,6 +193,10 @@
       "PRUNING": "Poda",
       "PEST_CONTROL": "Control de plagas",
       "HARVEST": "Cosecha"
+    },
+    "errors": {
+      "typeRequired": "El tipo de evento es obligatorio",
+      "timestampRequired": "La fecha y hora son obligatorias"
     }
   },
   "buttons": {

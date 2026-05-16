@@ -5,7 +5,8 @@
     "email": "Email",
     "password": "Password",
     "button": "Sign in",
-    "loading": "Signing in..."
+    "loading": "Signing in...",
+    "invalidCredentials": "Invalid credentials. Please try again."
   },
   "nav": {
     "title": "Greenhouse System",
@@ -45,11 +46,20 @@
     "inactivityRed": "Critical inactivity",
     "alertTitle": "lot requires attention",
     "alertTitlePlural": "lots require attention",
-    "noSowingMessage": "Register a Sowing event to see progress"
+    "noSowingMessage": "Register a Sowing event to see progress",
+    "upcomingHarvests": "Upcoming Harvests",
+    "noUpcomingHarvests": "No upcoming harvests",
+    "daysRemaining": "{{days}} days",
+    "overdue": "Overdue"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "No notifications",
+    "markAllRead": "Mark all as read"
   },
   "crops": {
     "title": "Crops",
-    "description": "Manage all your crops",
+    "subtitle": "Manage all your crops",
     "name": "Name",
     "description": "Description",
     "create": "Create",
@@ -80,7 +90,19 @@
     "cancelEdit": "Cancel",
     "clearForm": "Clear",
     "updateSuccess": "Crop updated successfully",
-    "days": "days"
+    "days": "days",
+    "irrigationFrequencyHours": "Irrigation (every N h)",
+    "irrigationPlaceholder": "Ex: 48",
+    "hours": "h",
+    "recommendedFertilizationDays": "Fertilization (every N days)",
+    "fertilizationPlaceholder": "Ex: 15",
+    "recommendedPestControlDays": "Pest control (every N days)",
+    "pestControlPlaceholder": "Ex: 30",
+    "errors": {
+      "nameRequired": "Name is required (min. 2 characters)",
+      "growthDaysRequired": "Growth days are required (min. 1)",
+      "inactivityRequired": "Inactivity threshold is required (min. 1)"
+    }
   },
   "lots": {
     "title": "Lots",
@@ -135,7 +157,16 @@
     "inactivityRed": "Critical",
     "noEvents": "No events registered",
     "harvestReady": "Harvest ready",
-    "daysRemainingLabel": "days remaining"
+    "daysRemainingLabel": "days remaining",
+    "downloadReport": "Download harvest report",
+    "reportError": "Error generating report",
+    "filterByStatus": "Filter by status",
+    "allStatuses": "All statuses",
+    "errors": {
+      "nameRequired": "Name is required (min. 2 characters)",
+      "cropRequired": "Crop is required",
+      "startDateRequired": "Start date is required"
+    }
   },
   "events": {
     "title": "Events",
@@ -162,6 +193,10 @@
       "PRUNING": "Pruning",
       "PEST_CONTROL": "Pest Control",
       "HARVEST": "Harvest"
+    },
+    "errors": {
+      "typeRequired": "Event type is required",
+      "timestampRequired": "Date and time are required"
     }
   },
   "buttons": {

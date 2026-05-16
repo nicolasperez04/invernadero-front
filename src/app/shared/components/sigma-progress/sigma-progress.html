@@ -1,0 +1,7 @@
+<div class="sigma-progress__header" *ngIf="label || showPercent">
+  <span class="sigma-progress__label" *ngIf="label">{{ label }}</span>
+  <span class="sigma-progress__percent" *ngIf="showPercent">{{ percent }}%</span>
+</div>
+<div class="sigma-progress__track">
+  <div class="sigma-progress__fill" [style.width.%]="percent"></div>
+</div>

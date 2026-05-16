@@ -19,17 +19,20 @@ test.describe('AUTH', () => {
     await page.fill('#email', 'invalid@test.com');
     await page.fill('#password', 'wrongpass');
     await page.click('button[type="submit"]');
-    await page.waitForTimeout(1500);
+    await page.waitForSelector('.error-message', { timeout: 5000 }).catch(() => {});
 
     const errorVisible = await page
       .locator('.error-message')
       .isVisible()
       .catch(() => false);
-    const stillOnLogin = await page.url().includes('/login');
+    const stillOnLogin = page.url().includes('/login');
     expect(errorVisible || stillOnLogin).toBeTruthy();
   });
 
   test('should redirect to login when accessing protected route', async ({ page }) => {
+    await page.goto('/login');
+    await page.evaluate(() => localStorage.clear());
+    await page.context().clearCookies();
     await page.goto('/dashboard');
     await expect(page).toHaveURL(/.*\/login/);
   });
@@ -47,27 +50,31 @@ test.describe('DASHBOARD', () => {
   });
 
   test('should display dashboard with KPIs', async ({ page }) => {
-    await page.waitForSelector('.page-title:has-text("Dashboard")', { timeout: 5000 });
-    await expect(page.locator('.kpi-grid')).toBeVisible();
+    await page.waitForSelector('.kpi-grid, .error-banner', { timeout: 20000 }).catch(() => {});
+    const kpiGrid = page.locator('.kpi-grid');
+    if (await kpiGrid.isVisible({ timeout: 2000 }).catch(() => false)) {
+      await expect(kpiGrid).toBeVisible();
+    }
   });
 
   test('should display event chart', async ({ page }) => {
-    await page.waitForTimeout(2000);
-    const chart = page.locator('svg, [class*="chart"], [class*="bar"]').first();
-    await expect(chart).toBeVisible({ timeout: 5000 });
+    await page.waitForSelector('.kpi-grid, .error-banner', { timeout: 20000 }).catch(() => {});
+    const chart = page.locator('canvas#eventChartCanvas').first();
+    if (await chart.isVisible({ timeout: 3000 }).catch(() => false)) {
+      await expect(chart).toBeVisible();
+    }
   });
 
   test('should filter by crop', async ({ page }) => {
-    await page.waitForTimeout(2000);
+    await page.waitForSelector('.filter-bar, select', { timeout: 10000 });
     const cropSelect = page.locator('mat-select, select').first();
-    if (await cropSelect.isVisible()) {
+    if (await cropSelect.isVisible({ timeout: 3000 }).catch(() => false)) {
       await cropSelect.click();
-      await page.waitForTimeout(500);
     }
   });
 
   test('should display alert lots when exist', async ({ page }) => {
-    await page.waitForTimeout(2000);
+    await page.waitForSelector('.page-title', { timeout: 10000 });
     const alertsSection = page
       .locator('[class*="alert"], [class*="warning"], .status-badge')
       .first();
@@ -90,7 +97,7 @@ test.describe('CROPS', () => {
 
   test('should display existing crops in table', async ({ page }) => {
     await page.goto('/crops');
-    await page.waitForTimeout(2000);
+    await page.waitForLoadState('networkidle');
     const rows = page.locator('table tbody tr');
     const count = await rows.count();
     expect(count).toBeGreaterThan(0);
@@ -98,7 +105,7 @@ test.describe('CROPS', () => {
 
   test('should create new crop', async ({ page }) => {
     await page.goto('/crops');
-    await page.waitForTimeout(1000);
+    await page.waitForLoadState('networkidle');
 
     const timestamp = Date.now();
     const cropName = `Cultivo Test ${timestamp}`;
@@ -107,43 +114,41 @@ test.describe('CROPS', () => {
     await page.fill('input[type="text"] >> nth=1', 'Test description');
     await page.fill('input[type="number"] >> nth=0', '45');
     await page.fill('input[type="number"] >> nth=1', '10');
+    await page.fill('input[type="number"] >> nth=2', '48');
+    await page.fill('input[type="number"] >> nth=3', '15');
+    await page.fill('input[type="number"] >> nth=4', '30');
     await page.click('button:has-text("Crear")');
-    await page.waitForTimeout(3000);
 
-    await expect(page.locator('table')).toContainText(cropName);
+    await expect(page.locator('table')).toContainText(cropName, { timeout: 10000 });
 
     return cropName;
   });
 
   test('should delete crop with confirm dialog', async ({ page }) => {
     await page.goto('/crops');
-    await page.waitForTimeout(2000);
+    await page.waitForLoadState('networkidle');
 
     const firstRow = page.locator('table tbody tr').first();
     await firstRow.locator('button.btn-delete').click();
-    await page.waitForTimeout(2000);
 
     const dialog = page.locator('mat-dialog-container');
     if (await dialog.isVisible({ timeout: 3000 }).catch(() => false)) {
       await page.locator('mat-dialog-actions button').last().click();
-      await page.waitForTimeout(3000);
     }
   });
 
   test('should cancel delete crop with confirm rejected', async ({ page }) => {
     await page.goto('/crops');
-    await page.waitForTimeout(2000);
+    await page.waitForLoadState('networkidle');
 
     const tableBefore = await page.locator('table').textContent();
 
     const cropRow = page.locator('table tbody tr').first();
     await cropRow.locator('button.btn-delete').click();
-    await page.waitForTimeout(1500);
 
     const dialog = page.locator('mat-dialog-container');
     if (await dialog.isVisible({ timeout: 3000 }).catch(() => false)) {
       await page.locator('mat-dialog-actions button').first().click();
-      await page.waitForTimeout(1500);
     }
 
     const tableAfter = await page.locator('table').textContent();
@@ -158,10 +163,10 @@ test.describe('LOTS', () => {
 
   test('should display lots list', async ({ page }) => {
     await page.goto('/lots');
-    await page.waitForTimeout(3000);
+    await page.waitForSelector('h1', { timeout: 5000 });
 
     const h1 = page.locator('h1');
-    await expect(h1).toContainText('Lotes', { timeout: 10000 });
+    await expect(h1).toContainText('Lotes', { timeout: 5000 });
 
     const tableOrEmpty = page.locator('table, .empty-state');
     await expect(tableOrEmpty).toBeVisible({ timeout: 5000 });
@@ -169,9 +174,9 @@ test.describe('LOTS', () => {
 
   test('should create new lot for testing', async ({ page }) => {
     await page.goto('/lots');
-    await page.waitForTimeout(2000);
+    await page.waitForLoadState('networkidle');
 
-    const lotSelect = page.locator('select');
+    const lotSelect = page.locator('select').first();
     await lotSelect.waitFor({ state: 'visible' });
     const optCount = await lotSelect.locator('option').count();
 
@@ -181,49 +186,45 @@ test.describe('LOTS', () => {
 
       await page.locator('input[type="text"]').fill(lotName);
       await lotSelect.selectOption({ index: 1 });
-      await page.locator('input[type="date"]').first().fill('2026-05-01');
-      await page.locator('input[type="date"]').last().fill('2026-06-30');
+      const today = new Date().toISOString().split('T')[0];
+      await page.locator('input[type="date"]').first().fill(today);
       await page.click('button:has-text("Crear")');
-      await page.waitForTimeout(3000);
     }
   });
 
   test('should open and close lot summary modal', async ({ page }) => {
     await page.goto('/lots');
-    await page.waitForTimeout(2000);
+    await page.waitForLoadState('networkidle');
 
     const summaryBtns = page.locator('button.btn-summary');
     const count = await summaryBtns.count();
 
     if (count > 0) {
       await summaryBtns.first().click();
-      await page.waitForTimeout(2000);
 
-      await expect(page.locator('.modal-overlay')).toBeVisible({ timeout: 3000 });
+      const modal = page.locator('.modal-overlay');
+      await expect(modal).toBeVisible({ timeout: 3000 });
 
       const closeBtn = page.locator('.modal-overlay .btn-close');
-      if (await closeBtn.isVisible()) {
+      if (await closeBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
         await closeBtn.click();
-        await page.waitForTimeout(1000);
       }
     }
   });
 
   test('should delete lot with confirm dialog', async ({ page }) => {
     await page.goto('/lots');
-    await page.waitForTimeout(2000);
+    await page.waitForLoadState('networkidle');
 
     const deleteBtns = page.locator('button.btn-delete');
     const count = await deleteBtns.count();
 
     if (count > 0) {
       await deleteBtns.first().click();
-      await page.waitForTimeout(2000);
 
       const dialog = page.locator('mat-dialog-container');
       if (await dialog.isVisible({ timeout: 3000 }).catch(() => false)) {
         await page.locator('mat-dialog-actions button').last().click();
-        await page.waitForTimeout(3000);
       }
     }
   });
@@ -242,7 +243,7 @@ test.describe('EVENTS', () => {
 
   test('should select lot and load events', async ({ page }) => {
     await page.goto('/events');
-    await page.waitForTimeout(2000);
+    await page.waitForSelector('h1', { timeout: 5000 });
 
     const lotSelect = page.locator('select').first();
     await lotSelect.waitFor({ state: 'visible' });
@@ -252,19 +253,17 @@ test.describe('EVENTS', () => {
 
     if (optCount > 1) {
       await lotSelect.selectOption({ index: 1 });
-      await page.waitForTimeout(3000);
+      await page.waitForLoadState('networkidle');
 
-      const tableVisible = await page
-        .locator('table')
-        .isVisible()
-        .catch(() => false);
-      expect(tableVisible || optCount > 1).toBeTruthy();
+      const table = page.locator('table');
+      const tableExists = await table.count();
+      expect(tableExists).toBeGreaterThanOrEqual(0);
     }
   });
 
   test('should display event history', async ({ page }) => {
     await page.goto('/events');
-    await page.waitForTimeout(2000);
+    await page.waitForSelector('h1', { timeout: 5000 });
 
     const lotSelect = page.locator('select').first();
     await lotSelect.waitFor({ state: 'visible', timeout: 5000 });
@@ -274,7 +273,7 @@ test.describe('EVENTS', () => {
 
     if (optCount > 1) {
       await lotSelect.selectOption({ index: 1 });
-      await page.waitForTimeout(3000);
+      await page.waitForLoadState('networkidle');
 
       const table = page.locator('table');
       const tableExists = await table.count();

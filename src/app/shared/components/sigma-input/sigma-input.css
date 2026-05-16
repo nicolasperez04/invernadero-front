@@ -1,0 +1,117 @@
+:host {
+  --sigma-input-h: 42px;
+  --sigma-input-fz: 14px;
+  --sigma-input-radius: var(--radius-md);
+  --sigma-input-border: var(--earth-200);
+  --sigma-input-border-focus: var(--olive-500);
+  --sigma-input-bg: #fff;
+
+  display: block;
+  font-family: var(--font-body);
+}
+
+.sigma-input__wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* ── Label ── */
+.sigma-input__label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--earth-700);
+  letter-spacing: 0.01em;
+}
+
+.sigma-input__required {
+  color: var(--danger-color);
+}
+
+/* ── Field ── */
+.sigma-input__field {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.sigma-input__icon {
+  position: absolute;
+  left: 12px;
+  font-size: 18px;
+  color: var(--neutral-400);
+  pointer-events: none;
+}
+
+.sigma-input__el {
+  width: 100%;
+  height: var(--sigma-input-h);
+  padding: 0 14px;
+  border: 1.5px solid var(--sigma-input-border);
+  border-radius: var(--sigma-input-radius);
+  background: var(--sigma-input-bg);
+  font-family: var(--font-body);
+  font-size: var(--sigma-input-fz);
+  color: var(--neutral-900);
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+  outline: none;
+}
+
+.sigma-input__icon + .sigma-input__el {
+  padding-left: 40px;
+}
+
+.sigma-input__el::placeholder {
+  color: var(--neutral-300);
+}
+
+.sigma-input__el:focus {
+  border-color: var(--sigma-input-border-focus);
+  box-shadow: 0 0 0 3px rgba(94, 178, 109, 0.15);
+}
+
+/* ── Textarea ── */
+:host.sigma-input--textarea .sigma-input__el {
+  height: auto;
+  min-height: 80px;
+  padding: 10px 14px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+/* ── Disabled ── */
+:host.sigma-input--disabled {
+  opacity: 0.55;
+}
+
+:host.sigma-input--disabled .sigma-input__el {
+  background: var(--neutral-100);
+  cursor: not-allowed;
+}
+
+/* ── Error ── */
+:host.sigma-input--error .sigma-input__el {
+  border-color: var(--danger-color);
+}
+
+:host.sigma-input--error .sigma-input__el:focus {
+  box-shadow: 0 0 0 3px rgba(201, 74, 74, 0.15);
+}
+
+/* ── Hint & Error ── */
+.sigma-input__hint,
+.sigma-input__error {
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+.sigma-input__hint {
+  color: var(--neutral-400);
+}
+
+.sigma-input__error {
+  color: var(--danger-color);
+  font-weight: 500;
+}
