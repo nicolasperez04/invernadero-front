@@ -39,7 +39,9 @@ test.describe('CROP EVENT TYPES DIALOG', () => {
 
     const overlay = page.locator('app-crop-event-types-dialog .modal-overlay');
     await expect(overlay).toBeVisible({ timeout: 10000 });
-    await expect(overlay.locator('.modal-title')).toContainText(`Tipos de evento — ${testCropName}`);
+    await expect(overlay.locator('.modal-title')).toContainText(
+      `Tipos de evento — ${testCropName}`,
+    );
   });
 
   test('should close dialog via X close button', async ({ page }) => {
@@ -94,7 +96,9 @@ test.describe('CROP EVENT TYPES DIALOG', () => {
     await expect(overlay).toBeVisible({ timeout: 10000 });
 
     const actions = overlay.locator('.modal-actions');
-    await expect(actions.locator('button[sigma-btn]', { hasText: 'Guardar cambios' })).toBeVisible();
+    await expect(
+      actions.locator('button[sigma-btn]', { hasText: 'Guardar cambios' }),
+    ).toBeVisible();
     await expect(actions.locator('button[sigma-btn]', { hasText: 'Cancelar' })).toBeVisible();
   });
 });

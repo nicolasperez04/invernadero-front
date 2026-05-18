@@ -78,8 +78,6 @@ test.describe('CROPS EDIT', () => {
     const cropRow = page.locator('sigma-table tbody tr').filter({ hasText: testCropName });
     await expect(cropRow.locator('button[title="Editar"]')).toBeVisible();
     await expect(cropRow.locator('button[title="Eliminar"]')).toBeVisible();
-    await expect(
-      cropRow.locator('button[title="Gestionar tipos de evento"]'),
-    ).toBeVisible();
+    await expect(cropRow.locator('button[title="Gestionar tipos de evento"]')).toBeVisible();
   });
 });

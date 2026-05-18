@@ -4,7 +4,12 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { HttpTestingController } from '@angular/common/http/testing';
 import { DashboardService } from './dashboard.service';
 import { environment } from '../../../environments/environment';
-import { DashboardResponse, EventChartDTO, LotStatusDTO, LotProgressDTO } from '../models/dashboard.model';
+import {
+  DashboardResponse,
+  EventChartDTO,
+  LotStatusDTO,
+  LotProgressDTO,
+} from '../models/dashboard.model';
 
 describe('DashboardService', () => {
   let service: DashboardService;
@@ -62,7 +67,9 @@ describe('DashboardService', () => {
         expect(data).toEqual(mockResponse);
       });
 
-      const req = httpMock.expectOne((r) => r.url === `${environment.apiUrl}/dashboard` && r.params.has('cropId'));
+      const req = httpMock.expectOne(
+        (r) => r.url === `${environment.apiUrl}/dashboard` && r.params.has('cropId'),
+      );
       expect(req.request.method).toBe('GET');
       expect(req.request.params.get('cropId')).toBe('7');
       req.flush(mockResponse);

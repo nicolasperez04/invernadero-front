@@ -21,9 +21,7 @@ describe('NotificationBellComponent', () => {
 
     await TestBed.configureTestingModule({
       imports: [NotificationBellComponent, TranslateModule.forRoot()],
-      providers: [
-        { provide: NotificationService, useValue: mockNotificationService },
-      ],
+      providers: [{ provide: NotificationService, useValue: mockNotificationService }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(NotificationBellComponent);

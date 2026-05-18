@@ -58,7 +58,8 @@ describe('GlobalErrorHandler', () => {
       const error = {
         originalError: {
           message: 'TypeError: null is not an object',
-          stack: 'TypeError: null is not an object\n    at Object.<anonymous> (http://localhost/main.js:42:10)\n    at handleError (http://localhost/main.js:15:5)',
+          stack:
+            'TypeError: null is not an object\n    at Object.<anonymous> (http://localhost/main.js:42:10)\n    at handleError (http://localhost/main.js:15:5)',
         },
       };
       handler.handleError(error);

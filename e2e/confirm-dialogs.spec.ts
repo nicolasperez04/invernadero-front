@@ -63,8 +63,6 @@ test.describe('CONFIRM DIALOGS', () => {
     await cancelBtn.click();
     await page.waitForTimeout(500);
 
-    await expect(
-      page.locator('table tbody tr').filter({ hasText: testLotName }),
-    ).toBeVisible();
+    await expect(page.locator('table tbody tr').filter({ hasText: testLotName })).toBeVisible();
   });
 });

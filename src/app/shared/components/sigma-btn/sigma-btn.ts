@@ -26,7 +26,14 @@ import { NgIf } from '@angular/common';
   },
 })
 export class SigmaBtnComponent {
-  @Input() variant: 'primary' | 'secondary' | 'ghost' | 'danger' | 'danger-ghost' | 'info-ghost' | 'warning-ghost' = 'primary';
+  @Input() variant:
+    | 'primary'
+    | 'secondary'
+    | 'ghost'
+    | 'danger'
+    | 'danger-ghost'
+    | 'info-ghost'
+    | 'warning-ghost' = 'primary';
   @Input({ transform: booleanAttribute }) loading = false;
   @Input({ transform: booleanAttribute }) disabled = false;
   @Input() size: 'sm' | 'md' | 'lg' = 'md';

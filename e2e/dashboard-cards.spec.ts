@@ -30,9 +30,7 @@ test.describe('DASHBOARD CARDS', () => {
   test('should display upcoming harvests timeline', async ({ page }) => {
     const timelineCard = page.locator('sigma-card.timeline-card');
     await expect(timelineCard).toBeVisible();
-    await expect(
-      timelineCard.locator('.section-header__title'),
-    ).toContainText('Próximas cosechas');
+    await expect(timelineCard.locator('.section-header__title')).toContainText('Próximas cosechas');
   });
 
   test('should display lot status section', async ({ page }) => {

@@ -87,7 +87,9 @@ test.describe('LOTS EDIT', () => {
     await page.locator('button[sigma-btn]', { hasText: 'Actualizar' }).click();
     await page.waitForLoadState('networkidle');
 
-    await expect(page.locator('.table-scroll table')).toContainText(updatedName, { timeout: 10000 });
+    await expect(page.locator('.table-scroll table')).toContainText(updatedName, {
+      timeout: 10000,
+    });
   });
 
   test('should cancel edit and return to create mode', async ({ page }) => {

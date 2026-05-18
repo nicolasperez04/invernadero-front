@@ -19,7 +19,9 @@ test.describe('DASHBOARD EMPTY STATES', () => {
     expect(hasEmptyState || hasChart).toBeTruthy();
   });
 
-  test('should show empty state for upcoming harvests when no sowing events exist', async ({ page }) => {
+  test('should show empty state for upcoming harvests when no sowing events exist', async ({
+    page,
+  }) => {
     await login(page);
     await page.goto('/dashboard');
     await page.waitForSelector('.dashboard-content', { timeout: 15000 });

@@ -77,9 +77,9 @@ test.describe('EVENTS CREATE', () => {
     await page.waitForLoadState('networkidle');
 
     await expect(page.locator('sigma-card').nth(1)).toBeVisible();
-    await expect(
-      page.locator('sigma-card').nth(1).locator('h3.section__title'),
-    ).toContainText('Nuevo Evento');
+    await expect(page.locator('sigma-card').nth(1).locator('h3.section__title')).toContainText(
+      'Nuevo Evento',
+    );
 
     await expect(page.locator('sigma-card').nth(2)).toBeVisible();
   });

@@ -2,7 +2,11 @@ import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { of } from 'rxjs';
-import { ConfirmDialogService, ConfirmDialogComponent, ConfirmDialogData } from './confirm-dialog.service';
+import {
+  ConfirmDialogService,
+  ConfirmDialogComponent,
+  ConfirmDialogData,
+} from './confirm-dialog.service';
 
 describe('ConfirmDialogService', () => {
   let service: ConfirmDialogService;
@@ -61,10 +65,13 @@ describe('ConfirmDialogComponent', () => {
   beforeEach(() => {
     dialogRefMock = { close: vi.fn() };
 
-    component = new ConfirmDialogComponent(dialogRefMock as unknown as MatDialogRef<ConfirmDialogComponent>, {
-      title: 'test.title',
-      message: 'test.message',
-    } as ConfirmDialogData);
+    component = new ConfirmDialogComponent(
+      dialogRefMock as unknown as MatDialogRef<ConfirmDialogComponent>,
+      {
+        title: 'test.title',
+        message: 'test.message',
+      } as ConfirmDialogData,
+    );
   });
 
   it('should be created', () => {

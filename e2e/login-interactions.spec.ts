@@ -37,10 +37,7 @@ test.describe('LOGIN INTERACTIONS', () => {
     await page.locator('sigma-input[name="password"] .sigma-input__el').fill('wrongpass');
 
     const [response] = await Promise.all([
-      page.waitForResponse(
-        (resp) => resp.url().includes('/api/auth/login'),
-        { timeout: 15000 },
-      ),
+      page.waitForResponse((resp) => resp.url().includes('/api/auth/login'), { timeout: 15000 }),
       page.locator('button[sigma-btn][type="submit"]').click(),
     ]);
 

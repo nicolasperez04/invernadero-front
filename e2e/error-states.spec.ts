@@ -38,11 +38,7 @@ test.describe('ERROR STATES', () => {
     await inputs.nth(2).fill('60');
     await inputs.nth(3).fill('10');
 
-    const submitBtn = page
-      .locator('sigma-card')
-      .first()
-      .locator('button[sigma-btn]')
-      .last();
+    const submitBtn = page.locator('sigma-card').first().locator('button[sigma-btn]').last();
     await submitBtn.click();
 
     await page.waitForTimeout(1500);

@@ -10,7 +10,9 @@ test.describe('NOTIFICATIONS ADVANCED', () => {
     await expect(page.locator('.bell-button')).toBeVisible({ timeout: 5000 });
   });
 
-  test('should open dropdown panel when clicking bell, showing mark-all when unread exist', async ({ page }) => {
+  test('should open dropdown panel when clicking bell, showing mark-all when unread exist', async ({
+    page,
+  }) => {
     await login(page);
     await page.goto('/dashboard');
     await page.waitForSelector('.dashboard-content', { timeout: 15000 });

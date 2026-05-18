@@ -20,7 +20,9 @@ test.describe('LANGUAGE SWITCHER', () => {
     expect(lang).toBe('en');
   });
 
-  test('should switch back to Spanish and update active class and localStorage', async ({ page }) => {
+  test('should switch back to Spanish and update active class and localStorage', async ({
+    page,
+  }) => {
     await login(page);
     await page.goto('/dashboard');
     await page.waitForSelector('.dashboard-content', { timeout: 15000 });
