@@ -63,17 +63,26 @@ const colors = {
   bright: '\x1b[1m',
 };
 
-function log(msg, color = 'reset') { console.log(colors[color] + msg + colors.reset); }
+function log(msg, color = 'reset') {
+  console.log(colors[color] + msg + colors.reset);
+}
 
 /* ────── Helpers ────── */
 function run(cmd) {
-  try { return execSync(cmd, { encoding: 'utf8', timeout: 5000 }).trim(); }
-  catch { return null; }
+  try {
+    return execSync(cmd, { encoding: 'utf8', timeout: 5000 }).trim();
+  } catch {
+    return null;
+  }
 }
 
-function stripAnsi(str) { return str.replace(ANSI_RE, ''); }
+function stripAnsi(str) {
+  return str.replace(ANSI_RE, '');
+}
 
-function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+function capitalize(s) {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
 
 /* ────── Context ────── */
 function getContext() {
@@ -212,7 +221,10 @@ function buildDescription(content, context, { errors, warnings }) {
     if (e.file) lines.push(`| **Archivo** | \`${e.file}\` |`);
     if (e.line && e.col) lines.push(`| **Línea** | ${e.line}:${e.col} |`);
     if (e.sourceCode) {
-      const code = e.sourceCode.replace(/^│\s*/, '').replace(/╵\s*[~^]+\s*$/, '').trim();
+      const code = e.sourceCode
+        .replace(/^│\s*/, '')
+        .replace(/╵\s*[~^]+\s*$/, '')
+        .trim();
       if (code) lines.push(`| **Código** | \`${code.substring(0, 60)}\` |`);
     }
     lines.push('');
@@ -321,7 +333,10 @@ async function reportBuildError() {
   log(`\n📦 Contexto detectado:`, 'cyan');
   log(`   Rama: ${context.gitBranch}`, 'dim');
   log(`   Angular: ${context.ngVersion} / Node: ${context.nodeVersion}`, 'dim');
-  log(`   Errores: ${errors.length}  |  Warnings: ${warnings.length}`, errors.length > 0 ? 'yellow' : 'dim');
+  log(
+    `   Errores: ${errors.length}  |  Warnings: ${warnings.length}`,
+    errors.length > 0 ? 'yellow' : 'dim',
+  );
 
   const api = axios.create({
     baseURL: TAIGA_URL,
@@ -348,7 +363,10 @@ async function reportBuildError() {
 
     if (errors.length > 0) {
       log(`\n📋 Resumen:`, 'yellow');
-      log(`   • ${errors[0].code}: ${errors[0].message.substring(0, 60)}${errors[0].file ? ` en ${errors[0].file}:${errors[0].line}` : ''}`, 'dim');
+      log(
+        `   • ${errors[0].code}: ${errors[0].message.substring(0, 60)}${errors[0].file ? ` en ${errors[0].file}:${errors[0].line}` : ''}`,
+        'dim',
+      );
       if (warnings.length > 0) log(`   • ${warnings.length} warning(s) no bloqueante(s)`, 'dim');
     }
   } catch (err) {
@@ -356,7 +374,11 @@ async function reportBuildError() {
     log(`❌ Error al crear issue: ${JSON.stringify(detail)}`, 'red');
     process.exit(1);
   } finally {
-    try { if (fs.existsSync(ERROR_LOG_FILE)) fs.unlinkSync(ERROR_LOG_FILE); } catch { /* ignore */ }
+    try {
+      if (fs.existsSync(ERROR_LOG_FILE)) fs.unlinkSync(ERROR_LOG_FILE);
+    } catch {
+      /* ignore */
+    }
   }
 }
 

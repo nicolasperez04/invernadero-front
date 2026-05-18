@@ -1,7 +1,8 @@
 const templates = {
   auth: {
     userStory: 'AUTH - Implementar autenticación JWT y control de acceso por roles',
-    description: 'Sistema de autenticación mediante credenciales (email/password) con generación de JWT. Control de acceso basado en roles (ADMIN/OPERATOR/VIEWER) usando Spring Security con @PreAuthorize. Cubre AUTH-RF-01, AUTH-RF-02, RNF-01 y RNF-02.',
+    description:
+      'Sistema de autenticación mediante credenciales (email/password) con generación de JWT. Control de acceso basado en roles (ADMIN/OPERATOR/VIEWER) usando Spring Security con @PreAuthorize. Cubre AUTH-RF-01, AUTH-RF-02, RNF-01 y RNF-02.',
     priority: 'Alta',
     tasks: [
       'Crear endpoint POST /auth/login que valide credenciales contra BCrypt',
@@ -22,7 +23,8 @@ const templates = {
   },
   users: {
     userStory: 'USR - Gestión completa de usuarios',
-    description: 'CRUD completo de usuarios con control de roles (ADMIN/OPERATOR/VIEWER), validación de unicidad de email, y eliminación lógica (soft delete). Solo ADMIN puede gestionar usuarios. Cubre USR-RF-01 a USR-RF-05.',
+    description:
+      'CRUD completo de usuarios con control de roles (ADMIN/OPERATOR/VIEWER), validación de unicidad de email, y eliminación lógica (soft delete). Solo ADMIN puede gestionar usuarios. Cubre USR-RF-01 a USR-RF-05.',
     priority: 'Alta',
     tasks: [
       'Crear endpoint POST /users (solo ADMIN puede crear)',
@@ -42,7 +44,8 @@ const templates = {
   },
   crops: {
     userStory: 'CRP - Gestión de cultivos',
-    description: 'Catálogo de cultivos con parámetros de crecimiento (inactivityDaysThreshold, estimatedGrowthDays), validación de unicidad del nombre. Cubre CRP-RF-01 a CRP-RF-06.',
+    description:
+      'Catálogo de cultivos con parámetros de crecimiento (inactivityDaysThreshold, estimatedGrowthDays), validación de unicidad del nombre. Cubre CRP-RF-01 a CRP-RF-06.',
     priority: 'Alta',
     tasks: [
       'Crear endpoint POST /crops (ADMIN/OPERATOR)',
@@ -60,7 +63,8 @@ const templates = {
   },
   lots: {
     userStory: 'LOT - Gestión completa de lotes con estados dinámicos',
-    description: 'Control de lotes dentro del invernadero con cálculo dinámico de estado (CREATED/IN_PRODUCTION/FINISHED), nivel de inactividad (GREEN/YELLOW/RED/GRAY/UNKNOWN), progreso del cultivo (%), y resumen completo. Cubre LOT-RF-01 a LOT-RF-10.',
+    description:
+      'Control de lotes dentro del invernadero con cálculo dinámico de estado (CREATED/IN_PRODUCTION/FINISHED), nivel de inactividad (GREEN/YELLOW/RED/GRAY/UNKNOWN), progreso del cultivo (%), y resumen completo. Cubre LOT-RF-01 a LOT-RF-10.',
     priority: 'Alta',
     tasks: [
       'Crear endpoint POST /lots (ADMIN/OPERATOR)',
@@ -81,7 +85,8 @@ const templates = {
   },
   events: {
     userStory: 'EVT - Registro y gestión completa de eventos agrícolas',
-    description: 'Registro y seguimiento de eventos agrícolas (SIEMBRA, COSECHA, RIEGO, FERTILIZACION, etc.) con validación de secuencia, cálculo automático de fecha de cosecha, y filtrado avanzado. Cubre EVT-RF-01 a EVT-RF-07.',
+    description:
+      'Registro y seguimiento de eventos agrícolas (SIEMBRA, COSECHA, RIEGO, FERTILIZACION, etc.) con validación de secuencia, cálculo automático de fecha de cosecha, y filtrado avanzado. Cubre EVT-RF-01 a EVT-RF-07.',
     priority: 'Alta',
     tasks: [
       'Crear endpoint POST /events (ADMIN/OPERATOR)',
@@ -102,7 +107,8 @@ const templates = {
   },
   eventTypes: {
     userStory: 'EVT-TYPE - Catálogo de tipos de eventos',
-    description: 'Gestión del catálogo de tipos de eventos agrícolas (SOWING, HARVEST, RIEGO, FERTILIZATION, etc.). Cubre EVT-TYPE-RF-01 y EVT-TYPE-RF-02.',
+    description:
+      'Gestión del catálogo de tipos de eventos agrícolas (SOWING, HARVEST, RIEGO, FERTILIZATION, etc.). Cubre EVT-TYPE-RF-01 y EVT-TYPE-RF-02.',
     priority: 'Alta',
     tasks: [
       'Crear endpoint GET /event-types (listar todos los tipos)',
@@ -117,7 +123,8 @@ const templates = {
   },
   dashboard: {
     userStory: 'DSH - Dashboard completo con métricas en tiempo real',
-    description: 'Visualización de métricas consolidadas del invernadero: gráfico de eventos (últimos 7 días), estados de lotes, nivel de inactividad, progreso de cultivos, y resumen de producción. Cubre DSH-RF-01 a DSH-RF-04.',
+    description:
+      'Visualización de métricas consolidadas del invernadero: gráfico de eventos (últimos 7 días), estados de lotes, nivel de inactividad, progreso de cultivos, y resumen de producción. Cubre DSH-RF-01 a DSH-RF-04.',
     priority: 'Alta',
     tasks: [
       'Implementar DSH-RF-01: Obtener dashboard completo con métricas consolidadas',
@@ -138,22 +145,22 @@ const templates = {
 };
 
 const moduleMap = {
-  'auth': 'auth',
-  'autenticación': 'auth',
-  'usuarios': 'users',
-  'usuario': 'users',
-  'cultivos': 'crops',
-  'cultivo': 'crops',
-  'lotes': 'lots',
-  'lote': 'lots',
-  'eventos': 'events',
-  'evento': 'events',
+  auth: 'auth',
+  autenticación: 'auth',
+  usuarios: 'users',
+  usuario: 'users',
+  cultivos: 'crops',
+  cultivo: 'crops',
+  lotes: 'lots',
+  lote: 'lots',
+  eventos: 'events',
+  evento: 'events',
   'tipos de evento': 'eventTypes',
   'event-types': 'eventTypes',
   'tipos-evento': 'eventTypes',
-  'dashboard': 'dashboard',
-  'métricas': 'dashboard',
-  'metricas': 'dashboard',
+  dashboard: 'dashboard',
+  métricas: 'dashboard',
+  metricas: 'dashboard',
 };
 
 function getTemplate(moduleName) {

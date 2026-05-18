@@ -319,6 +319,12 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     return labels[level];
   }
 
+  getProgressColor(lot: LotProgressDTO): 'green' | 'amber' | 'red' {
+    if (lot.daysRemaining <= 0) return 'red';
+    if (lot.daysRemaining <= 7) return 'amber';
+    return 'green';
+  }
+
   getProgressWidth(progress: number): number {
     return Math.min(Math.max(progress, 0), 100);
   }
@@ -381,7 +387,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   // ── Alerts ──
 
   get alertLots(): LotStatusDTO[] {
-    return this.lotStatuses.filter((l) => l.status !== 'GREEN' || l.inactivityLevel !== 'GREEN');
+    return this.lotStatuses.filter((l) => l.inactivityLevel !== 'GREEN');
   }
 
   get hasAlerts(): boolean {

@@ -71,13 +71,13 @@
 /* ── Ghost ── */
 :host.sigma-btn--ghost {
   background: transparent;
-  color: var(--earth-600);
-  border-color: var(--earth-200);
+  color: var(--neutral-500);
+  border-color: var(--neutral-300);
 }
 
 :host.sigma-btn--ghost:hover:not(:disabled) {
-  background: var(--earth-20);
-  border-color: var(--earth-300);
+  background: var(--neutral-100);
+  border-color: var(--neutral-400);
 }
 
 /* ── Danger ── */
@@ -91,6 +91,42 @@
   background: #b53f3f;
   border-color: #b53f3f;
   box-shadow: 0 4px 12px rgba(201, 74, 74, 0.35);
+}
+
+/* ── Danger Ghost ── */
+:host.sigma-btn--danger-ghost {
+  background: transparent;
+  color: var(--danger-color);
+  border-color: var(--danger-light);
+}
+
+:host.sigma-btn--danger-ghost:hover:not(:disabled) {
+  background: var(--danger-light);
+  border-color: var(--danger-color);
+}
+
+/* ── Info Ghost ── */
+:host.sigma-btn--info-ghost {
+  background: transparent;
+  color: var(--info-color);
+  border-color: var(--info-light);
+}
+
+:host.sigma-btn--info-ghost:hover:not(:disabled) {
+  background: var(--info-light);
+  border-color: var(--info-color);
+}
+
+/* ── Warning Ghost ── */
+:host.sigma-btn--warning-ghost {
+  background: transparent;
+  color: var(--amber-600);
+  border-color: var(--amber-100);
+}
+
+:host.sigma-btn--warning-ghost:hover:not(:disabled) {
+  background: var(--amber-50);
+  border-color: var(--amber-500);
 }
 
 /* ── Sizes ── */
@@ -134,8 +170,23 @@
 }
 
 :host.sigma-btn--ghost .sigma-btn__spinner {
-  border-color: rgba(92, 74, 58, 0.25);
-  border-top-color: var(--earth-600);
+  border-color: rgba(128, 128, 128, 0.25);
+  border-top-color: var(--neutral-500);
+}
+
+:host.sigma-btn--danger-ghost .sigma-btn__spinner {
+  border-color: rgba(201, 74, 74, 0.25);
+  border-top-color: var(--danger-color);
+}
+
+:host.sigma-btn--info-ghost .sigma-btn__spinner {
+  border-color: rgba(74, 124, 201, 0.25);
+  border-top-color: var(--info-color);
+}
+
+:host.sigma-btn--warning-ghost .sigma-btn__spinner {
+  border-color: rgba(245, 166, 35, 0.25);
+  border-top-color: var(--amber-600);
 }
 
 :host.sigma-btn--danger .sigma-btn__spinner {
@@ -144,5 +195,7 @@
 }
 
 @keyframes sigma-spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }

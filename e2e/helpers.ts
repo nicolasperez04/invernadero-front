@@ -1,4 +1,4 @@
-import { Page, request } from '@playwright/test';
+import { Page, request, expect } from '@playwright/test';
 
 export const TEST_USER = {
   email: 'nicolas@gmail.com',
@@ -11,16 +11,14 @@ export async function login(
   password: string = TEST_USER.password,
 ): Promise<void> {
   await page.goto('/login');
-  await page.fill('#email', email);
-  await page.fill('#password', password);
-  await page.click('button[type="submit"]');
+  await page.locator('sigma-input[name="email"] .sigma-input__el').fill(email);
+  await page.locator('sigma-input[name="password"] .sigma-input__el').fill(password);
+  await page.click('button[sigma-btn]');
   await page.waitForURL(/.*\/dashboard/, { timeout: 10000 });
 }
 
 export async function logout(page: Page): Promise<void> {
-  await page.evaluate(() => {
-    localStorage.clear();
-  });
+  await page.evaluate(() => localStorage.clear());
   await page.goto('/login');
 }
 
@@ -30,7 +28,7 @@ export async function waitForAngular(page: Page): Promise<void> {
 
 export async function dismissToast(page: Page): Promise<void> {
   const toast = page.locator('.mat-mdc-snack-bar-container, .snack-bar-container');
-  if (await toast.isVisible({ timeout: 2000 }).catch(() => false)) {
+  if (await toast.isVisible({ timeout: 1000 }).catch(() => false)) {
     await page.waitForTimeout(500);
   }
 }
@@ -43,7 +41,6 @@ export async function seedTestData(token: string, baseApi: string): Promise<void
 
   const ts = Date.now();
 
-  // Create test crop with template values
   const cropResp = await ctx.post('/api/crops', {
     data: {
       name: `E2E Crop ${ts}`,
@@ -57,7 +54,6 @@ export async function seedTestData(token: string, baseApi: string): Promise<void
   });
   const crop = await cropResp.json();
 
-  // Create test lot
   await ctx.post('/api/lots', {
     data: {
       name: `Lote E2E ${ts}`,
@@ -65,4 +61,16 @@ export async function seedTestData(token: string, baseApi: string): Promise<void
       startDate: new Date(Date.now() - 7 * 86400000).toISOString(),
     },
   });
+}
+
+export function toErrorName(status: number): string {
+  const map: Record<number, string> = {
+    400: 'Bad Request',
+    401: 'Unauthorized',
+    403: 'Forbidden',
+    404: 'Not Found',
+    409: 'Conflict',
+    500: 'Server Error',
+  };
+  return map[status] || `Error ${status}`;
 }

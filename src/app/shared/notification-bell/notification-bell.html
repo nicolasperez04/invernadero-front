@@ -1,13 +1,19 @@
 <div class="notification-bell">
   <button class="bell-button" (click)="toggleDropdown()">
     <span class="material-icons bell-icon">notifications</span>
-    <span class="bell-badge" *ngIf="unreadCount > 0">{{ unreadCount > 99 ? '99+' : unreadCount }}</span>
+    <span class="bell-badge" *ngIf="unreadCount > 0">{{
+      unreadCount > 99 ? '99+' : unreadCount
+    }}</span>
   </button>
 
   <div *ngIf="dropdownOpen" class="dropdown-panel">
     <div class="dropdown-header">
       <span class="dropdown-title">{{ 'notifications.title' | translate }}</span>
-      <button *ngIf="unreadCount > 0" (click)="markAllAsRead(); $event.stopPropagation()" class="mark-all-btn">
+      <button
+        *ngIf="unreadCount > 0"
+        (click)="markAllAsRead(); $event.stopPropagation()"
+        class="mark-all-btn"
+      >
         {{ 'notifications.markAllRead' | translate }}
       </button>
     </div>
@@ -23,7 +29,9 @@
       [class.unread]="!n.read"
       (click)="markAsRead(n.id); $event.stopPropagation()"
     >
-      <span class="material-icons level-icon" [style.color]="getLevelColor(n.level)">{{ getLevelIcon(n.level) }}</span>
+      <span class="material-icons level-icon" [style.color]="getLevelColor(n.level)">{{
+        getLevelIcon(n.level)
+      }}</span>
       <div class="notification-content">
         <p class="notification-message">{{ n.message }}</p>
         <span class="notification-date">{{ formatDate(n.createdAt) }}</span>

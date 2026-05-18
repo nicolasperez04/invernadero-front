@@ -56,6 +56,9 @@ e2e/.auth/
 test-results/
 playwright-report/
 
+# Vitest coverage and test results
+/target/
+
 # Build logs
 build-error.log
 

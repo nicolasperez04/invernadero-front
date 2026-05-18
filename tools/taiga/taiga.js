@@ -81,7 +81,12 @@ async function loadProjectStatuses() {
 
     for (const status of usStatuses) {
       const name = (status.name || status).toString().toLowerCase();
-      if (name.includes('progress') || name.includes('desarrollo') || name.includes('inprogress') || name.includes('started')) {
+      if (
+        name.includes('progress') ||
+        name.includes('desarrollo') ||
+        name.includes('inprogress') ||
+        name.includes('started')
+      ) {
         usInProgressStatusId = status.id || status;
         break;
       }
@@ -214,7 +219,7 @@ async function getUserStories() {
 async function updateUserStoryStatus(userStoryId, statusId) {
   const response = await getApi().get(`/userstories/${userStoryId}`);
   const us = response.data;
-  
+
   await getApi().put(`/userstories/${userStoryId}`, {
     project: us.project,
     subject: us.subject,
@@ -232,7 +237,7 @@ async function getUserStoryStatuses() {
 async function addUserStoryToSprint(sprintId, userStoryId) {
   const response = await getApi().get(`/userstories/${userStoryId}`);
   const us = response.data;
-  
+
   await getApi().patch(`/userstories/${userStoryId}`, {
     milestone: sprintId,
     version: us.version,
@@ -243,19 +248,19 @@ let projectRoles = null;
 
 async function loadProjectRoles() {
   if (projectRoles) return projectRoles;
-  
+
   const projResponse = await getApi().get(`/projects/${TAIGA_PROJECT_ID}`);
-  projectRoles = (projResponse.data.roles || []).filter(r => r.computable);
+  projectRoles = (projResponse.data.roles || []).filter((r) => r.computable);
   return projectRoles;
 }
 
 async function updateUserStoryPoints(userStoryId, points) {
   const response = await getApi().get(`/userstories/${userStoryId}`);
   const us = response.data;
-  
+
   const projResponse = await getApi().get(`/projects/${TAIGA_PROJECT_ID}`);
   const pointsConfig = projResponse.data.points;
-  
+
   let pointId = null;
   if (pointsConfig && Array.isArray(pointsConfig)) {
     for (const p of pointsConfig) {
@@ -265,15 +270,15 @@ async function updateUserStoryPoints(userStoryId, points) {
       }
     }
   }
-  
+
   const roles = await loadProjectRoles();
-  
+
   if (pointId && roles.length > 0) {
     const pointsObj = {};
     for (const role of roles) {
       pointsObj[role.id] = pointId;
     }
-    
+
     await getApi().patch(`/userstories/${userStoryId}`, {
       points: pointsObj,
       version: us.version,
@@ -286,7 +291,7 @@ async function updateUserStoryPoints(userStoryId, points) {
 async function assignUserStoryToMe(userStoryId) {
   const response = await getApi().get(`/userstories/${userStoryId}`);
   const us = response.data;
-  
+
   await getApi().patch(`/userstories/${userStoryId}`, {
     assigned_to: currentUserId,
     version: us.version,
@@ -303,7 +308,7 @@ async function getTasks(userStoryId) {
 async function assignTaskToMe(taskId) {
   const response = await getApi().get(`/tasks/${taskId}`);
   const task = response.data;
-  
+
   await getApi().patch(`/tasks/${taskId}`, {
     assigned_to: currentUserId,
     version: task.version,
@@ -314,14 +319,14 @@ function getApiInternal() {
   return getApi();
 }
 
-module.exports = { 
-  login, 
-  createUserStory, 
-  createTask, 
-  getProjectId, 
-  deleteUserStory, 
-  createSprint, 
-  getUserStories, 
+module.exports = {
+  login,
+  createUserStory,
+  createTask,
+  getProjectId,
+  deleteUserStory,
+  createSprint,
+  getUserStories,
   addUserStoryToSprint,
   updateUserStoryStatus,
   getUserStoryStatuses,
@@ -329,5 +334,5 @@ module.exports = {
   assignUserStoryToMe,
   getTasks,
   assignTaskToMe,
-  getApiInternal
+  getApiInternal,
 };

@@ -15,7 +15,9 @@ describe('SseService', () => {
       close: closeSpy,
     };
 
-    (globalThis as any).EventSource = vi.fn().mockImplementation(function() { return mockEventSource; });
+    (globalThis as any).EventSource = vi.fn().mockImplementation(function () {
+      return mockEventSource;
+    });
 
     localStorage.clear();
     service = new SseService();
@@ -39,7 +41,7 @@ describe('SseService', () => {
     localStorage.setItem('token', 'test-jwt');
     service.connect();
     expect((globalThis as any).EventSource).toHaveBeenCalledWith(
-      'http://localhost:8080/api/sse/subscribe?token=test-jwt'
+      'http://localhost:8080/api/sse/subscribe?token=test-jwt',
     );
   });
 

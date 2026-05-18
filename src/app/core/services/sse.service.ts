@@ -16,9 +16,7 @@ export class SseService implements OnDestroy {
     const token = localStorage.getItem('token');
     if (!token) return;
 
-    this.eventSource = new EventSource(
-      `${environment.apiUrl}/sse/subscribe?token=${token}`
-    );
+    this.eventSource = new EventSource(`${environment.apiUrl}/sse/subscribe?token=${token}`);
 
     this.eventSource.addEventListener('dashboard', (event: MessageEvent) => {
       try {

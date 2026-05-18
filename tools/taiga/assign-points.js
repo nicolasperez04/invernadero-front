@@ -4,7 +4,11 @@ const storyPoints = {
   9247053: { module: 'AUTH', points: 5, reason: 'JWT + Security + RBAC' },
   9247039: { module: 'USR', points: 8, reason: 'CRUD + roles + validaciones' },
   9247017: { module: 'CRP', points: 5, reason: 'CRUD + validaciones' },
-  9247055: { module: 'LOT', points: 13, reason: 'CRUD + cálculos estados + inactividad + progreso' },
+  9247055: {
+    module: 'LOT',
+    points: 13,
+    reason: 'CRUD + cálculos estados + inactividad + progreso',
+  },
   9247056: { module: 'EVT', points: 13, reason: 'CRUD + validación secuencia + trazabilidad' },
   9247054: { module: 'EVT-TYPE', points: 3, reason: 'Catálogo simple' },
   9247057: { module: 'DSH', points: 8, reason: 'Métricas + gráficos + time real' },
@@ -38,7 +42,6 @@ async function main() {
     console.log(`\n✅ Story Points asignados`);
     console.log(`   Total de puntos: ${totalPoints}`);
     console.log(`   Total de User Stories: ${Object.keys(storyPoints).length}`);
-
   } catch (error) {
     console.error('❌ Error:', error.message);
     process.exit(1);

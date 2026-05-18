@@ -26,13 +26,15 @@ async function createEpic(name, description, color = '#E57C40') {
 const epics = [
   {
     name: 'Backend API',
-    description: 'Implementación del backend con Spring Boot. Incluye Authentication, Users, Crops, Lots, Events y Event Types.',
+    description:
+      'Implementación del backend con Spring Boot. Incluye Authentication, Users, Crops, Lots, Events y Event Types.',
     color: '#4FC3F7',
     stories: [9247053, 9247039, 9247017, 9247055, 9247056, 9247054],
   },
   {
     name: 'Frontend',
-    description: 'Implementación del frontend con Angular. Dashboard, componentes UI, integración con API REST.',
+    description:
+      'Implementación del frontend con Angular. Dashboard, componentes UI, integración con API REST.',
     color: '#81C784',
     stories: [9247057],
   },
@@ -50,14 +52,14 @@ async function main() {
 
     for (const epic of epics) {
       log(`   📦 Creando Epic: ${epic.name}`, 'cyan');
-      
+
       const response = await api.post('/epics', {
         project: parseInt(process.env.TAIGA_PROJECT_ID, 10),
         subject: epic.name,
         description: epic.description,
         color: epic.color,
       });
-      
+
       const epicId = response.data.id;
       log(`      ✅ Epic creado (ID: ${epicId})`, 'green');
       log(`      📝 Asignando ${epic.stories.length} User Stories...`, 'cyan');
@@ -76,7 +78,6 @@ async function main() {
     }
 
     log('🎉 Epics creados exitosamente!', 'bright');
-
   } catch (error) {
     log('❌ Error: ' + error.message, 'red');
     process.exit(1);

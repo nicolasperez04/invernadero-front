@@ -13,8 +13,10 @@ describe('DashboardComponent', () => {
   let sseEventsSubject: Subject<{ type: string; data: any }>;
 
   const mockDashboardService = {
-    getDashboard: () => of({ eventChart: null, lotStatuses: [], lotProgress: [], upcomingHarvests: [] }),
-    getDashboardByCrop: () => of({ eventChart: null, lotStatuses: [], lotProgress: [], upcomingHarvests: [] }),
+    getDashboard: () =>
+      of({ eventChart: null, lotStatuses: [], lotProgress: [], upcomingHarvests: [] }),
+    getDashboardByCrop: () =>
+      of({ eventChart: null, lotStatuses: [], lotProgress: [], upcomingHarvests: [] }),
   };
 
   const mockCropService = {

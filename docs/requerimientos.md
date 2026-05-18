@@ -4,25 +4,25 @@
 
 # Instrucciones para el uso de este formato {#instrucciones-para-el-uso-de-este-formato .unnumbered}
 
-> *Este formato es una plantilla tipo para documentos de requisitos del software. Está basado y es conforme con el estándar IEEE Std 830-1998.*
+> _Este formato es una plantilla tipo para documentos de requisitos del software. Está basado y es conforme con el estándar IEEE Std 830-1998._
 >
-> *Las secciones que no se consideren aplicables al sistema descrito podrán de forma justificada indicarse como no aplicables (NA).*
+> _Las secciones que no se consideren aplicables al sistema descrito podrán de forma justificada indicarse como no aplicables (NA)._
 >
-> *Notas:*
+> _Notas:_
 >
-> *Los textos en color azul son indicaciones que deben eliminarse y, en su caso, sustituirse por los contenidos descritos en cada apartado.*
+> _Los textos en color azul son indicaciones que deben eliminarse y, en su caso, sustituirse por los contenidos descritos en cada apartado._
 >
-> *Los textos entre corchetes del tipo "\[Inserte aquí el texto\]" permiten la inclusión directa de texto con el color y estilo adecuado a la sección, al pulsar sobre ellos con el puntero del ratón.*
+> _Los textos entre corchetes del tipo "\[Inserte aquí el texto\]" permiten la inclusión directa de texto con el color y estilo adecuado a la sección, al pulsar sobre ellos con el puntero del ratón._
 >
-> *Los títulos y subtítulos de cada apartado están definidos como estilos de MS Word, de forma que su numeración consecutiva se genera automáticamente según se trate de estilos "Titulo1, Titulo2 y Titulo3".*
+> _Los títulos y subtítulos de cada apartado están definidos como estilos de MS Word, de forma que su numeración consecutiva se genera automáticamente según se trate de estilos "Titulo1, Titulo2 y Titulo3"._
 >
-> *La sangría de los textos dentro de cada apartado se genera automáticamente al pulsar Intro al final de la línea de título. (Estilos Normal indentado1, Normal indentado 2 y Normal indentado 3).*
+> _La sangría de los textos dentro de cada apartado se genera automáticamente al pulsar Intro al final de la línea de título. (Estilos Normal indentado1, Normal indentado 2 y Normal indentado 3)._
 >
-> *El índice del documento es una tabla de contenido que MS Word actualiza tomando como criterio los títulos del documento.*
+> _El índice del documento es una tabla de contenido que MS Word actualiza tomando como criterio los títulos del documento._
 >
-> *Una vez terminada su redacción debe indicarse a Word que actualice todo su contenido para reflejar el contenido definitivo.*
+> _Una vez terminada su redacción debe indicarse a Word que actualice todo su contenido para reflejar el contenido definitivo._
 
-[]{#_heading=h.7lflz0oo1og2 .anchor}
+[]{#\_heading=h.7lflz0oo1og2 .anchor}
 
 # Contenido {#contenido .unnumbered}
 
@@ -31,7 +31,6 @@
 > [**CONTENIDO** **4**](#_heading=h.9vdxnk28w5eo)
 
 1.  [**INTRODUCCIÓN** **6**](#introducción)
-
     1.  [**Propósito** **6**](#propósito)
 
     2.  [**Alcance** **6**](#alcance)
@@ -45,7 +44,6 @@
     6.  [**Resumen** **7**](#_heading=h.t2esckbicyvr)
 
 2.  [**DESCRIPCIÓN GENERAL** **7**](#_heading=h.brqp65jl8hvp)
-
     1.  [**Perspectiva del producto** **7**](#_heading=h.qi5eszvizf6w)
 
     2.  [**Funcionalidad del producto** **8**](#_heading=h.hclxtbrvq4y3)
@@ -57,9 +55,7 @@
     5.  [**Suposiciones y dependencias** **9**](#_heading=h.pvg2auxyajna)
 
 3.  [**REQUISITOS ESPECÍFICOS** **9**](#_heading=h.a4wwkfszefqg)
-
     1.  [**Requisitos comunes de las interfaces** **17**](#_heading=h.ypvjbxoap2lp)
-
         1.  [Interfaces de usuario 17](#_heading=h.g5m4zp49z6j3)
 
         2.  [Interfaces de hardware 17](#_heading=h.bqqtrubcgljx)
@@ -69,7 +65,6 @@
         4.  [Interfaces de comunicación 17](#_heading=h.uylrn3kb11zd)
 
     2.  **Requerimientos funcionales 17**
-
         1.  [Requisito funcional 1 17](#_heading=h.fbeigesi1s9c)
 
         2.  [Requisito funcional 2 17](#_heading=h.ff5aico4z90q)
@@ -93,7 +88,6 @@
 <!-- -->
 
 3.  **Requerimientos no funcionales 19**
-
     1.  [Requisitos de rendimiento 19](#_heading=h.rqiftcnzrtm2)
 
     2.  [Seguridad 20](#_heading=h.e7ww0xcc99b6)
@@ -195,12 +189,12 @@ El sistema permite:
 </tbody>
 </table>
 
-#  {#section .unnumbered}
+# {#section .unnumbered}
 
 # Módulos del sistema
 
 | **Código** | **Módulo**          | **Descripción**                                      | **Prioridad** |
-|------------|---------------------|------------------------------------------------------|---------------|
+| ---------- | ------------------- | ---------------------------------------------------- | ------------- |
 | AUTH       | Autenticación       | Login, validación de credenciales, generación de JWT | Alta          |
 | USR        | Gestión de Usuarios | CRUD de usuarios, control de roles y estados         | Alta          |
 | CRP        | Gestión de Cultivos | Catálogo de cultivos, validación de unicidad         | Alta          |

@@ -36,5 +36,7 @@
 }
 
 @keyframes sigma-spinner-rotate {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }

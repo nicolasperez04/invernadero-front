@@ -12,7 +12,9 @@
         <tr *ngFor="let row of data; let i = index" [class]="rowClass(row, i)">
           <td *ngFor="let col of columns" [class]="col.class || ''">
             <ng-container *ngIf="getCellTemplate(col.key) as tpl">
-              <ng-container *ngTemplateOutlet="tpl; context: { $implicit: row, row: row, col: col }"></ng-container>
+              <ng-container
+                *ngTemplateOutlet="tpl; context: { $implicit: row, row: row, col: col }"
+              ></ng-container>
             </ng-container>
             <ng-container *ngIf="!getCellTemplate(col.key)">
               {{ getRowValue(row, col.key) }}
@@ -25,9 +27,17 @@
 
   <div *ngIf="loading" class="sigma-table__skeleton">
     <div *ngFor="let _ of skeletonArray(skeletonRows)" class="sigma-table__skeleton-row">
-      <div *ngFor="let col of columns" class="sigma-table__skeleton-cell" [style.width]="col.width || ''"></div>
+      <div
+        *ngFor="let col of columns"
+        class="sigma-table__skeleton-cell"
+        [style.width]="col.width || ''"
+      ></div>
     </div>
   </div>
 
-  <sigma-empty-state *ngIf="!loading && data.length === 0" [icon]="emptyIcon" [title]="emptyMessage"></sigma-empty-state>
+  <sigma-empty-state
+    *ngIf="!loading && data.length === 0"
+    [icon]="emptyIcon"
+    [title]="emptyMessage"
+  ></sigma-empty-state>
 </div>

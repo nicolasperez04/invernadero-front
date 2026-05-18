@@ -21,10 +21,7 @@ describe('LotListComponent', () => {
         MatSnackBarModule,
         TranslateModule.forRoot(),
       ],
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-      ],
+      providers: [provideHttpClient(), provideHttpClientTesting()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(LotListComponent);
@@ -40,7 +37,9 @@ describe('LotListComponent', () => {
   it('downloadReport should call getReport and create a download link', () => {
     const mockBlob = new Blob(['test'], { type: 'application/pdf' });
     const getReportSpy = vi.spyOn(lotService, 'getReport').mockReturnValue(of(mockBlob));
-    const createObjectURLSpy = vi.spyOn(window.URL, 'createObjectURL').mockReturnValue('blob:http://test');
+    const createObjectURLSpy = vi
+      .spyOn(window.URL, 'createObjectURL')
+      .mockReturnValue('blob:http://test');
     const revokeObjectURLSpy = vi.spyOn(window.URL, 'revokeObjectURL');
 
     component.downloadReport(1, 'Test Lot');

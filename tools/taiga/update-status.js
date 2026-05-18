@@ -12,11 +12,16 @@ async function main() {
 
     console.log('🔍 Obteniendo estados disponibles...');
     const statuses = await taiga.getUserStoryStatuses();
-    
+
     let inProgressStatus = null;
     for (const status of statuses) {
       const name = (status.name || '').toString().toLowerCase();
-      if (name.includes('progress') || name.includes('inprogress') || name.includes('started') || name.includes('desarrollo')) {
+      if (
+        name.includes('progress') ||
+        name.includes('inprogress') ||
+        name.includes('started') ||
+        name.includes('desarrollo')
+      ) {
         inProgressStatus = status.id;
         console.log(`   Estado "In Progress" encontrado: ${status.name} (ID: ${status.id})`);
         break;
@@ -25,7 +30,9 @@ async function main() {
 
     if (!inProgressStatus && statuses.length > 0) {
       inProgressStatus = statuses[0].id;
-      console.log(`   Usando primer estado disponible: ${statuses[0].name} (ID: ${statuses[0].id})`);
+      console.log(
+        `   Usando primer estado disponible: ${statuses[0].name} (ID: ${statuses[0].id})`,
+      );
     }
 
     if (!inProgressStatus) {
@@ -49,7 +56,6 @@ async function main() {
     console.log(`\n✅ Proceso completado`);
     console.log(`   Total actualizadas: ${updated}`);
     console.log(`   Total user stories: ${userStories.length}`);
-
   } catch (error) {
     console.error('❌ Error:', error.message);
     process.exit(1);

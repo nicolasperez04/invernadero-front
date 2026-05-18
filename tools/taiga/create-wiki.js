@@ -34,7 +34,7 @@ Sistema de gestion de invernadero automatizado para el control de cultivos, lote
 ## Enlaces
 - [Taiga Project](https://tree.taiga.io/nicolasperez04/invernadero)
 - [Repositorio Frontend](https://github.com/proyecto-front)
-`
+`,
   },
   {
     slug: 'arquitectura',
@@ -77,7 +77,7 @@ Sistema de gestion de invernadero automatizado para el control de cultivos, lote
 ### Base de Datos
 - PostgreSQL
 - Entidades: Users, Crops, Lots, Events, EventTypes
-`
+`,
   },
   {
     slug: 'stack-tecnologico',
@@ -110,7 +110,7 @@ Sistema de gestion de invernadero automatizado para el control de cultivos, lote
 | npm | Gestor de paquetes |
 | Vitest | Testing |
 | GitHub Actions | CI/CD |
-`
+`,
   },
   {
     slug: 'requisitos-ieee-830',
@@ -151,7 +151,7 @@ Sistema de gestion de invernadero automatizado para el control de cultivos, lote
 - RNF-02: Seguridad con JWT
 - RNF-03: Trazabilidad
 - RNF-04: Interfaz responsiva
-`
+`,
   },
   {
     slug: 'guia-desarrollo',
@@ -201,7 +201,7 @@ cd proyecto-back
 - Nombres en PascalCase para componentes
 - Servicios con sufijo Service
 - Repositorios con sufijo Repository
-`
+`,
   },
   {
     slug: 'endpoints-api',
@@ -260,8 +260,8 @@ cd proyecto-back
 | Metodo | Endpoint | Descripcion |
 |--------|----------|-------------|
 | GET | /dashboard | Obtener metricas |
-`
-  }
+`,
+  },
 ];
 
 async function main() {
@@ -278,13 +278,13 @@ async function main() {
     for (const page of wikiPages) {
       try {
         log(`Creando: ${page.title}`, 'cyan');
-        
+
         const response = await api.post('/wiki', {
           project: parseInt(projectId),
           slug: page.slug,
           content: page.content,
         });
-        
+
         log(`   OK - Pagina creada\n`, 'green');
       } catch (err) {
         if (err.response?.status === 400) {
@@ -296,7 +296,6 @@ async function main() {
     }
 
     log('Wiki creado exitosamente!', 'green');
-
   } catch (error) {
     log('Error: ' + error.message, 'red');
     process.exit(1);

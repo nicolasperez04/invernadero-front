@@ -1,5 +1,4 @@
 <div class="page-wrapper">
-
   <!-- LOT SELECTOR -->
   <sigma-card>
     <div slot="header" class="section__header">
@@ -27,19 +26,31 @@
 
     <div class="form-row">
       <label class="native-select-wrapper">
-        <span class="native-select-label">{{ 'events.type' | translate }} <span class="native-select-required">*</span></span>
-        <select class="native-select" [(ngModel)]="newEvent.type" [class.native-select--error]="submitted && !newEvent.type">
+        <span class="native-select-label"
+          >{{ 'events.type' | translate }} <span class="native-select-required">*</span></span
+        >
+        <select
+          class="native-select"
+          [(ngModel)]="newEvent.type"
+          [class.native-select--error]="submitted && !newEvent.type"
+        >
           <option value="">{{ 'events.selectType' | translate }}</option>
           <option *ngFor="let t of eventTypes" [value]="t.name">{{ translateType(t.name) }}</option>
         </select>
-        <span class="native-select-error" *ngIf="submitted && !newEvent.type">{{ 'events.errors.typeRequired' | translate }}</span>
+        <span class="native-select-error" *ngIf="submitted && !newEvent.type">{{
+          'events.errors.typeRequired' | translate
+        }}</span>
       </label>
       <sigma-input
         label="{{ 'events.timestamp' | translate }}"
         type="datetime-local"
         [(ngModel)]="newEvent.timestamp"
         [required]="true"
-        [error]="submitted && !newEvent.timestamp ? ('events.errors.timestampRequired' | translate) : undefined"
+        [error]="
+          submitted && !newEvent.timestamp
+            ? ('events.errors.timestampRequired' | translate)
+            : undefined
+        "
       ></sigma-input>
       <div class="form-field--wide">
         <sigma-input
@@ -63,7 +74,9 @@
   <sigma-card *ngIf="selectedLotId">
     <div slot="header" class="section__header">
       <mat-icon class="section__icon">history</mat-icon>
-      <h3 class="section__title">{{ 'events.history' | translate }} — {{ getLotName(selectedLotId) }}</h3>
+      <h3 class="section__title">
+        {{ 'events.history' | translate }} — {{ getLotName(selectedLotId) }}
+      </h3>
     </div>
 
     <div class="table-scroll">
@@ -78,7 +91,9 @@
         <tbody>
           <tr *ngFor="let event of events">
             <td>{{ event.timestamp | date: 'dd/MM/yyyy HH:mm' }}</td>
-            <td><sigma-badge color="blue" size="sm">{{ translateType(event.type) }}</sigma-badge></td>
+            <td>
+              <sigma-badge color="blue" size="sm">{{ translateType(event.type) }}</sigma-badge>
+            </td>
             <td>{{ event.description || ('events.noDescription' | translate) }}</td>
           </tr>
         </tbody>
@@ -89,5 +104,4 @@
       <sigma-empty-state icon="inbox" [title]="'events.empty' | translate"></sigma-empty-state>
     </ng-template>
   </sigma-card>
-
 </div>

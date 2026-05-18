@@ -89,14 +89,17 @@ export class TaigaService {
         500: 'Internal Server Error',
         0: 'Network Error',
       };
-      lines.push(`| **HTTP Status** | ${error.status} - ${statusLabels[error.status] || 'Unknown'} |`);
+      lines.push(
+        `| **HTTP Status** | ${error.status} - ${statusLabels[error.status] || 'Unknown'} |`,
+      );
     }
 
     lines.push(``);
     lines.push(`### Error Details`);
     lines.push(`**Message:** ${error.message}`);
     if (error.source) lines.push(`**Source:** \`${error.source}\``);
-    if (error.stack) lines.push(``, `**Stack Trace:**`, `\`\`\``, error.stack.substring(0, 1500), `\`\`\``);
+    if (error.stack)
+      lines.push(``, `**Stack Trace:**`, `\`\`\``, error.stack.substring(0, 1500), `\`\`\``);
 
     return {
       project: TAIGA_CONFIG.projectId,

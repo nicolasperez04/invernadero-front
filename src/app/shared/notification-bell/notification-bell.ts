@@ -41,7 +41,8 @@ export class NotificationBellComponent implements OnInit, OnDestroy {
   }
 
   refresh(): void {
-    this.notificationService.getAll()
+    this.notificationService
+      .getAll()
       .pipe(takeUntil(this.destroy$))
       .subscribe((list) => {
         this.notifications = list;
@@ -50,7 +51,8 @@ export class NotificationBellComponent implements OnInit, OnDestroy {
   }
 
   loadCount(): void {
-    this.notificationService.getUnreadCount()
+    this.notificationService
+      .getUnreadCount()
       .pipe(takeUntil(this.destroy$))
       .subscribe((res) => {
         this.unreadCount = res.count;
@@ -58,7 +60,8 @@ export class NotificationBellComponent implements OnInit, OnDestroy {
   }
 
   markAsRead(id: number): void {
-    this.notificationService.markAsRead(id)
+    this.notificationService
+      .markAsRead(id)
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         this.refresh();
@@ -66,7 +69,8 @@ export class NotificationBellComponent implements OnInit, OnDestroy {
   }
 
   markAllAsRead(): void {
-    this.notificationService.markAllAsRead()
+    this.notificationService
+      .markAllAsRead()
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         this.refresh();
@@ -75,19 +79,27 @@ export class NotificationBellComponent implements OnInit, OnDestroy {
 
   getLevelIcon(level: string): string {
     switch (level) {
-      case 'INFO': return 'info';
-      case 'WARNING': return 'warning_amber';
-      case 'CRITICAL': return 'error';
-      default: return 'notifications';
+      case 'INFO':
+        return 'info';
+      case 'WARNING':
+        return 'warning_amber';
+      case 'CRITICAL':
+        return 'error';
+      default:
+        return 'notifications';
     }
   }
 
   getLevelColor(level: string): string {
     switch (level) {
-      case 'INFO': return '#4A7CC9';
-      case 'WARNING': return '#F5A623';
-      case 'CRITICAL': return '#C94A4A';
-      default: return '#8D7E6E';
+      case 'INFO':
+        return '#4A7CC9';
+      case 'WARNING':
+        return '#F5A623';
+      case 'CRITICAL':
+        return '#C94A4A';
+      default:
+        return '#8D7E6E';
     }
   }
 

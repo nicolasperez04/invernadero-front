@@ -20,7 +20,7 @@ const sprintsToClose = [
 
 const sprintToKeepOpen = {
   id: 517875,
-  name: 'Sprint 4 - Dashboard'
+  name: 'Sprint 4 - Dashboard',
 };
 
 async function main() {
@@ -36,11 +36,11 @@ async function main() {
     for (const sprint of sprintsToClose) {
       try {
         log(`   📦 Cerrando: ${sprint.name} (ID: ${sprint.id})`, 'cyan');
-        
+
         await api.patch(`/milestones/${sprint.id}`, {
           closed: true,
         });
-        
+
         log(`      ✅ Sprint cerrado`, 'green');
       } catch (err) {
         log(`      ⚠️ Error: ${err.message}`, 'yellow');
@@ -53,7 +53,6 @@ async function main() {
     log(`   Sprint 4 - Dashboard (ID: ${sprintToKeepOpen.id}) permanece activo`, 'cyan');
 
     log('\n🎉 Proceso completado!', 'green');
-
   } catch (error) {
     log('❌ Error: ' + error.message, 'red');
     process.exit(1);

@@ -1,5 +1,4 @@
 <div class="layout" [class.sidebar-collapsed]="sidebarCollapsed">
-
   <!-- TOOLBAR -->
   <header class="toolbar">
     <div class="toolbar-left">
@@ -13,17 +12,13 @@
       <app-notification-bell></app-notification-bell>
 
       <div class="lang-switcher">
-        <button
-          class="lang-btn"
-          [class.active]="currentLang() === 'es'"
-          (click)="setLang('es')"
-        >ES</button>
+        <button class="lang-btn" [class.active]="currentLang() === 'es'" (click)="setLang('es')">
+          ES
+        </button>
         <span class="lang-sep">|</span>
-        <button
-          class="lang-btn"
-          [class.active]="currentLang() === 'en'"
-          (click)="setLang('en')"
-        >EN</button>
+        <button class="lang-btn" [class.active]="currentLang() === 'en'" (click)="setLang('en')">
+          EN
+        </button>
       </div>
 
       <div class="user-info">
@@ -42,7 +37,6 @@
     <!-- SIDEBAR -->
     <nav class="sidebar">
       <div class="sidebar-brand">
-
         <span class="sidebar-brand-text">{{ 'nav.title' | translate }}</span>
       </div>
 

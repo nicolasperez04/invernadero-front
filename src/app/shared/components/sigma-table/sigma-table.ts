@@ -1,4 +1,13 @@
-import { Component, Input, ContentChildren, QueryList, AfterContentInit, TemplateRef, ChangeDetectionStrategy, Directive } from '@angular/core';
+import {
+  Component,
+  Input,
+  ContentChildren,
+  QueryList,
+  AfterContentInit,
+  TemplateRef,
+  ChangeDetectionStrategy,
+  Directive,
+} from '@angular/core';
 import { NgFor, NgIf, NgTemplateOutlet, CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { SigmaEmptyStateComponent } from '../sigma-empty-state/sigma-empty-state';
@@ -47,7 +56,7 @@ export class SigmaTableComponent implements AfterContentInit {
 
   private buildTemplateMap(): void {
     this.cellTemplateMap.clear();
-    this.cellDefs.forEach(def => this.cellTemplateMap.set(def.columnKey, def.template));
+    this.cellDefs.forEach((def) => this.cellTemplateMap.set(def.columnKey, def.template));
   }
 
   getCellTemplate(key: string): TemplateRef<any> | undefined {

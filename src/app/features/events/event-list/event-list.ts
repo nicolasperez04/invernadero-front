@@ -23,9 +23,15 @@ import { SigmaInputComponent } from '../../../shared/components/sigma-input/sigm
   selector: 'app-event-list',
   standalone: true,
   imports: [
-    FormsModule, CommonModule, TranslateModule, MatIconModule,
-    SigmaBtnComponent, SigmaCardComponent, SigmaBadgeComponent,
-    SigmaEmptyStateComponent, SigmaInputComponent,
+    FormsModule,
+    CommonModule,
+    TranslateModule,
+    MatIconModule,
+    SigmaBtnComponent,
+    SigmaCardComponent,
+    SigmaBadgeComponent,
+    SigmaEmptyStateComponent,
+    SigmaInputComponent,
   ],
   templateUrl: './event-list.html',
   styleUrl: './event-list.css',
@@ -64,43 +70,66 @@ export class EventListComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.loadLots();
     this.loadEventTypes();
-    this.router.events.pipe(
-      filter((event) => event instanceof NavigationEnd),
-      filter((event: any) => event.url === '/events'),
-      takeUntil(this.destroy$),
-    ).subscribe(() => {
-      this.loadLots();
-      this.loadEventTypes();
-      this.selectedLotId = 0;
-      this.events = [];
-    });
+    this.router.events
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        filter((event: any) => event.url === '/events'),
+        takeUntil(this.destroy$),
+      )
+      .subscribe(() => {
+        this.loadLots();
+        this.loadEventTypes();
+        this.selectedLotId = 0;
+        this.events = [];
+      });
   }
 
-  ngOnDestroy(): void { this.destroy$.next(); this.destroy$.complete(); }
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   loadLots(): void {
     this.lotService.getAll().subscribe({
-      next: (data) => { this.lots = data; this.cdr.markForCheck(); },
-      error: () => { this.cdr.markForCheck(); },
+      next: (data) => {
+        this.lots = data;
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.cdr.markForCheck();
+      },
     });
   }
 
   loadEventTypes(): void {
     this.eventTypeService.getAll().subscribe({
-      next: (data) => { this.eventTypes = data; this.cdr.markForCheck(); },
-      error: () => { this.cdr.markForCheck(); },
+      next: (data) => {
+        this.eventTypes = data;
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.cdr.markForCheck();
+      },
     });
   }
 
   loadEvents(): void {
     if (!this.selectedLotId) return;
-    const selectedLot = this.lots.find(l => l.id === this.selectedLotId);
+    const selectedLot = this.lots.find((l) => l.id === this.selectedLotId);
     forkJoin({
       events: this.eventService.getByLot(this.selectedLotId),
-      eventTypes: selectedLot ? this.eventTypeService.getByCrop(selectedLot.cropId) : this.eventTypeService.getAll(),
+      eventTypes: selectedLot
+        ? this.eventTypeService.getByCrop(selectedLot.cropId)
+        : this.eventTypeService.getAll(),
     }).subscribe({
-      next: ({ events, eventTypes }) => { this.events = events; this.eventTypes = eventTypes; this.cdr.markForCheck(); },
-      error: () => { this.cdr.markForCheck(); },
+      next: ({ events, eventTypes }) => {
+        this.events = events;
+        this.eventTypes = eventTypes;
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.cdr.markForCheck();
+      },
     });
   }
 
@@ -109,8 +138,16 @@ export class EventListComponent implements OnInit, OnDestroy {
     if (this.formErrors.length) return;
     if (!this.selectedLotId) return;
     this.loading = true;
-    const timestamp = this.newEvent.timestamp.length === 16 ? this.newEvent.timestamp + ':00.000Z' : this.newEvent.timestamp;
-    const payload = { ...this.newEvent, lotId: this.selectedLotId, userId: this.auth.getUserId(), timestamp };
+    const timestamp =
+      this.newEvent.timestamp.length === 16
+        ? this.newEvent.timestamp + ':00.000Z'
+        : this.newEvent.timestamp;
+    const payload = {
+      ...this.newEvent,
+      lotId: this.selectedLotId,
+      userId: this.auth.getUserId(),
+      timestamp,
+    };
     this.eventService.create(payload).subscribe({
       next: () => {
         this.loading = false;
@@ -118,7 +155,9 @@ export class EventListComponent implements OnInit, OnDestroy {
         this.newEvent = { lotId: 0, type: '', userId: 0, timestamp: '', description: '' };
         this.loadEvents();
       },
-      error: () => { this.loading = false; },
+      error: () => {
+        this.loading = false;
+      },
     });
   }
 

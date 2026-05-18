@@ -17,20 +17,20 @@ async function main() {
     username: TAIGA_USERNAME,
     password: TAIGA_PASSWORD,
   });
-  
+
   const token = loginRes.data.auth_token;
   const userId = loginRes.data.id;
   api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
   const usId = 9247039;
   const us = await api.get(`/userstories/${usId}`);
-  
+
   console.log('Current points:', us.data.points);
   console.log('Current user ID:', userId);
   console.log('Version:', us.data.version);
 
   const proj = await api.get(`/projects/${TAIGA_PROJECT_ID}`);
-  const pointId = proj.data.points.find(p => p.value === 8)?.id;
+  const pointId = proj.data.points.find((p) => p.value === 8)?.id;
   console.log('Point ID for 8:', pointId);
 
   const newPoints = { ...us.data.points };

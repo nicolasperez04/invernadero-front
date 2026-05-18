@@ -34,23 +34,25 @@ async function main() {
 
   for (const sprint of sprints) {
     console.log(`📦 ${sprint.name} (ID: ${sprint.id})`);
-    
+
     for (const usId of sprint.stories) {
       try {
         const usRes = await api.get(`/userstories/${usId}`);
         const us = usRes.data;
-        
+
         console.log(`   📝 US #${usId}: "${us.subject.substring(0, 40)}..."`);
         console.log(`      Estado actual: ${us.status_extra_info?.name}`);
         console.log(`      Milestone actual: ${us.milestone}`);
-        
+
         const updateRes = await api.patch(`/userstories/${usId}`, {
           milestone: sprint.id,
           version: us.version,
         });
-        
+
         const updated = updateRes.data;
-        console.log(`      ✅ Asignada a sprint ${sprint.id} (nuevo milestone: ${updated.milestone})`);
+        console.log(
+          `      ✅ Asignada a sprint ${sprint.id} (nuevo milestone: ${updated.milestone})`,
+        );
       } catch (err) {
         console.log(`      ⚠️ Error: ${err.response?.status} - ${err.response?.statusText}`);
       }
@@ -59,20 +61,21 @@ async function main() {
   }
 
   console.log('✅ Verificando asignación final...');
-  
+
   const userStories = await api.get('/userstories', {
     params: { project: parseInt(TAIGA_PROJECT_ID, 10) },
   });
-  
+
   console.log('\n📊 Estado final de User Stories:');
   for (const us of userStories.data) {
     console.log(`   #${us.ref} ${us.subject.substring(0, 35)}...`);
-    console.log(`      Sprint: ${us.milestone || 'Sin asignar'} | Estado: ${us.status_extra_info?.name}`);
+    console.log(
+      `      Sprint: ${us.milestone || 'Sin asignar'} | Estado: ${us.status_extra_info?.name}`,
+    );
   }
-
 }
 
-main().catch(err => {
+main().catch((err) => {
   console.error('❌ Error:', err.message);
   process.exit(1);
 });

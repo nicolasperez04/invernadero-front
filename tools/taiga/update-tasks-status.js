@@ -30,15 +30,19 @@ async function main() {
     const taskStatuses = await api.get(`/projects/${process.env.TAIGA_PROJECT_ID}`);
     const statuses = taskStatuses.data.task_statuses;
 
-    const closedStatus = statuses.find(s => s.name.toLowerCase().includes('closed'));
-    const inProgressStatus = statuses.find(s => s.name.toLowerCase().includes('progress'));
+    const closedStatus = statuses.find((s) => s.name.toLowerCase().includes('closed'));
+    const inProgressStatus = statuses.find((s) => s.name.toLowerCase().includes('progress'));
 
     log('Estados de tasks disponibles:', 'cyan');
-    statuses.forEach(s => console.log(`   - ${s.name} (ID: ${s.id})`));
+    statuses.forEach((s) => console.log(`   - ${s.name} (ID: ${s.id})`));
     console.log('');
 
-    log(`Estado "Done" (Closed): ${closedStatus?.name || 'No encontrado'} (ID: ${closedStatus?.id})`);
-    log(`Estado "In Progress": ${inProgressStatus?.name || 'No encontrado'} (ID: ${inProgressStatus?.id})\n`);
+    log(
+      `Estado "Done" (Closed): ${closedStatus?.name || 'No encontrado'} (ID: ${closedStatus?.id})`,
+    );
+    log(
+      `Estado "In Progress": ${inProgressStatus?.name || 'No encontrado'} (ID: ${inProgressStatus?.id})\n`,
+    );
 
     log('Actualizando estado de tasks...\n', 'bright');
 
@@ -86,7 +90,6 @@ async function main() {
     log(`   Total tasks actualizadas: ${totalUpdated}`, 'cyan');
     log(`   -> Done: ${totalDone}`, 'green');
     log(`   -> In Progress: ${totalInProgress}`, 'yellow');
-
   } catch (error) {
     log('Error: ' + error.message, 'red');
     process.exit(1);

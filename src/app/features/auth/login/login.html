@@ -7,7 +7,6 @@
     <p class="login-subtitle">{{ 'login.subtitle' | translate }}</p>
 
     <form class="login-form" (ngSubmit)="login()" #loginForm="ngForm">
-
       <div *ngIf="errorMessage" class="error-message">
         <mat-icon>error</mat-icon>
         {{ errorMessage }}
@@ -43,7 +42,14 @@
         </button>
       </div>
 
-      <button sigma-btn variant="primary" type="submit" style="width:100%" [disabled]="!email || !password" [loading]="loading">
+      <button
+        sigma-btn
+        variant="primary"
+        type="submit"
+        style="width: 100%"
+        [disabled]="!email || !password"
+        [loading]="loading"
+      >
         {{ 'login.button' | translate }}
       </button>
     </form>

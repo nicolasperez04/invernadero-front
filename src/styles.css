@@ -2,46 +2,46 @@
 
 :root {
   /* ── Earth palette (primary) ── */
-  --earth-900: #1A120C;
-  --earth-800: #2C2018;
-  --earth-700: #3E2E22;
-  --earth-600: #5C4A3A;
-  --earth-500: #6B5A4A;
-  --earth-400: #8D7E6E;
-  --earth-300: #A89A8A;
-  --earth-200: #C4B8A8;
-  --earth-100: #DED5C8;
-  --earth-50: #EDE6DB;
-  --earth-20: #F5F0E8;
+  --earth-900: #1a120c;
+  --earth-800: #2c2018;
+  --earth-700: #3e2e22;
+  --earth-600: #5c4a3a;
+  --earth-500: #6b5a4a;
+  --earth-400: #8d7e6e;
+  --earth-300: #a89a8a;
+  --earth-200: #c4b8a8;
+  --earth-100: #ded5c8;
+  --earth-50: #ede6db;
+  --earth-20: #f5f0e8;
 
   /* ── Olive palette (tertiary) ── */
-  --olive-900: #1B3D22;
-  --olive-800: #2C5E35;
-  --olive-700: #3D7A48;
-  --olive-600: #4E965B;
-  --olive-500: #5FB26D;
-  --olive-400: #7FC18A;
-  --olive-300: #9FD1A7;
-  --olive-200: #BFE0C4;
-  --olive-100: #DFF0E2;
-  --olive-50: #F2F9F4;
+  --olive-900: #1b3d22;
+  --olive-800: #2c5e35;
+  --olive-700: #3d7a48;
+  --olive-600: #4e965b;
+  --olive-500: #5fb26d;
+  --olive-400: #7fc18a;
+  --olive-300: #9fd1a7;
+  --olive-200: #bfe0c4;
+  --olive-100: #dff0e2;
+  --olive-50: #f2f9f4;
 
   /* ── Amber palette (accent) ── */
-  --amber-900: #663D00;
-  --amber-800: #995C00;
-  --amber-700: #CC7A00;
-  --amber-600: #E68C00;
-  --amber-500: #F5A623;
-  --amber-400: #F7B84E;
-  --amber-300: #F9C979;
-  --amber-200: #FBDFA8;
-  --amber-100: #FDF0D4;
-  --amber-50: #FFF9EE;
+  --amber-900: #663d00;
+  --amber-800: #995c00;
+  --amber-700: #cc7a00;
+  --amber-600: #e68c00;
+  --amber-500: #f5a623;
+  --amber-400: #f7b84e;
+  --amber-300: #f9c979;
+  --amber-200: #fbdfa8;
+  --amber-100: #fdf0d4;
+  --amber-50: #fff9ee;
 
   /* ── Cream backgrounds ── */
-  --cream-50: #FAF7F2;
-  --cream-100: #F5F0E8;
-  --cream-200: #EDE6DB;
+  --cream-50: #faf7f2;
+  --cream-100: #f5f0e8;
+  --cream-200: #ede6db;
 
   /* ── Legacy aliases (backwards compat) ── */
   --primary-color: var(--earth-600);
@@ -53,31 +53,31 @@
   --secondary-dark: var(--amber-700);
 
   /* ── Neutral palette ── */
-  --neutral-900: #1A1A1A;
-  --neutral-800: #2C2C2C;
+  --neutral-900: #1a1a1a;
+  --neutral-800: #2c2c2c;
   --neutral-700: #404040;
   --neutral-600: #595959;
   --neutral-500: #757575;
-  --neutral-400: #9E9E9E;
-  --neutral-300: #BDBDBD;
-  --neutral-200: #E0E0E0;
-  --neutral-100: #F5F5F5;
-  --neutral-50: #FAFAFA;
+  --neutral-400: #9e9e9e;
+  --neutral-300: #bdbdbd;
+  --neutral-200: #e0e0e0;
+  --neutral-100: #f5f5f5;
+  --neutral-50: #fafafa;
   --neutral-dark: var(--neutral-900);
   --neutral-dark-gray: var(--neutral-700);
   --neutral-gray: var(--neutral-500);
   --neutral-light-gray: var(--neutral-100);
-  --neutral-light: #FFFFFF;
+  --neutral-light: #ffffff;
 
   /* ── Status colors ── */
   --success-color: var(--olive-700);
   --warning-color: var(--amber-500);
-  --danger-color: #C94A4A;
-  --info-color: #4A7CC9;
+  --danger-color: #c94a4a;
+  --info-color: #4a7cc9;
   --success-light: var(--olive-50);
   --warning-light: var(--amber-50);
-  --danger-light: #FDF0F0;
-  --info-light: #EEF3FA;
+  --danger-light: #fdf0f0;
+  --info-light: #eef3fa;
 
   /* ── Typography ── */
   --font-display: 'DM Serif Display', Georgia, serif;
@@ -162,7 +162,12 @@ body {
 }
 
 /* ===== TYPOGRAPHY ===== */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   margin: 0;
   font-family: var(--font-display);
   font-weight: 400;

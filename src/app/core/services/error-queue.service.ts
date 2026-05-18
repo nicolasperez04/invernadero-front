@@ -1,6 +1,14 @@
 import { Injectable } from '@angular/core';
 
-export type ErrorType = 'RUNTIME' | 'HTTP-400' | 'HTTP-403' | 'HTTP-404' | 'HTTP-409' | 'HTTP-500' | 'HTTP-0' | 'COMPILE';
+export type ErrorType =
+  | 'RUNTIME'
+  | 'HTTP-400'
+  | 'HTTP-403'
+  | 'HTTP-404'
+  | 'HTTP-409'
+  | 'HTTP-500'
+  | 'HTTP-0'
+  | 'COMPILE';
 
 export interface QueuedError {
   id: string;
@@ -59,7 +67,7 @@ export class ErrorQueueService {
       (e) =>
         e.type === newError.type &&
         e.message === newError.message &&
-        new Date(e.timestamp).getTime() > windowStart
+        new Date(e.timestamp).getTime() > windowStart,
     );
   }
 
@@ -130,9 +138,7 @@ export class ErrorQueueService {
     if (!sessionStart) return;
 
     const startTime = parseInt(sessionStart, 10);
-    this.errors = this.errors.filter(
-      (e) => new Date(e.timestamp).getTime() < startTime
-    );
+    this.errors = this.errors.filter((e) => new Date(e.timestamp).getTime() < startTime);
     this.saveToStorage();
   }
 

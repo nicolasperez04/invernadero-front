@@ -9,19 +9,18 @@ async function main() {
     console.log('📋 Obteniendo estados de User Stories...');
     const statuses = await taiga.getUserStoryStatuses();
     console.log('Estados disponibles:');
-    statuses.forEach(s => {
+    statuses.forEach((s) => {
       console.log(`   ID: ${s.id} - ${s.name}`);
     });
 
-    const readyStatus = statuses.find(s => 
-      s.name.toLowerCase().includes('ready') || 
-      s.name.toLowerCase().includes(' backlog')
+    const readyStatus = statuses.find(
+      (s) => s.name.toLowerCase().includes('ready') || s.name.toLowerCase().includes(' backlog'),
     );
-    const inProgressStatus = statuses.find(s => 
-      s.name.toLowerCase().includes('progress') || 
-      s.name.toLowerCase().includes('desarrollo')
+    const inProgressStatus = statuses.find(
+      (s) =>
+        s.name.toLowerCase().includes('progress') || s.name.toLowerCase().includes('desarrollo'),
     );
-    
+
     const targetStatus = inProgressStatus || readyStatus || statuses[0];
     console.log(`\n📌 Estado objetivo: ${targetStatus.name} (ID: ${targetStatus.id})`);
 
@@ -36,7 +35,6 @@ async function main() {
     }
 
     console.log('✅ Todas las User Stories actualizadas a estado:', targetStatus.name);
-
   } catch (error) {
     console.error('❌ Error:', error.message);
     process.exit(1);

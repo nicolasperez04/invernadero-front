@@ -63,7 +63,8 @@ export const routes: Routes = [
       // ----------------------------------------
       {
         path: 'dashboard',
-        loadComponent: () => import('./features/dashboard/dashboard').then(m => m.DashboardComponent),
+        loadComponent: () =>
+          import('./features/dashboard/dashboard').then((m) => m.DashboardComponent),
         data: { title: 'nav.dashboard' },
       },
 
@@ -77,7 +78,8 @@ export const routes: Routes = [
       // ----------------------------------------
       {
         path: 'crops',
-        loadComponent: () => import('./features/crops/crop-list/crop-list').then(m => m.CropListComponent),
+        loadComponent: () =>
+          import('./features/crops/crop-list/crop-list').then((m) => m.CropListComponent),
         canMatch: [roleGuard],
         data: { roles: ['ADMIN', 'OPERATOR'], title: 'nav.crops' },
       },
@@ -89,7 +91,8 @@ export const routes: Routes = [
       // ----------------------------------------
       {
         path: 'lots',
-        loadComponent: () => import('./features/lots/lot-list/lot-list').then(m => m.LotListComponent),
+        loadComponent: () =>
+          import('./features/lots/lot-list/lot-list').then((m) => m.LotListComponent),
         canMatch: [roleGuard],
         data: { roles: ['ADMIN', 'OPERATOR'], title: 'nav.lots' },
       },
@@ -101,7 +104,8 @@ export const routes: Routes = [
       // ----------------------------------------
       {
         path: 'events',
-        loadComponent: () => import('./features/events/event-list/event-list').then(m => m.EventListComponent),
+        loadComponent: () =>
+          import('./features/events/event-list/event-list').then((m) => m.EventListComponent),
         canMatch: [roleGuard],
         data: { roles: ['ADMIN', 'OPERATOR', 'VIEWER'], title: 'nav.events' },
       },

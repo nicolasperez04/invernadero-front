@@ -41,12 +41,12 @@
 }
 
 /* ── Slot spacing ── */
-::ng-deep [slot=header] {
+::ng-deep [slot='header'] {
   display: block;
   margin-bottom: 16px;
 }
 
-::ng-deep [slot=actions] {
+::ng-deep [slot='actions'] {
   display: flex;
   align-items: center;
   gap: 8px;

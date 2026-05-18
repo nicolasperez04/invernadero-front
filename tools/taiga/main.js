@@ -63,9 +63,10 @@ async function processModule(moduleName, verbose = false) {
   }
 
   if (template.description) {
-    const desc = template.description.length > 100 
-      ? template.description.substring(0, 100) + '...' 
-      : template.description;
+    const desc =
+      template.description.length > 100
+        ? template.description.substring(0, 100) + '...'
+        : template.description;
     logInfo(`   📄 ${desc}`, 'dim');
   }
 
@@ -93,7 +94,7 @@ async function processModule(moduleName, verbose = false) {
 
 async function main() {
   const args = process.argv.slice(2);
-  
+
   if (args.length === 0) {
     console.log(`
 ${colors.bright}Invernadero - Automatización Taiga${colors.reset}
@@ -125,13 +126,13 @@ ${colors.cyan}Opciones:${colors.reset}
   }
 
   const verbose = args.includes('--verbose') || args.includes('-v');
-  
+
   let modules = args
-    .filter(arg => !arg.startsWith('--') && !arg.startsWith('-'))
+    .filter((arg) => !arg.startsWith('--') && !arg.startsWith('-'))
     .join(',')
     .split(',')
-    .map(m => m.trim())
-    .filter(m => m.length > 0);
+    .map((m) => m.trim())
+    .filter((m) => m.length > 0);
 
   if (modules.length === 0) {
     logError('No se especificó ningún módulo');
@@ -144,25 +145,27 @@ ${colors.cyan}Opciones:${colors.reset}
     } else {
       logInfo('🔐 Autenticando en Taiga...', 'cyan');
     }
-    
+
     await taiga.login();
     logSuccess('✅ Autenticado\n');
 
     const results = [];
-    
+
     for (const moduleName of modules) {
       const result = await processModule(moduleName, verbose);
       if (result) {
         results.push(result);
       } else {
-        console.log(`   Módulos disponibles: auth, usuarios, cultivos, lotes, eventos, tipos de evento, dashboard`);
+        console.log(
+          `   Módulos disponibles: auth, usuarios, cultivos, lotes, eventos, tipos de evento, dashboard`,
+        );
       }
     }
 
     if (results.length > 0) {
       console.log('\n' + colors.bright + '🎉 Backlog creado exitosamente!' + colors.reset);
       console.log(`   Proyecto ID: ${taiga.getProjectId()}`);
-      
+
       if (results.length === 1) {
         console.log(`   User Story: ${results[0].userStoryId}`);
         console.log(`   Tasks: ${results[0].tasks}`);
@@ -171,7 +174,9 @@ ${colors.cyan}Opciones:${colors.reset}
         for (const r of results) {
           console.log(`      ${r.module}: ${r.tasks} tasks (US #${r.userStoryId})`);
         }
-        console.log(`\n   Total: ${results.length} módulos, ${results.reduce((a, b) => a + b.tasks, 0)} tareas`);
+        console.log(
+          `\n   Total: ${results.length} módulos, ${results.reduce((a, b) => a + b.tasks, 0)} tareas`,
+        );
       }
     }
   } catch (error) {

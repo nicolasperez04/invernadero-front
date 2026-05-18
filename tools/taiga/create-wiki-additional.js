@@ -35,7 +35,7 @@ async function main() {
     for (const page of additionalWikiPages) {
       try {
         log(`Creando: ${page.title}`, 'cyan');
-        
+
         try {
           await api.post('/wiki', {
             project: parseInt(projectId),
@@ -62,7 +62,6 @@ async function main() {
     log(`Creadas: ${created}`, 'green');
     log(`Omitidas (ya existen): ${skipped}`, 'yellow');
     log('Wiki adicional completado!', 'green');
-
   } catch (error) {
     log('Error: ' + error.message, 'red');
     process.exit(1);

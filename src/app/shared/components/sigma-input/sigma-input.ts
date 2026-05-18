@@ -1,4 +1,11 @@
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, forwardRef } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  ChangeDetectionStrategy,
+  forwardRef,
+} from '@angular/core';
 import { NgIf } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 
@@ -26,7 +33,15 @@ export class SigmaInputComponent implements ControlValueAccessor {
   @Input() label = '';
   @Input() error: string | undefined;
   @Input() hint: string | undefined;
-  @Input() type: 'text' | 'email' | 'password' | 'number' | 'textarea' | 'datetime-local' | 'date' | 'time' = 'text';
+  @Input() type:
+    | 'text'
+    | 'email'
+    | 'password'
+    | 'number'
+    | 'textarea'
+    | 'datetime-local'
+    | 'date'
+    | 'time' = 'text';
   @Input() placeholder = '';
   @Input() iconLeft: string | undefined;
   @Input() disabled = false;

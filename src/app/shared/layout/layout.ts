@@ -19,13 +19,7 @@ interface NavItem {
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [
-    RouterOutlet,
-    MatIconModule,
-    CommonModule,
-    TranslateModule,
-    NotificationBellComponent,
-  ],
+  imports: [RouterOutlet, MatIconModule, CommonModule, TranslateModule, NotificationBellComponent],
   templateUrl: './layout.html',
   styleUrl: './layout.css',
 })
@@ -38,7 +32,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
     { path: '/crops', icon: 'grass', label: 'nav.crops', roles: ['ADMIN', 'OPERATOR'] },
     { path: '/lots', icon: 'place', label: 'nav.lots', roles: ['ADMIN', 'OPERATOR'] },
     { path: '/events', icon: 'event', label: 'nav.events', roles: ['ADMIN', 'OPERATOR', 'VIEWER'] },
-    ];
+  ];
 
   pageTitle$!: Observable<string>;
 
@@ -50,7 +44,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.pageTitle$ = this.router.events.pipe(
-      filter(e => e instanceof NavigationEnd),
+      filter((e) => e instanceof NavigationEnd),
       startWith(null),
       map(() => {
         let route = this.router.routerState.root.snapshot;
@@ -59,14 +53,16 @@ export class LayoutComponent implements OnInit, OnDestroy {
       }),
     );
 
-    this.router.events.pipe(
-      filter(e => e instanceof NavigationEnd),
-      takeUntil(this.destroy$),
-    ).subscribe(() => {
-      if (window.innerWidth < 1024) {
-        this.sidebarCollapsed = true;
-      }
-    });
+    this.router.events
+      .pipe(
+        filter((e) => e instanceof NavigationEnd),
+        takeUntil(this.destroy$),
+      )
+      .subscribe(() => {
+        if (window.innerWidth < 1024) {
+          this.sidebarCollapsed = true;
+        }
+      });
   }
 
   ngOnDestroy(): void {
@@ -96,7 +92,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
   }
 
   get filteredNavItems(): NavItem[] {
-    return this.navItems.filter(item => this.canAccess(item.roles));
+    return this.navItems.filter((item) => this.canAccess(item.roles));
   }
 
   get username(): string {

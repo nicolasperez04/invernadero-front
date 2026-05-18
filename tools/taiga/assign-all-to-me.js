@@ -22,7 +22,7 @@ async function main() {
 
       const tasks = await taiga.getTasks(story.id);
       console.log(`      Tasks en esta US: ${tasks.length}`);
-      
+
       for (const task of tasks) {
         await taiga.assignTaskToMe(task.id);
         tasksAssigned++;
@@ -36,7 +36,6 @@ async function main() {
     console.log(`   User Stories asignadas: ${usAssigned}`);
     console.log(`   Tasks asignadas: ${tasksAssigned}`);
     console.log(`   Total: ${usAssigned + tasksAssigned} elementos`);
-
   } catch (error) {
     console.error('❌ Error:', error.message);
     process.exit(1);

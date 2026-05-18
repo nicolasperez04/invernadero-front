@@ -46,8 +46,8 @@ export interface LotStatusDTO {
   lotId: number;
   /** Nombre descriptivo del lote */
   lotName: string;
-  /** Estado del lote */
-  status: 'GREEN' | 'YELLOW' | 'RED';
+  /** Estado del lote (CREATED | IN_PRODUCTION | FINISHED) */
+  status: 'CREATED' | 'IN_PRODUCTION' | 'FINISHED';
   /** Nivel de inactividad del lote */
   inactivityLevel: 'GREEN' | 'YELLOW' | 'RED';
 }

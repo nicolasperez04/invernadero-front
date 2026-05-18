@@ -12,7 +12,11 @@ function log(msg, color = 'reset') {
 }
 
 const epics = [
-  { id: 355536, name: 'Backend API', stories: [9247053, 9247039, 9247017, 9247055, 9247056, 9247054] },
+  {
+    id: 355536,
+    name: 'Backend API',
+    stories: [9247053, 9247039, 9247017, 9247055, 9247056, 9247054],
+  },
   { id: 355537, name: 'Frontend', stories: [9247057] },
 ];
 
@@ -28,12 +32,12 @@ async function main() {
 
     for (const epic of epics) {
       log(`📦 ${epic.name} (ID: ${epic.id})`, 'cyan');
-      
+
       for (const usId of epic.stories) {
         try {
           const usRes = await api.get(`/userstories/${usId}`);
           const us = usRes.data;
-          
+
           await api.patch(`/userstories/${usId}`, {
             epics: [epic.id],
             version: us.version,
@@ -48,7 +52,6 @@ async function main() {
     }
 
     log('✅ Vinculación completada!', 'green');
-
   } catch (error) {
     log('❌ Error: ' + error.message, 'red');
     process.exit(1);

@@ -1,4 +1,12 @@
-<div class="sigma-toggle__track" (click)="onClick()" tabindex="0" role="switch" [attr.aria-checked]="checked" (keydown.enter)="onClick()" (keydown.space)="onClick(); $event.preventDefault()">
+<div
+  class="sigma-toggle__track"
+  (click)="onClick()"
+  tabindex="0"
+  role="switch"
+  [attr.aria-checked]="checked"
+  (keydown.enter)="onClick()"
+  (keydown.space)="onClick(); $event.preventDefault()"
+>
   <div class="sigma-toggle__thumb"></div>
 </div>
 <span class="sigma-toggle__label" *ngIf="label">{{ label }}</span>

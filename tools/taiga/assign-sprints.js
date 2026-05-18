@@ -29,7 +29,6 @@ async function main() {
     }
 
     console.log('✅ Asignación completada!');
-
   } catch (error) {
     console.error('❌ Error:', error.message);
     process.exit(1);

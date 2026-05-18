@@ -13,6 +13,9 @@ import { NgIf } from '@angular/common';
     '[class.sigma-btn--secondary]': 'variant === "secondary"',
     '[class.sigma-btn--ghost]': 'variant === "ghost"',
     '[class.sigma-btn--danger]': 'variant === "danger"',
+    '[class.sigma-btn--danger-ghost]': 'variant === "danger-ghost"',
+    '[class.sigma-btn--info-ghost]': 'variant === "info-ghost"',
+    '[class.sigma-btn--warning-ghost]': 'variant === "warning-ghost"',
     '[class.sigma-btn--sm]': 'size === "sm"',
     '[class.sigma-btn--lg]': 'size === "lg"',
     '[class.sigma-btn--loading]': 'loading',
@@ -23,7 +26,7 @@ import { NgIf } from '@angular/common';
   },
 })
 export class SigmaBtnComponent {
-  @Input() variant: 'primary' | 'secondary' | 'ghost' | 'danger' = 'primary';
+  @Input() variant: 'primary' | 'secondary' | 'ghost' | 'danger' | 'danger-ghost' | 'info-ghost' | 'warning-ghost' = 'primary';
   @Input({ transform: booleanAttribute }) loading = false;
   @Input({ transform: booleanAttribute }) disabled = false;
   @Input() size: 'sm' | 'md' | 'lg' = 'md';

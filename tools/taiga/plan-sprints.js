@@ -21,7 +21,7 @@ async function main() {
 
     log('📋 Obteniendo User Stories del proyecto...', 'cyan');
     const userStories = await taiga.getUserStories();
-    
+
     log(`   Total: ${userStories.length} user stories\n`, 'yellow');
 
     const today = new Date();
@@ -34,8 +34,8 @@ async function main() {
         start: addDays(0),
         end: addDays(14),
         modules: ['AUTH', 'USR'],
-        stories: userStories.filter(us => 
-          us.subject.includes('AUTH') || us.subject.includes('USR')
+        stories: userStories.filter(
+          (us) => us.subject.includes('AUTH') || us.subject.includes('USR'),
         ),
       },
       {
@@ -43,8 +43,8 @@ async function main() {
         start: addDays(14),
         end: addDays(28),
         modules: ['CRP', 'LOT'],
-        stories: userStories.filter(us => 
-          us.subject.includes('CRP') || us.subject.includes('LOT')
+        stories: userStories.filter(
+          (us) => us.subject.includes('CRP') || us.subject.includes('LOT'),
         ),
       },
       {
@@ -52,8 +52,8 @@ async function main() {
         start: addDays(28),
         end: addDays(42),
         modules: ['EVT'],
-        stories: userStories.filter(us => 
-          us.subject.includes('EVT') && !us.subject.includes('TYPE')
+        stories: userStories.filter(
+          (us) => us.subject.includes('EVT') && !us.subject.includes('TYPE'),
         ),
       },
       {
@@ -61,30 +61,32 @@ async function main() {
         start: addDays(42),
         end: addDays(56),
         modules: ['DSH', 'EVT-TYPE'],
-        stories: userStories.filter(us => 
-          us.subject.includes('DSH') || us.subject.includes('EVT-TYPE')
+        stories: userStories.filter(
+          (us) => us.subject.includes('DSH') || us.subject.includes('EVT-TYPE'),
         ),
       },
     ];
 
     log('📊 Plan de Sprints sugeridos para el proyecto Invernadero\n', 'bright');
-    log('=' .repeat(60), 'cyan');
+    log('='.repeat(60), 'cyan');
 
     for (const sprint of sprints) {
       log(`\n${colors.bright}🏃 ${sprint.name}${colors.reset}`, 'magenta');
       log(`   📅 ${sprint.start} al ${sprint.end}`, 'cyan');
       log(`   🎯 Módulos: ${sprint.modules.join(', ')}`, 'yellow');
       log(`   📝 User Stories (${sprint.stories.length}):`, 'green');
-      
+
       if (sprint.stories.length === 0) {
-         const modulesFilter = sprint.modules.join('|');
-         const allStories = userStories.filter(us => modulesFilter.some(m => us.subject.includes(m)));
-         for (const us of allStories) {
-            log(`      • ${us.subject.substring(0, 50)}... (ID: ${us.id})`, 'reset');
-         }
-         if (allStories.length === 0) {
-            log(`      (No se encontraron US en Taiga para este sprint)`, 'yellow');
-         }
+        const modulesFilter = sprint.modules.join('|');
+        const allStories = userStories.filter((us) =>
+          modulesFilter.some((m) => us.subject.includes(m)),
+        );
+        for (const us of allStories) {
+          log(`      • ${us.subject.substring(0, 50)}... (ID: ${us.id})`, 'reset');
+        }
+        if (allStories.length === 0) {
+          log(`      (No se encontraron US en Taiga para este sprint)`, 'yellow');
+        }
       } else {
         for (const us of sprint.stories) {
           log(`      • ${us.subject.substring(0, 45)}... (ID: ${us.id})`, 'reset');
@@ -98,7 +100,6 @@ async function main() {
     log('   Project Settings → Sprints → Add Sprint', 'dim');
     log(`   Proyecto ID: ${taiga.getProjectId()}`, 'dim');
     log('\n✅ Planificación completada!', 'green');
-
   } catch (error) {
     log('❌ Error: ' + error.message, 'red');
     process.exit(1);

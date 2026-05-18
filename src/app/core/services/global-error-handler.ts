@@ -47,7 +47,8 @@ export class GlobalErrorHandler implements ErrorHandler {
     }
 
     if (originalError?.message?.includes('ExpressionChangedAfterItHasBeenCheckedError')) {
-      errorInfo.message = 'ExpressionChangedAfterItHasBeenCheckedError - Cambios detectados después de la verificación';
+      errorInfo.message =
+        'ExpressionChangedAfterItHasBeenCheckedError - Cambios detectados después de la verificación';
     } else if (originalError?.message?.includes('Cannot read')) {
       errorInfo.message = `Cannot read property: ${originalError.message}`;
     } else if (originalError?.message?.includes('Cannot set')) {

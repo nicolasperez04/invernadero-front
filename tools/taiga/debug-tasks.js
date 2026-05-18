@@ -32,12 +32,16 @@ async function main() {
   try {
     const res1 = await api.get(`/projects/${TAIGA_PROJECT_ID}/tasks`);
     console.log('GET /tasks: OK, total:', res1.data.length);
-  } catch (e) { console.log('GET /tasks:', e.message); }
+  } catch (e) {
+    console.log('GET /tasks:', e.message);
+  }
 
   try {
     const res2 = await api.get(`/tasks`);
     console.log('GET /tasks: OK');
-  } catch (e) { console.log('GET /tasks:', e.message); }
+  } catch (e) {
+    console.log('GET /tasks:', e.message);
+  }
 }
 
 main().catch(console.error);

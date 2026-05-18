@@ -14,8 +14,17 @@
       <p class="modal-subtitle">Selecciona los tipos de evento disponibles para este cultivo.</p>
 
       <div class="event-types-list">
-        <label *ngFor="let et of allEventTypes" class="event-type-item" [class.event-type-item--checked]="selectedIds.has(et.id)">
-          <input type="checkbox" [checked]="selectedIds.has(et.id)" (change)="toggleType(et.id)" class="event-type-checkbox" />
+        <label
+          *ngFor="let et of allEventTypes"
+          class="event-type-item"
+          [class.event-type-item--checked]="selectedIds.has(et.id)"
+        >
+          <input
+            type="checkbox"
+            [checked]="selectedIds.has(et.id)"
+            (change)="toggleType(et.id)"
+            class="event-type-checkbox"
+          />
           <span class="event-type-name">{{ et.name }}</span>
           <span class="event-type-category">({{ et.category }})</span>
         </label>
