@@ -40,8 +40,8 @@ jobs:
       - name: Run tests with coverage
         id: tests
         run: |
-          npx vitest run --reporter=verbose --coverage 2>&1 | tee test-output.log
-          echo "exitcode=${PIPESTATUS[0]}" >> $GITHUB_OUTPUT
+          npm run test:ci
+          echo "exitcode=$?" >> $GITHUB_OUTPUT
 
       - name: Check test status
         if: steps.tests.outputs.exitcode != '0'
